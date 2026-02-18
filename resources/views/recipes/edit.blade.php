@@ -1,37 +1,53 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Receita')
+@section('page_title', 'Editar Receita')
 
 @section('content')
-<div class="max-w-xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Editar Receita</h1>
-    <form method="POST" action="{{ route('recipes.update', $recipe) }}" class="space-y-6">
+<div class="max-w-2xl">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-xl font-semibold">Editar Receita</h1>
+        <a href="{{ route('recipes.index') }}" class="text-sm text-gray-500">Voltar</a>
+    </div>
+
+    @if ($errors->any())
+        <div class="mb-4 rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+            <ul class="list-disc pl-5 space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('recipes.update', $recipe) }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-sm">
         @csrf
         @method('PUT')
         <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-            <input id="name" name="name" type="text" required maxlength="100" value="{{ old('name', $recipe->name) }}"
-                   class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            <label class="block text-sm font-medium mb-1">Nome</label>
+            <input name="name" value="{{ old('name', $recipe->name) }}" required class="w-full rounded-lg border px-3 py-2" />
         </div>
+
         <div>
-            <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Valor</label>
-            <input id="amount" name="amount" type="number" step="0.01" min="0" required value="{{ old('amount', $recipe->amount) }}"
-                   class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            <label class="block text-sm font-medium mb-1">Valor (R$)</label>
+            <input name="amount" type="number" step="0.01" value="{{ old('amount', $recipe->amount) }}" required class="w-full rounded-lg border px-3 py-2" />
         </div>
+
         <div>
-            <label for="transaction_date" class="block text-sm font-medium text-gray-700 mb-1">Data</label>
-            <input id="transaction_date" name="transaction_date" type="date" required value="{{ old('transaction_date', $recipe->transaction_date ? $recipe->transaction_date->format('Y-m-d') : null) }}"
-                   class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            <label class="block text-sm font-medium mb-1">Data da transação</label>
+            <input type="date" name="transaction_date" value="{{ old('transaction_date', $recipe->transaction_date?->format('Y-m-d')) }}" class="w-full rounded-lg border px-3 py-2" />
         </div>
+
         <div class="flex items-center gap-2">
-            <input id="received" name="received" type="checkbox" value="1" {{ old('received', $recipe->received) ? 'checked' : '' }}
-                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-            <label for="received" class="text-sm text-gray-700">Receita recebida</label>
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="received" value="1" class="rounded" {{ old('received', $recipe->fixed) ? 'checked' : '' }} />
+                <span class="text-sm">Recebido</span>
+            </label>
         </div>
-        <button type="submit"
-                class="w-full py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 active:scale-[0.99] transition-all duration-200 cursor-pointer">
-            Atualizar Receita
-        </button>
+
+        <div class="pt-4 flex gap-3">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Atualizar</button>
+            <a href="{{ route('recipes.index') }}" class="px-4 py-2 rounded-lg border">Cancelar</a>
+        </div>
     </form>
 </div>
 @endsection

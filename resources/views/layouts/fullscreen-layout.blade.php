@@ -11,9 +11,6 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Default header height CSS variable (updated dynamically by JS) -->
-    <style>:root { --app-header-height: 56px; }</style>
-
     <!-- Alpine.js -->
     {{-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 
@@ -93,56 +90,27 @@
             }
         })();
     </script>
-    
 </head>
 
-<body
-    x-data="{ 'loaded': true}"
-    x-init="$store.sidebar.isExpanded = window.innerWidth >= 1280;
-    const checkMobile = () => {
-        if (window.innerWidth < 1280) {
-            $store.sidebar.setMobileOpen(false);
-            $store.sidebar.isExpanded = false;
-        } else {
-            $store.sidebar.isMobileOpen = false;
-            $store.sidebar.isExpanded = true;
-        }
-    };
-    window.addEventListener('resize', checkMobile);
-    /* remove preloader after Alpine initializes (short delay for UX) */
-    setTimeout(() => { loaded = false }, 120);">
+<body x-data="{ 'loaded': true}" x-init="$store.sidebar.isExpanded = window.innerWidth >= 1280;
+const checkMobile = () => {
+    if (window.innerWidth < 1280) {
+        $store.sidebar.setMobileOpen(false);
+        $store.sidebar.isExpanded = false;
+    } else {
+        $store.sidebar.isMobileOpen = false;
+        $store.sidebar.isExpanded = true;
+    }
+};
+window.addEventListener('resize', checkMobile);
+/* remove preloader after Alpine initializes (short delay for UX) */
+setTimeout(() => { loaded = false }, 120);">
 
     {{-- preloader --}}
     <x-common.preloader/>
     {{-- preloader end --}}
 
-    <!-- app header (full width) -->
-    @include('layouts.app-header')
-
-    <script>
-        /* expose header height so sidebar can be positioned below it */
-        function setHeaderHeightVar() {
-            const header = document.getElementById('app-header');
-            if (header) {
-                document.documentElement.style.setProperty('--app-header-height', header.offsetHeight + 'px');
-            }
-        }
-        window.addEventListener('load', setHeaderHeightVar);
-        window.addEventListener('resize', setHeaderHeightVar);
-        setHeaderHeightVar();
-    </script>
-
-    <div class="min-h-screen xl:flex pt-[var(--app-header-height)]">
-        @include('layouts.backdrop')
-        @include('layouts.sidebar')
-
-        <div class="flex-1 transition-all duration-300 ease-in-out lg:ml-[220px]">
-            <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-                @yield('content')
-            </div>
-        </div>
-
-    </div>
+    @yield('content')
 
 </body>
 

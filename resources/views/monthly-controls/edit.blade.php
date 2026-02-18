@@ -1,29 +1,46 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Controle Mensal')
+@section('page_title', 'Editar Controle Mensal')
 
 @section('content')
-<div class="max-w-xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Editar Controle Mensal</h1>
-    <form method="POST" action="{{ route('monthly-controls.update', $control) }}" class="space-y-6">
+<div class="max-w-lg">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-xl font-semibold">Editar Controle Mensal</h1>
+        <a href="{{ route('monthly-controls.index') }}" class="text-sm text-gray-500">Voltar</a>
+    </div>
+
+    @if ($errors->any())
+        <div class="mb-4 rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+            <ul class="list-disc pl-5 space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('monthly-controls.update', $control) }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-sm">
         @csrf
         @method('PUT')
-        <div>
-            <label for="month" class="block text-sm font-medium text-gray-700 mb-1">Mês</label>
-            <select id="month" name="month" required class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                <option value="">Selecione o mês</option>
-                @foreach([1=>'Janeiro',2=>'Fevereiro',3=>'Março',4=>'Abril',5=>'Maio',6=>'Junho',7=>'Julho',8=>'Agosto',9=>'Setembro',10=>'Outubro',11=>'Novembro',12=>'Dezembro'] as $num => $nome)
-                    <option value="{{ $num }}" {{ old('month', $control->month) == $num ? 'selected' : '' }}>{{ $nome }}</option>
-                @endforeach
-            </select>
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label class="block text-sm font-medium mb-1">Mês</label>
+                <select name="month" required class="w-full rounded-lg border px-3 py-2">
+                    @for($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ old('month', $control->month) == $m ? 'selected' : '' }}>{{ sprintf('%02d', $m) }}</option>
+                    @endfor
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Ano</label>
+                <input name="year" type="number" min="2000" max="2100" value="{{ old('year', $control->year) }}" required class="w-full rounded-lg border px-3 py-2" />
+            </div>
         </div>
-        <div>
-            <label for="year" class="block text-sm font-medium text-gray-700 mb-1">Ano</label>
-            <input id="year" name="year" type="number" min="2000" max="2100" required value="{{ old('year', $control->year) }}" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+
+        <div class="pt-4 flex gap-3">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Atualizar</button>
+            <a href="{{ route('monthly-controls.index') }}" class="px-4 py-2 rounded-lg border">Cancelar</a>
         </div>
-        <button type="submit" class="w-full py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 active:scale-[0.99] transition-all duration-200 cursor-pointer">
-            Atualizar Controle
-        </button>
     </form>
 </div>
 @endsection

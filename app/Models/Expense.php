@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\EnsuresMonthlyControl;
 
 class Expense extends Model
 {
+    use EnsuresMonthlyControl;
+
     protected $fillable = [
         'name',
         'amount',

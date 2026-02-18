@@ -35,10 +35,11 @@ class ExpenseController extends Controller
             'fixed' => 'boolean',
             'transaction_date' => 'required|date',
             'monthly_financial_control_id' => [
-                'required',
+                'nullable',
                 'exists:monthly_financial_controls,id',
             ],
         ]);
+        // ensure organization is set (used by the model/trait to create/find monthly control)
         $validated['organization_id'] = Auth::user()->organization_id;
         Expense::create($validated);
         return redirect()->route('expenses.index')->with('success', 'Despesa criada com sucesso!');
@@ -62,7 +63,7 @@ class ExpenseController extends Controller
             'fixed' => 'boolean',
             'transaction_date' => 'required|date',
             'monthly_financial_control_id' => [
-                'required',
+                'nullable',
                 'exists:monthly_financial_controls,id',
             ],
         ]);

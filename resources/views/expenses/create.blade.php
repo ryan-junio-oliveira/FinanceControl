@@ -1,56 +1,62 @@
 @extends('layouts.app')
 
-@section('title', 'Nova Despesa')
+@section('page_title', 'Nova Despesa')
 
 @section('content')
-<div class="max-w-xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Nova Despesa</h1>
+<div class="max-w-2xl">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-xl font-semibold">Nova Despesa</h1>
+        <a href="{{ route('expenses.index') }}" class="text-sm text-gray-500">Voltar</a>
+    </div>
 
-    <form method="POST" action="{{ route('expenses.store') }}" class="space-y-6">
+    @if ($errors->any())
+        <div class="mb-4 rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+            <ul class="list-disc pl-5 space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('expenses.store') }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-sm">
         @csrf
-
         <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-            <input id="name" name="name" type="text" required maxlength="100" value="{{ old('name') }}"
-                   class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            <label class="block text-sm font-medium mb-1">Nome</label>
+            <input name="name" value="{{ old('name') }}" required class="w-full rounded-lg border px-3 py-2" />
         </div>
 
         <div>
-            <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Valor</label>
-            <input id="amount" name="amount" type="number" step="0.01" min="0" required value="{{ old('amount') }}"
-                   class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            <label class="block text-sm font-medium mb-1">Valor (R$)</label>
+            <input name="amount" type="number" step="0.01" value="{{ old('amount') }}" required class="w-full rounded-lg border px-3 py-2" />
+        </div>
+
+        <div class="flex items-center gap-4">
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="fixed" value="1" class="rounded" {{ old('fixed') ? 'checked' : '' }} />
+                <span class="text-sm">Despesa fixa</span>
+            </label>
+
+            <div class="flex-1">
+                <label class="block text-sm font-medium mb-1">Data da transação</label>
+                <input type="date" name="transaction_date" value="{{ old('transaction_date') }}" class="w-full rounded-lg border px-3 py-2" />
+            </div>
         </div>
 
         <div>
-            <label for="transaction_date" class="block text-sm font-medium text-gray-700 mb-1">Data</label>
-            <input id="transaction_date" name="transaction_date" type="date" required value="{{ old('transaction_date') }}"
-                   class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-        </div>
-
-
-        <div>
-            <label for="monthly_financial_control_id" class="block text-sm font-medium text-gray-700 mb-1">Vínculo com Controle Mensal <span class="text-red-500">*</span></label>
-            <select id="monthly_financial_control_id" name="monthly_financial_control_id" required
-                    class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                <option value="">Selecione o controle mensal</option>
-                @foreach($controls as $control)
-                    <option value="{{ $control->id }}" {{ old('monthly_financial_control_id') == $control->id ? 'selected' : '' }}>
-                        {{ str_pad($control->month, 2, '0', STR_PAD_LEFT) }}/{{ $control->year }}
-                    </option>
+            <label class="block text-sm font-medium mb-1">Controle Mensal (opcional)</label>
+            <select name="monthly_financial_control_id" class="w-full rounded-lg border px-3 py-2">
+                <option value="">Auto (criar/associar)</option>
+                @foreach($controls as $c)
+                    <option value="{{ $c->id }}">{{ sprintf('%02d/%d', $c->month, $c->year) }}</option>
                 @endforeach
             </select>
         </div>
 
-        <div class="flex items-center gap-2">
-            <input id="fixed" name="fixed" type="checkbox" value="1" {{ old('fixed') ? 'checked' : '' }}
-                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-            <label for="fixed" class="text-sm text-gray-700">Despesa fixa</label>
+        <div class="pt-4 flex gap-3">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-red-600 text-white">Salvar</button>
+            <a href="{{ route('expenses.index') }}" class="px-4 py-2 rounded-lg border">Cancelar</a>
         </div>
-
-        <button type="submit"
-                class="w-full py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 active:scale-[0.99] transition-all duration-200 cursor-pointer">
-            Salvar Despesa
-        </button>
     </form>
 </div>
 @endsection

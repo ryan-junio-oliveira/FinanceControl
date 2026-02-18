@@ -3,124 +3,54 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="w-full max-w-md">
+    <div class="w-full max-w-md mx-auto bg-white border border-gray-200 rounded-lg p-6">
+        <h1 class="text-center text-2xl font-semibold text-primary mb-6">Finance<span
+                class="text-primary-accent">Control</span></h1>
 
-    {{-- Card --}}
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-
-        {{-- Logo --}}
-        <div class="flex items-center justify-center gap-2 mb-8">
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
-                <i class="fas fa-wallet text-white text-xl"></i>
-            </div>
-            <h1 class="text-3xl font-bold text-gray-900">Finance<span class="text-blue-600">Control</span></h1>
-        </div>
-
-        <h2 class="text-2xl font-bold text-center text-gray-900 mb-2">Bem-vindo de volta</h2>
-        <p class="text-center text-gray-500 mb-8">
-            Entre para acessar seu painel financeiro
-        </p>
-
-        {{-- Erros --}}
         @if ($errors->any())
-            <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-                <div class="flex items-start gap-3">
-                    <i class="fas fa-exclamation-circle mt-0.5"></i>
-                    <ul class="space-y-1 flex-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            <div class="mb-4 rounded-md border border-red-100 bg-red-50 p-3 text-sm text-red-700">
+                <ul class="list-disc pl-5 space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}" class="space-y-5">
+        <form method="POST" action="{{ route('login') }}" class="space-y-4">
             @csrf
 
-            {{-- Email --}}
-            <div>
-                <label for="email" class="block text-sm font-medium mb-2 text-gray-700">
-                    E-mail
-                </label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <input
-                        id="email"
-                        type="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        required
-                        autofocus
-                        placeholder="seu@email.com"
-                        class="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-300
-                               text-gray-900 placeholder-gray-400
-                               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                               transition"
-                    >
-                </div>
-            </div>
+            <label class="block text-sm text-gray-700">
+                E-mail
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+                    placeholder="seu@email.com"
+                    class="mt-2 w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:ring-2 focus:ring-blue-500">
+            </label>
 
-            {{-- Senha --}}
-            <div>
-                <label for="password" class="block text-sm font-medium mb-2 text-gray-700">
-                    Senha
-                </label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        required
-                        placeholder="••••••••"
-                        class="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-300
-                               text-gray-900 placeholder-gray-400
-                               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                               transition"
-                    >
-                </div>
-            </div>
+            <label class="block text-sm text-gray-700">
+                Senha
+                <input id="password" type="password" name="password" required placeholder="••••••••"
+                    class="mt-2 w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:ring-2 focus:ring-blue-500">
+            </label>
 
-            {{-- Lembrar / Esqueci --}}
             <div class="flex items-center justify-between text-sm">
-                <label class="flex items-center gap-2 cursor-pointer text-gray-600">
+                <label class="flex items-center gap-2 text-gray-600">
                     <input type="checkbox" name="remember"
-                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     Lembrar-me
                 </label>
 
-                <a href="{{ route('password.request') }}"
-                   class="text-blue-600 hover:text-blue-700 font-medium transition">
-                    Esqueceu a senha?
-                </a>
+                <a href="{{ route('password.request') }}" class="text-blue-600">Esqueceu a senha?</a>
             </div>
 
-            {{-- Botão --}}
-            <button
-                type="submit"
-                class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600
-                       text-white font-semibold
-                       hover:shadow-lg hover:shadow-blue-500/50
-                       active:scale-[0.99]
-                       transition-all duration-200"
-            >
+            <button type="submit"
+                class="w-full py-2 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold">
                 Entrar
             </button>
         </form>
-    </div>
 
-    {{-- Cadastro --}}
-    <p class="mt-6 text-center text-gray-600 text-sm">
-        Não tem conta?
-        <a href="{{ route('register') }}"
-           class="text-blue-600 hover:text-blue-700 font-semibold">
-            Criar agora
-        </a>
-    </p>
-</div>
+        <p class="mt-4 text-center text-sm text-gray-500">
+            Não tem conta? <a href="{{ route('register') }}" class="text-blue-600 font-semibold">Criar agora</a>
+        </p>
+    </div>
 @endsection
