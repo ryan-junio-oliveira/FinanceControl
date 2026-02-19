@@ -8,9 +8,18 @@ use Illuminate\Http\Request;
 
 class BankController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $banks = Bank::orderBy('name')->paginate(20);
+        $q = $request->query('q');
+        $perPage = (int) $request->query('per_page', 20);
+        $perPage = in_array($perPage, [10,20,50,100]) ? $perPage : 20;
+
+        $query = Bank::orderBy('name');
+        if ($q) {
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        $banks = $query->paginate($perPage);
         return view('banks.index', compact('banks'));
     }
 

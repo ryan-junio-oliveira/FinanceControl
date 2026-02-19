@@ -23,7 +23,7 @@
         @csrf
         <div>
             <label class="block text-sm font-medium mb-1">Nome</label>
-            <input name="name" value="{{ old('name') }}" required class="w-full rounded-lg border px-3 py-2" />
+            <x-form-input name="name" :value="old('name')" required />
         </div>
 
         <div>

@@ -8,22 +8,20 @@
     <a href="{{ route('monthly-controls.create') }}" class="px-4 py-2 rounded-lg bg-indigo-600 text-white">Novo mês</a>
 </div>
 
-@if(session('success'))
-    <div class="mb-4 rounded-md bg-green-50 border border-green-200 p-3 text-sm text-green-700">{{ session('success') }}</div>
-@endif
 
-<table class="w-full text-sm rounded-lg overflow-hidden bg-white dark:bg-gray-800">
-    <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+
+<table class="w-full text-sm rounded-lg overflow-hidden bg-white">
+    <thead class="bg-gray-50 text-left">
         <tr>
-            <th class="px-4 py-3">Mês / Ano</th>
-            <th class="px-4 py-3">Ações</th>
+            <th class="px-6 py-3">Mês / Ano</th>
+            <th class="px-6 py-3">Ações</th>
         </tr>
     </thead>
     <tbody>
         @forelse($controls as $control)
             <tr class="border-t">
-                <td class="px-4 py-3">{{ sprintf('%02d / %d', $control->month, $control->year) }}</td>
-                <td class="px-4 py-3">
+                <td class="px-6 py-4">{{ sprintf('%02d / %d', $control->month, $control->year) }}</td>
+                <td class="px-6 py-4">
                     <a href="{{ route('monthly-controls.edit', $control) }}" class="text-blue-600 mr-3">Editar</a>
                     <form action="{{ route('monthly-controls.destroy', $control) }}" method="POST" class="inline-block" onsubmit="return confirm('Remover controle mensal?');">
                         @csrf

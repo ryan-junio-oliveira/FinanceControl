@@ -41,19 +41,19 @@
             <table class="w-full text-left text-sm text-gray-700">
                 <thead class="bg-gray-50 text-gray-600">
                     <tr>
-                        <th class="px-4 py-3">Data</th>
-                        <th class="px-4 py-3">Nome</th>
-                        <th class="px-4 py-3">Categoria</th>
-                        <th class="px-4 py-3">Valor</th>
+                        <th class="px-6 py-3">Data</th>
+                        <th class="px-6 py-3">Nome</th>
+                        <th class="px-6 py-3">Categoria</th>
+                        <th class="px-6 py-3">Valor</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($expenses as $e)
                     <tr class="border-t">
-                        <td class="px-4 py-3">{{ $e->transaction_date?->format('d/m/Y') ?? '-' }}</td>
-                        <td class="px-4 py-3">{{ $e->name }}</td>
-                        <td class="px-4 py-3">{{ $e->category?->name ?? '-' }}</td>
-                        <td class="px-4 py-3">R$ {{ number_format($e->amount, 2, ',', '.') }}</td>
+                        <td class="px-6 py-4">{{ $e->transaction_date?->format('d/m/Y') ?? '-' }}</td>
+                        <td class="px-6 py-4">{{ $e->name }}</td>
+                        <td class="px-6 py-4">{{ $e->category?->name ?? '-' }}</td>
+                        <td class="px-6 py-4">R$ {{ number_format($e->amount, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
                 </tbody>

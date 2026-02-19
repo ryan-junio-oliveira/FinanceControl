@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register route middleware alias for forcing password change after invite
+        if ($this->app->bound('router')) {
+            $this->app['router']->aliasMiddleware('force_password_change', \App\Http\Middleware\ForcePasswordChange::class);
+        }
     }
 }

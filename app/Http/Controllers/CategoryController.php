@@ -7,12 +7,26 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         $org = auth()->user()->organization;
-        $categories = Category::where('organization_id', $org->id)
-            ->orderBy('name')
-            ->paginate(20);
+
+        $q = $request->query('q');
+        $type = $request->query('type');
+        $perPage = (int) $request->query('per_page', 20);
+        $perPage = in_array($perPage, [10,20,50,100]) ? $perPage : 20;
+
+        $query = Category::where('organization_id', $org->id);
+
+        if ($q) {
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        $categories = $query->orderBy('name')->paginate($perPage);
 
         return view('categories.index', compact('categories'));
     }

@@ -21,7 +21,7 @@
 @endphp
 
 <aside id="sidebar"
-    class="fixed left-0 bg-white border-r border-gray-200 flex flex-col z-[99999] w-[220px] transition-transform duration-300 -translate-x-full lg:translate-x-0"
+    class="fixed left-0 bg-white border-r border-gray-600 flex flex-col z-[99999] w-[220px] transition-transform duration-300 -translate-x-full lg:translate-x-0"
     style="top: var(--app-header-height, 56px); height: calc(100vh - var(--app-header-height, 56px));">
 
     {{-- User / Org (dropdown) --}}
@@ -29,7 +29,7 @@
         <button type="button" id="org-toggle"
             class="w-full flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded px-1 py-1">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                style="background-color:#1565C0;">
+                style="background-color:var(--color-brand-500);">
                 {{ strtoupper(substr(auth()->user()->organization->name ?? (auth()->user()->username ?? 'F'), 0, 1)) }}
             </div>
             <span class="text-sm font-semibold text-gray-800 truncate flex-1 leading-tight">
@@ -115,7 +115,7 @@
                                         class="fa-solid fa-chevron-down flex-shrink-0 transition-transform duration-200 text-[14px] {{ $isOpen ? 'rotate-180 text-blue-500' : 'text-gray-400' }}"></i>
                                 </button>
                                 <ul id="submenu-{{ $key }}"
-                                    class="mt-0.5 ml-7 pl-2 border-l border-gray-200 space-y-0.5 {{ $isOpen ? '' : 'hidden' }}">
+                                    class="mt-0.5 ml-7 pl-2 border-l border-gray-600 space-y-0.5 {{ $isOpen ? '' : 'hidden' }}">
                                     @foreach ($item['subItems'] as $sub)
                                         <li>
                                             @php

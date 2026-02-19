@@ -10,11 +10,19 @@ use Illuminate\Validation\Rule;
 
 class RecipeController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $recipes = Recipe::where('organization_id', Auth::user()->organization_id)
-            ->orderByDesc('transaction_date')
-            ->paginate(10);
+        $orgId = Auth::user()->organization_id;
+        $q = $request->query('q');
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = in_array($perPage, [10,20,50,100]) ? $perPage : 10;
+
+        $query = Recipe::where('organization_id', $orgId);
+        if ($q) {
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        $recipes = $query->orderByDesc('transaction_date')->paginate($perPage);
         return view('recipes.index', compact('recipes'));
     }
 

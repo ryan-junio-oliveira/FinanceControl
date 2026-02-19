@@ -59,4 +59,24 @@ class AuthController extends Controller
         Auth::logout();
         return redirect('/');
     }
+
+    // Force password change after invite/login
+    public function showForceChangeForm()
+    {
+        return view('auth.passwords.force-change');
+    }
+
+    public function forceChangePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = $request->user();
+        $user->password = $request->password; // model casts will hash
+        $user->must_change_password = false;
+        $user->save();
+
+        return redirect()->route('dashboard')->with('success', 'Senha alterada com sucesso.');
+    }
 }

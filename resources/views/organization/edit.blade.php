@@ -11,22 +11,19 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="rounded-md bg-green-50 border border-green-100 p-3 text-sm text-green-700">{{ session('success') }}</div>
-    @endif
+
 
     <div class="bg-white p-6 rounded-lg shadow-sm">
         <form action="{{ route('organization.update') }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
             <div>
-                <label class="text-sm text-gray-600">Nome da organização</label>
-                <input name="name" value="{{ old('name', $org->name) }}" required class="w-full rounded-lg border px-3 py-2" />
+                <x-form-input name="name" label="Nome da organização" :value="old('name', $org->name)" required />
             </div>
             <div class="flex gap-3">
-                <button class="px-4 py-2 rounded-lg bg-brand-500 text-white">Salvar</button>
+                <x-button-primary type="submit">Salvar</x-button-primary>
                 @if($org->isArchived())
-                    <form action="{{ route('organization.unarchive') }}" method="POST">@csrf<button class="px-4 py-2 rounded-lg border">Restaurar</button></form>
+                    <form action="{{ route('organization.unarchive') }}" method="POST">@csrf<x-button-primary type="submit">Restaurar</x-button-primary></form>
                 @else
                     <form action="{{ route('organization.archive') }}" method="POST">@csrf<button class="px-4 py-2 rounded-lg border text-rose-600" onclick="return confirm('Arquivar organização? Após 6 meses será excluída definitivamente.')">Arquivar</button></form>
                 @endif
@@ -39,15 +36,13 @@
         <form action="{{ route('organization.invite') }}" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             @csrf
             <div>
-                <label class="text-sm text-gray-600">Usuário</label>
-                <input name="username" value="{{ old('username') }}" required class="w-full rounded-lg border px-3 py-2" />
+                <x-form-input name="username" label="Usuário" :value="old('username')" required />
             </div>
             <div>
-                <label class="text-sm text-gray-600">Email</label>
-                <input name="email" type="email" value="{{ old('email') }}" required class="w-full rounded-lg border px-3 py-2" />
+                <x-form-input name="email" label="Email" type="email" :value="old('email')" required />
             </div>
             <div class="flex items-end gap-2">
-                <button class="px-4 py-2 rounded-lg bg-brand-500 text-white">Convidar</button>
+                <x-button-primary>Convidar</x-button-primary>
             </div>
         </form>
     </div>
@@ -58,17 +53,17 @@
             <table class="w-full text-left text-sm text-gray-700">
                 <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                     <tr>
-                        <th class="px-4 py-3">Usuário</th>
-                        <th class="px-4 py-3">Email</th>
-                        <th class="px-4 py-3">Ações</th>
+                        <th class="px-6 py-3">Usuário</th>
+                        <th class="px-6 py-3">Email</th>
+                        <th class="px-6 py-3">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($members as $m)
                     <tr class="border-t">
-                        <td class="px-4 py-3">{{ $m->username }}</td>
-                        <td class="px-4 py-3">{{ $m->email }}</td>
-                        <td class="px-4 py-3">
+                        <td class="px-6 py-4">{{ $m->username }}</td>
+                        <td class="px-6 py-4">{{ $m->email }}</td>
+                        <td class="px-6 py-4">
                             @if($m->id !== auth()->id())
                             <form action="{{ route('organization.members.remove', $m) }}" method="POST" class="inline-block" onsubmit="return confirm('Remover membro?');">
                                 @csrf

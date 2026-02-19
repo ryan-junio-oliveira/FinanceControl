@@ -1,12 +1,11 @@
 <header
     id="app-header"
-    class="fixed top-0 left-0 right-0 z-[100000] h-14 flex items-center px-4 shadow"
-    style="background-color: #1590c0;">
+    class="fixed top-0 left-0 right-0 z-[100000] h-14 flex items-center px-4 shadow bg-brand-500 text-white">
 
     {{-- Left: brand (removed desktop hamburger to avoid duplicate) --}}
     <div class="flex items-center gap-3 min-w-[200px]">
         <a href="{{ route('dashboard') }}" class="text-white font-bold text-lg tracking-tight select-none">
-            FinanceControl<span class="ml-1 text-xs font-medium bg-white/20 px-1.5 py-0.5 rounded">ERP</span>
+            Finance<span class="text-amber-400">Control</span> <span class="ml-1 text-xs font-medium bg-white/20 px-1.5 py-0.5 rounded">ERP</span>
         </a>
     </div>
 
@@ -25,7 +24,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
-                    class="text-white text-sm font-medium flex items-center gap-1 hover:text-blue-200 transition cursor-pointer">
+                    class="bg-white text-gray-700 p-2 rounded text-sm font-medium flex items-center gap-1 hover:text-cyan-600 transition cursor-pointer">
                 Sair
                 <i class="fa-solid fa-right-from-bracket text-[14px]"></i>
             </button>

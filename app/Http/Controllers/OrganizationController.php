@@ -43,16 +43,9 @@ class OrganizationController extends Controller
             'email' => 'required|email|max:255|unique:users,email',
         ]);
 
-        $password = Str::random(12);
+        $service = new \App\Services\OrganizationInviteService();
+        $user = $service->invite($validated['username'], $validated['email'], $org->id);
 
-        $user = User::create([
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'password' => $password, // cast 'hashed' will hash it
-            'organization_id' => $org->id,
-        ]);
-
-        // Note: no email sent by default (caller can manually inform the credential or implement mail later)
         return redirect()->route('organization.edit')->with('success', 'Membro convidado com sucesso.');
     }
 

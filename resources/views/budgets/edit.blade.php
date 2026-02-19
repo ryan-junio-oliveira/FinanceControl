@@ -12,21 +12,21 @@
 
         <div>
             <label class="text-sm text-gray-600">Nome</label>
-            <input name="name" value="{{ old('name', $budget->name) }}" required class="w-full rounded-lg border px-3 py-2" />
+            <x-form-input name="name" :value="old('name', $budget->name)" required />
         </div>
 
         <div class="grid grid-cols-3 gap-4">
             <div>
                 <label class="text-sm text-gray-600">Valor planejado</label>
-                <input name="amount" type="number" step="0.01" value="{{ old('amount', $budget->amount) }}" required class="w-full rounded-lg border px-3 py-2" />
+                <x-form-input name="amount" type="number" step="0.01" :value="old('amount', $budget->amount)" required />
             </div>
             <div>
                 <label class="text-sm text-gray-600">Data início</label>
-                <input type="date" name="start_date" value="{{ old('start_date', $budget->start_date?->format('Y-m-d')) }}" required class="w-full rounded-lg border px-3 py-2" />
+                <x-form-input name="start_date" type="date" :value="old('start_date', $budget->start_date?->format('Y-m-d'))" required />
             </div>
             <div>
                 <label class="text-sm text-gray-600">Data fim</label>
-                <input type="date" name="end_date" value="{{ old('end_date', $budget->end_date?->format('Y-m-d')) }}" required class="w-full rounded-lg border px-3 py-2" />
+                <x-form-input name="end_date" type="date" :value="old('end_date', $budget->end_date?->format('Y-m-d'))" required />
             </div>
         </div>
 
@@ -42,7 +42,7 @@
 
         <div>
             <label class="inline-flex items-center gap-2 text-sm">
-                <input type="checkbox" name="is_active" value="1" {{ old('is_active', $budget->is_active) ? 'checked' : '' }} class="rounded" />
+                <x-form-checkbox name="is_active" :checked="old('is_active', $budget->is_active)" />
                 <span>Ativo</span>
             </label>
         </div>

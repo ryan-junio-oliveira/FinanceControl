@@ -72,8 +72,8 @@
 <body>
 
     {{-- preloader --}}
-    <div id="preloader" class="fixed inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-gray-900/80">
-        <div class="w-14 h-14 rounded-full border-4 border-t-4 border-gray-200 border-t-gray-800 animate-spin" role="status" aria-label="Carregando"></div>
+    <div id="preloader" class="fixed inset-0 z-50 flex items-center justify-center bg-white/80">
+        <div class="w-14 h-14 rounded-full border-4 border-t-4 border-gray-600 border-t-gray-800 animate-spin" role="status" aria-label="Carregando"></div>
     </div>
     {{-- preloader end --}}
 

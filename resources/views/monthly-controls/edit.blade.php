@@ -9,15 +9,7 @@
         <a href="{{ route('monthly-controls.index') }}" class="text-sm text-gray-500">Voltar</a>
     </div>
 
-    @if ($errors->any())
-        <div class="mb-4 rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
-            <ul class="list-disc pl-5 space-y-1">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-form-errors />
 
     <form action="{{ route('monthly-controls.update', $control) }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-sm">
         @csrf
@@ -33,7 +25,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1">Ano</label>
-                <input name="year" type="number" min="2000" max="2100" value="{{ old('year', $control->year) }}" required class="w-full rounded-lg border px-3 py-2" />
+                <x-form-input name="year" type="number" min="2000" max="2100" :value="old('year', $control->year)" required />
             </div>
         </div>
 

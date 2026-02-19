@@ -17,35 +17,16 @@
     <!-- Default header height CSS variable (updated dynamically by JS) -->
     <style>:root { --app-header-height: 56px; }</style>
 
-    <!-- Vanilla JS theme & sidebar store (replaces Alpine.store) -->
+    <!-- Dark mode removed: theme logic disabled, sidebar store retained -->
     <script>
         (function () {
             window.TailAdmin = window.TailAdmin || {};
 
+            /* theme removed — app locked to light mode */
             TailAdmin.theme = {
-                theme: 'light',
-                init() {
-                    const saved = localStorage.getItem('theme');
-                    const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                    this.theme = saved || system;
-                    this.update();
-                },
-                toggle() {
-                    this.theme = this.theme === 'light' ? 'dark' : 'light';
-                    localStorage.setItem('theme', this.theme);
-                    this.update();
-                },
-                update() {
-                    const html = document.documentElement;
-                    const body = document.body;
-                    if (this.theme === 'dark') {
-                        html.classList.add('dark');
-                        body.classList.add('dark', 'bg-gray-900');
-                    } else {
-                        html.classList.remove('dark');
-                        body.classList.remove('dark', 'bg-gray-900');
-                    }
-                }
+                init() { /* no-op: light-only */ },
+                toggle() { /* removed */ },
+                update() { document.documentElement.classList.remove('dark'); document.body.classList.remove('dark','bg-gray-900'); }
             };
 
             TailAdmin.sidebar = {
@@ -121,7 +102,7 @@
                 TailAdmin.theme.init();
                 TailAdmin.sidebar.init();
 
-                // hide preloader (replaces Alpine 'loaded')
+                // hide preloader
                 setTimeout(() => {
                     const pre = document.getElementById('preloader');
                     if (pre) pre.style.display = 'none';
@@ -146,19 +127,12 @@
         })();
     </script>
 
-    <!-- Apply dark mode immediately to prevent flash -->
+    <!-- Dark mode removed: enforce light-only to avoid flashes -->
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('theme');
-            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            const theme = savedTheme || systemTheme;
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-                document.body.classList.add('dark', 'bg-gray-900');
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.body.classList.remove('dark', 'bg-gray-900');
-            }
+            document.documentElement.classList.remove('dark');
+            document.body.classList.remove('dark', 'bg-gray-900');
+            localStorage.removeItem('theme');
         })();
     </script>
     
@@ -167,10 +141,14 @@
 <body>
 
     {{-- preloader --}}
-    <div id="preloader" class="fixed inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-gray-900/80">
-        <div class="w-14 h-14 rounded-full border-4 border-t-4 border-gray-200 border-t-gray-800 animate-spin" role="status" aria-label="Carregando"></div>
+    <div id="preloader" class="fixed inset-0 z-50 flex items-center justify-center bg-white/80">
+        <div class="w-14 h-14 rounded-full border-4 border-t-4 border-gray-600 border-t-gray-800 animate-spin" role="status" aria-label="Carregando"></div>
     </div>
     {{-- preloader end --}}
+
+    {{-- global flash (session messages) --}}
+    <x-flash />
+    {{-- end flash --}}
 
     <!-- app header (full width) -->
     @include('layouts.app-header')

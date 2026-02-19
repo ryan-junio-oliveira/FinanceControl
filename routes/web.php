@@ -20,8 +20,17 @@ Route::post('/password/email', function () {
     return back()->with('status', 'Link enviado (placeholder)');
 })->name('password.email');
 
+// Force password change (for invited users)
 Route::middleware('auth')->group(function () {
+    Route::get('/password/change', [App\Http\Controllers\AuthController::class, 'showForceChangeForm'])->name('password.force');
+    Route::post('/password/change', [App\Http\Controllers\AuthController::class, 'forceChangePassword'])->name('password.force.update');
+});
+
+Route::middleware(['auth','force_password_change'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/styleguide/palette', function () {
+        return view('style.palette');
+    })->name('style.palette');
 
     // CRUD Despesas
     Route::get('/expenses', [App\Http\Controllers\ExpenseController::class, 'index'])->name('expenses.index');

@@ -9,10 +9,19 @@ use Illuminate\Http\Request;
 
 class CreditCardController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         $orgId = auth()->user()->organization_id;
-        $cards = CreditCard::where('organization_id', $orgId)->with('bank')->orderBy('name')->paginate(20);
+        $q = $request->query('q');
+        $perPage = (int) $request->query('per_page', 20);
+        $perPage = in_array($perPage, [10,20,50,100]) ? $perPage : 20;
+
+        $query = CreditCard::where('organization_id', $orgId)->with('bank');
+        if ($q) {
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        $cards = $query->orderBy('name')->paginate($perPage);
         return view('credit-cards.index', ['creditCards' => $cards]);
     }
 
