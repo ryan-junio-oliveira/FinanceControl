@@ -21,7 +21,7 @@
 @endphp
 
 <aside id="sidebar"
-    class="fixed left-0 bg-white border-r border-gray-600 flex flex-col z-[99999] w-[220px] transition-transform duration-300 -translate-x-full lg:translate-x-0"
+    class="fixed left-0 bg-white border-r border-gray-100 flex flex-col z-[99999] w-[220px] transition-transform duration-300 -translate-x-full lg:translate-x-0"
     style="top: var(--app-header-height, 56px); height: calc(100vh - var(--app-header-height, 56px));">
 
     {{-- User / Org (dropdown) --}}
@@ -115,7 +115,7 @@
                                         class="fa-solid fa-chevron-down flex-shrink-0 transition-transform duration-200 text-[14px] {{ $isOpen ? 'rotate-180 text-blue-500' : 'text-gray-400' }}"></i>
                                 </button>
                                 <ul id="submenu-{{ $key }}"
-                                    class="mt-0.5 ml-7 pl-2 border-l border-gray-600 space-y-0.5 {{ $isOpen ? '' : 'hidden' }}">
+                                    class="mt-0.5 ml-7 pl-2 border-l border-gray-100 space-y-0.5 {{ $isOpen ? '' : 'hidden' }}">
                                     @foreach ($item['subItems'] as $sub)
                                         <li>
                                             @php
@@ -224,12 +224,5 @@
         });
     })();
 
-    // close mobile sidebar when a navigation link is clicked (delegate)
-    document.getElementById('sidebar')?.addEventListener('click', function(e) {
-        const a = e.target.closest && e.target.closest('a');
-        if (!a) return;
-        if (window.innerWidth < 1280) {
-            TailAdmin && TailAdmin.sidebar && TailAdmin.sidebar.setMobileOpen(false);
-        }
-    });
+    // close mobile sidebar when a navigation link is clicked (app.blade.php handles this via event delegation)
 </script>

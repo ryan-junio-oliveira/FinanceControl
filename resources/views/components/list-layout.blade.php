@@ -22,11 +22,11 @@
 
     {{-- controls slot (defaults to nothing) --}}
     @if (isset($controls))
-        <div class="rounded-xl border border-gray-600 bg-white p-4 shadow-sm mb-4">{{ $controls }}</div>
+        <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm mb-4">{{ $controls }}</div>
     @endif
 
     {{-- main content (table) --}}
-    <div class="rounded-xl border border-gray-600 bg-white shadow-sm overflow-hidden">{{ $slot }}</div>
+    <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">{{ $slot }}</div>
 
     {{-- pagination slot (optional) --}}
     @if (isset($pagination))

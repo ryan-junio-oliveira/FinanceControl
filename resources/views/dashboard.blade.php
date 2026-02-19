@@ -259,7 +259,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-600">
                         <thead>
-                            <tr class="border-b border-gray-600 text-xs uppercase tracking-wider text-gray-400">
+                            <tr class="border-b border-gray-100 text-xs uppercase tracking-wider text-gray-400">
                                 <th class="pb-3 pr-4">Tipo</th>
                                 <th class="pb-3 pr-4">Descrição</th>
                                 <th class="pb-3 pr-4">Data</th>
