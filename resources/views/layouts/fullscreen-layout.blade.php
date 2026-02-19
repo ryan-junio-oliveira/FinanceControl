@@ -21,20 +21,9 @@
                 window.TailAdmin = window.TailAdmin || {};
 
                 TailAdmin.theme = {
-                    theme: 'light',
-                    init() {
-                        const saved = localStorage.getItem('theme');
-                        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                        this.theme = saved || system;
-                        this.update();
-                    },
-                    toggle() { this.theme = this.theme === 'light' ? 'dark' : 'light'; localStorage.setItem('theme', this.theme); this.update(); },
-                    update() {
-                        const html = document.documentElement;
-                        const body = document.body;
-                        if (this.theme === 'dark') { html.classList.add('dark'); body.classList.add('dark', 'bg-gray-900'); }
-                        else { html.classList.remove('dark'); body.classList.remove('dark', 'bg-gray-900'); }
-                    }
+                    init() { /* no-op: light-only */ },
+                    toggle() { /* removed */ },
+                    update() { document.documentElement.classList.remove('dark'); document.body.classList.remove('dark','bg-gray-900'); }
                 };
 
                 TailAdmin.sidebar = {
@@ -52,19 +41,12 @@
         }
     </script>
 
-    <!-- Apply dark mode immediately to prevent flash -->
+    <!-- Dark mode removed: enforce light-only to avoid flashes -->
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('theme');
-            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            const theme = savedTheme || systemTheme;
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-                document.body.classList.add('dark', 'bg-gray-900');
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.body.classList.remove('dark', 'bg-gray-900');
-            }
+            document.documentElement.classList.remove('dark');
+            document.body.classList.remove('dark', 'bg-gray-900');
+            localStorage.removeItem('theme');
         })();
     </script>
 </head>
