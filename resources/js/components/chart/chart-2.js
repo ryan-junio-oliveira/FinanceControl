@@ -3,13 +3,15 @@ export const initChartTwo = () => {
     const chartElement = document.querySelector('#chartTwo');
 
     if (chartElement) {
+        const percent = parseFloat(chartElement.dataset.percent) || 0;
+
         const chartTwoOptions = {
-            series: [75.55],
+            series: [percent],
             colors: ["#465FFF"],
             chart: {
                 fontFamily: "Outfit, sans-serif",
                 type: "radialBar",
-                height: 330,
+                height: 220,
                 sparkline: {
                     enabled: true,
                 },
@@ -19,37 +21,30 @@ export const initChartTwo = () => {
                     startAngle: -90,
                     endAngle: 90,
                     hollow: {
-                        size: "80%",
+                        size: "75%",
                     },
                     track: {
                         background: "#E4E7EC",
                         strokeWidth: "100%",
-                        margin: 5, // margin is in pixels
+                        margin: 5,
                     },
                     dataLabels: {
-                        name: {
-                            show: false,
-                        },
+                        name: { show: false },
                         value: {
-                            fontSize: "36px",
+                            fontSize: "28px",
                             fontWeight: "600",
-                            offsetY: 60,
+                            offsetY: 50,
                             color: "#1D2939",
                             formatter: function (val) {
-                                return val + "%";
+                                return Math.round(val) + "%";
                             },
                         },
                     },
                 },
             },
-            fill: {
-                type: "solid",
-                colors: ["#465FFF"],
-            },
-            stroke: {
-                lineCap: "round",
-            },
-            labels: ["Progress"],
+            fill: { type: "solid", colors: ["#465FFF"] },
+            stroke: { lineCap: "round" },
+            labels: ["Execução"],
         };
 
         const chart = new ApexCharts(chartElement, chartTwoOptions);

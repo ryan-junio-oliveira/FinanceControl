@@ -10,21 +10,29 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('organization_id')->constrained()->onDelete('cascade');
+
+            $table->foreignId('organization_id')
+                ->constrained()
+                ->restrictOnDelete();
+
+            $table->foreignId('category_id')
+                ->constrained()
+                ->restrictOnDelete();
+
             $table->string('name');
-            $table->decimal('amount', 10, 2);
+            $table->decimal('amount', 12, 2);
             $table->boolean('fixed')->default(false);
             $table->date('transaction_date')->nullable();
-            $table->unsignedBigInteger('monthly_financial_control_id');
+
+            $table->foreignId('monthly_financial_control_id')
+                ->constrained()
+                ->cascadeOnDelete(); // aqui pode manter
+
             $table->timestamps();
 
-            $table->foreign('monthly_financial_control_id')->references('id')->on('monthly_financial_controls')->onDelete('cascade');
-
-            $table->index('organization_id');
-            $table->index('monthly_financial_control_id');
-            $table->index('name');
+            $table->index(['organization_id', 'transaction_date']);
+            $table->index('category_id');
             $table->index('fixed');
-            $table->index('transaction_date');
         });
     }
 

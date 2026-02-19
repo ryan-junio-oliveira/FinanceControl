@@ -9,6 +9,7 @@ use App\Models\Organization;
 use App\Models\Recipe;
 use App\Models\Expense;
 use App\Models\MonthlyFinancialControl;
+use App\Models\Category;
 use Carbon\Carbon;
 
 class MonthlyControlAutoCreationTest extends TestCase
@@ -24,10 +25,13 @@ class MonthlyControlAutoCreationTest extends TestCase
 
         $date = Carbon::create(2026, 2, 14);
 
+        $cat = Category::create(['name' => 'Vendas', 'type' => 'recipe', 'organization_id' => $org->id]);
+
         $response = $this->post(route('recipes.store'), [
             'name' => 'Venda teste',
             'amount' => 150.00,
             'transaction_date' => $date->format('Y-m-d'),
+            'category_id' => $cat->id,
         ]);
 
         $response->assertRedirect(route('recipes.index'));
@@ -55,11 +59,14 @@ class MonthlyControlAutoCreationTest extends TestCase
 
         $date = Carbon::create(2026, 3, 5);
 
+        $cat = Category::create(['name' => 'Contas', 'type' => 'expense', 'organization_id' => $org->id]);
+
         $response = $this->post(route('expenses.store'), [
             'name' => 'Conta teste',
             'amount' => 75.50,
             'transaction_date' => $date->format('Y-m-d'),
             // monthly_financial_control_id intentionally omitted
+            'category_id' => $cat->id,
         ]);
 
         $response->assertRedirect(route('expenses.index'));

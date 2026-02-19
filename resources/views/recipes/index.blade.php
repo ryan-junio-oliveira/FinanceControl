@@ -17,7 +17,7 @@
         <tr>
             <th class="px-4 py-3">Nome</th>
             <th class="px-4 py-3">Valor</th>
-            <th class="px-4 py-3">Recebido</th>
+            <th class="px-4 py-3">Fixa</th>
             <th class="px-4 py-3">Data</th>
             <th class="px-4 py-3">Ações</th>
         </tr>

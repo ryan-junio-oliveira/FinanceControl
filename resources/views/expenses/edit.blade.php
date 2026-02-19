@@ -45,14 +45,25 @@
             </div>
         </div>
 
-        <div>
-            <label class="block text-sm font-medium mb-1">Controle Mensal (opcional)</label>
-            <select name="monthly_financial_control_id" class="w-full rounded-lg border px-3 py-2">
-                <option value="">Auto (criar/associar)</option>
-                @foreach($controls as $c)
-                    <option value="{{ $c->id }}" {{ old('monthly_financial_control_id', $expense->monthly_financial_control_id) == $c->id ? 'selected' : '' }}>{{ sprintf('%02d/%d', $c->month, $c->year) }}</option>
-                @endforeach
-            </select>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Categoria</label>
+                <select name="category_id" required class="w-full rounded-lg border px-3 py-2">
+                    @foreach($categories as $c)
+                        <option value="{{ $c->id }}" {{ (old('category_id', $expense->category_id) == $c->id) ? 'selected' : '' }}>{{ $c->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Controle Mensal (opcional)</label>
+                <select name="monthly_financial_control_id" class="w-full rounded-lg border px-3 py-2">
+                    <option value="">Auto (criar/associar)</option>
+                    @foreach($controls as $c)
+                        <option value="{{ $c->id }}" {{ old('monthly_financial_control_id', $expense->monthly_financial_control_id) == $c->id ? 'selected' : '' }}>{{ sprintf('%02d/%d', $c->month, $c->year) }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
 
         <div class="pt-4 flex gap-3">

@@ -29,4 +29,9 @@ class Organization extends Model
     {
         return $this->hasMany(Recipe::class);
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 }

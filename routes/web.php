@@ -46,4 +46,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/monthly-controls/{monthly_control}/edit', [App\Http\Controllers\MonthlyFinancialControlController::class, 'edit'])->name('monthly-controls.edit');
     Route::put('/monthly-controls/{monthly_control}', [App\Http\Controllers\MonthlyFinancialControlController::class, 'update'])->name('monthly-controls.update');
     Route::delete('/monthly-controls/{monthly_control}', [App\Http\Controllers\MonthlyFinancialControlController::class, 'destroy'])->name('monthly-controls.destroy');
+
+    // CRUD Categorias
+    Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [App\Http\Controllers\CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [App\Http\Controllers\CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{category}/edit', [App\Http\Controllers\CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{category}', [App\Http\Controllers\CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [App\Http\Controllers\CategoryController::class, 'destroy'])->name('categories.destroy');
 });

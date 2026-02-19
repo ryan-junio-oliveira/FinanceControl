@@ -10,7 +10,15 @@ return new class extends Migration
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('organization_id')->constrained()->onDelete('cascade');
+
+            $table->foreignId('organization_id')
+                ->constrained()
+                ->restrictOnDelete();
+
+            $table->foreignId('category_id')
+                ->constrained()
+                ->restrictOnDelete();
+                
             $table->string('name');
             $table->decimal('amount', 10, 2);
             $table->boolean('fixed')->default(false);
@@ -21,6 +29,7 @@ return new class extends Migration
             $table->foreign('monthly_financial_control_id')->references('id')->on('monthly_financial_controls')->onDelete('cascade');
 
             $table->index('organization_id');
+            $table->index('category_id');
             $table->index('monthly_financial_control_id');
             $table->index('name');
             $table->index('fixed');

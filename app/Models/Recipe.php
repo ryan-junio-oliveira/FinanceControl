@@ -16,6 +16,7 @@ class Recipe extends Model
         'transaction_date',
         'monthly_financial_control_id',
         'organization_id',
+        'category_id',
     ];
 
     protected $casts = [
@@ -32,5 +33,10 @@ class Recipe extends Model
     public function organization()
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

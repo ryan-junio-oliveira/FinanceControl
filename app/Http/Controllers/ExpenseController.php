@@ -19,16 +19,24 @@ class ExpenseController extends Controller
 
     public function create()
     {
-        // Buscar controles mensais da organização do usuário
+        // Buscar controles mensais e categorias da organização do usuário
         $controls = \App\Models\MonthlyFinancialControl::where('organization_id', Auth::user()->organization_id)
             ->orderByDesc('year')
             ->orderByDesc('month')
             ->get();
-        return view('expenses.create', compact('controls'));
+
+        $categories = \App\Models\Category::where('organization_id', Auth::user()->organization_id)
+            ->where('type', 'expense')
+            ->orderBy('name')
+            ->get();
+
+        return view('expenses.create', compact('controls', 'categories'));
     }
 
     public function store(Request $request)
     {
+        $orgId = Auth::user()->organization_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0',
@@ -38,25 +46,40 @@ class ExpenseController extends Controller
                 'nullable',
                 'exists:monthly_financial_controls,id',
             ],
+            'category_id' => [
+                'required',
+                'integer',
+                \Illuminate\Validation\Rule::exists('categories', 'id')->where(function ($q) use ($orgId) {
+                    $q->where('organization_id', $orgId)->where('type', 'expense');
+                }),
+            ],
         ]);
         // ensure organization is set (used by the model/trait to create/find monthly control)
-        $validated['organization_id'] = Auth::user()->organization_id;
+        $validated['organization_id'] = $orgId;
         Expense::create($validated);
         return redirect()->route('expenses.index')->with('success', 'Despesa criada com sucesso!');
     }
 
     public function edit(Expense $expense)
     {
-        // Buscar controles mensais da organização do usuário
+        // Buscar controles mensais e categorias da organização do usuário
         $controls = \App\Models\MonthlyFinancialControl::where('organization_id', Auth::user()->organization_id)
             ->orderByDesc('year')
             ->orderByDesc('month')
             ->get();
-        return view('expenses.edit', compact('expense', 'controls'));
+
+        $categories = \App\Models\Category::where('organization_id', Auth::user()->organization_id)
+            ->where('type', 'expense')
+            ->orderBy('name')
+            ->get();
+
+        return view('expenses.edit', compact('expense', 'controls', 'categories'));
     }
 
     public function update(Request $request, Expense $expense)
     {
+        $orgId = Auth::user()->organization_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0',
@@ -65,6 +88,13 @@ class ExpenseController extends Controller
             'monthly_financial_control_id' => [
                 'nullable',
                 'exists:monthly_financial_controls,id',
+            ],
+            'category_id' => [
+                'required',
+                'integer',
+                \Illuminate\Validation\Rule::exists('categories', 'id')->where(function ($q) use ($orgId) {
+                    $q->where('organization_id', $orgId)->where('type', 'expense');
+                }),
             ],
         ]);
         $expense->update($validated);
