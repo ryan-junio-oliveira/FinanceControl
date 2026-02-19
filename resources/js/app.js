@@ -44,6 +44,23 @@ document.addEventListener('DOMContentLoaded', () => {
         import('./components/chart/chart-13').then(module => module.initChartThirteen());
     }
 
+    // new dashboard charts
+    if (document.querySelector('#chartExpensesByCategory')) {
+        import('./components/chart/chart-pie').then(module => module.initPie('chartExpensesByCategory'));
+    }
+    if (document.querySelector('#chartRevenueByCategory')) {
+        import('./components/chart/chart-pie').then(module => module.initPie('chartRevenueByCategory'));
+    }
+    if (document.querySelector('#chartCards')) {
+        import('./components/chart/chart-cards').then(module => module.initCardsBar());
+    }
+    if (document.querySelector('#chartCombined')) {
+        import('./components/chart/chart-combined').then(module => module.initCombined());
+    }
+    if (document.querySelector('#chartTopCategories')) {
+        import('./components/chart/chart-top-categories').then(module => module.initTopCategories());
+    }
+
     // Calendar init
     if (document.querySelector('#calendar')) {
         import('./components/calendar-init').then(module => module.calendarInit());

@@ -218,6 +218,95 @@
 
         </div>
 
+        <!-- Additional analytics: category-breakdowns, cards and comparisons -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Expenses by category (pie) -->
+            <div class="bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-6 shadow-sm transition">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium text-gray-900">Despesas por categoria (mês)</div>
+                    <div class="text-xs text-gray-400">{{ now()->format('M Y') }}</div>
+                </div>
+                <div id="chartExpensesByCategory" class="mt-4 h-56" data-series='@json($expensesCategorySeries ?? [])' data-labels='@json($expensesCategoryLabels ?? [])'></div>
+            </div>
+
+            <!-- Revenue by category (pie) -->
+            <div class="bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-6 shadow-sm transition">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium text-gray-900">Receita por categoria (mês)</div>
+                    <div class="text-xs text-gray-400">{{ now()->format('M Y') }}</div>
+                </div>
+                <div id="chartRevenueByCategory" class="mt-4 h-56" data-series='@json($recipesCategorySeries ?? [])' data-labels='@json($recipesCategoryLabels ?? [])'></div>
+            </div>
+
+            <!-- Cards overview -->
+            <div class="bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-6 shadow-sm transition">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium text-gray-900">Cartões (faturas)</div>
+                    <div class="text-xs text-gray-400">Total faturas</div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="text-3xl font-semibold">R$ {{ number_format($cardsTotal ?? 0, 2, ',', '.') }}</div>
+                    <div class="text-xs text-gray-500 mt-1">Soma das faturas de todos os cartões</div>
+                </div>
+
+                <div id="chartCards" class="mt-6 h-40" data-labels='@json($creditCards->pluck("name") ?? [])' data-series='@json($creditCards->pluck("statement_amount") ?? [])'></div>
+
+                <div class="mt-4 text-sm">
+                    @forelse($creditCards as $c)
+                        <div class="flex items-center justify-between py-1">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full" style="background-color: {{ $c->color ?? '#CBD5E1' }}"></div>
+                                <div class="text-sm text-gray-700">{{ $c->name }}</div>
+                            </div>
+                            <div class="text-sm font-medium">R$ {{ number_format($c->statement_amount, 2, ',', '.') }}</div>
+                        </div>
+                    @empty
+                        <div class="text-xs text-gray-400">Nenhum cartão cadastrado.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <!-- Combined comparisons -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div class="bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-6 shadow-sm transition">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium text-gray-900">Despesa total (Despesas + Cartões) vs Receitas (mês)</div>
+                    <div class="text-xs text-gray-400">Mês atual</div>
+                </div>
+
+                <div id="chartCombined" class="mt-6 h-56" data-labels='@json([now()->format("M/Y")])' data-series='@json([
+                    ["name" => "Receitas", "data" => [ (float) ($totalRecipes ?? 0) ]],
+                    ["name" => "Despesas + Cartões", "data" => [ (float) ($totalExpensesWithCards ?? 0) ]]
+                ])'></div>
+
+                <div class="mt-4 text-sm text-gray-600 flex gap-4">
+                    <div>Receitas: <strong>R$ {{ number_format($totalRecipes ?? 0, 2, ',', '.') }}</strong></div>
+                    <div>Despesas totais: <strong>R$ {{ number_format($totalExpensesWithCards ?? 0, 2, ',', '.') }}</strong></div>
+                </div>
+            </div>
+
+            <div class="bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-6 shadow-sm transition">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium text-gray-900">Top categorias (despesa)</div>
+                    <div class="text-xs text-gray-400">Top 5</div>
+                </div>
+
+                <div id="chartTopCategories" class="mt-6 h-56" data-labels='@json($topExpenseCategories->pluck("category") ?? [])' data-series='@json($topExpenseCategories->pluck("total") ?? [])'></div>
+
+                <div class="mt-4 text-sm text-gray-600">
+                    @foreach($topExpenseCategories as $item)
+                        <div class="flex items-center justify-between py-1">
+                            <div class="text-sm">{{ $item['category'] }}</div>
+                            <div class="text-sm font-medium">R$ {{ number_format($item['total'], 2, ',', '.') }}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 @endsection

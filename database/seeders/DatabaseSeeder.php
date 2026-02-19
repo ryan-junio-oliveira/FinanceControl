@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\BankSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,6 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
-        $this->call(\Database\Seeders\BankSeeder::class);
+        $this->call(BankSeeder::class);
     }
 }

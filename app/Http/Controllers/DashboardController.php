@@ -26,11 +26,63 @@ class DashboardController extends Controller
 
         $recentTransactions = $this->getRecentTransactions($orgId);
 
+        // Expenses by category (current month)
+        $expensesByCategory = Expense::selectRaw('categories.name AS category, SUM(expenses.amount) AS total')
+            ->join('categories', 'categories.id', '=', 'expenses.category_id')
+            ->where('expenses.organization_id', $orgId)
+            ->whereYear('expenses.transaction_date', now()->year)
+            ->whereMonth('expenses.transaction_date', now()->month)
+            ->groupBy('categories.name')
+            ->orderByDesc('total')
+            ->get();
+
+        // Recipes by category (current month)
+        $recipesByCategory = Recipe::selectRaw('categories.name AS category, SUM(recipes.amount) AS total')
+            ->join('categories', 'categories.id', '=', 'recipes.category_id')
+            ->where('recipes.organization_id', $orgId)
+            ->whereYear('recipes.transaction_date', now()->year)
+            ->whereMonth('recipes.transaction_date', now()->month)
+            ->groupBy('categories.name')
+            ->orderByDesc('total')
+            ->get();
+
+        // Cards summary (current organization)
+        $creditCards = \App\Models\CreditCard::where('organization_id', $orgId)->get();
+        $cardsTotal = $creditCards->sum('statement_amount');
+
+        // Combined expense (expenses this month + cards statements)
+        $totalExpensesWithCards = ($totals['totalExpenses'] ?? 0) + $cardsTotal;
+
+        // Prepare chart-friendly arrays
+        $expensesCategoryLabels = $expensesByCategory->pluck('category')->toArray();
+        $expensesCategorySeries = $expensesByCategory->pluck('total')->map(fn($v) => (float) $v)->toArray();
+
+        $recipesCategoryLabels = $recipesByCategory->pluck('category')->toArray();
+        $recipesCategorySeries = $recipesByCategory->pluck('total')->map(fn($v) => (float) $v)->toArray();
+
+        // Top expense categories (for bar chart)
+        $topExpenseCategories = $expensesByCategory->take(5)->map(fn($r) => ['category' => $r->category, 'total' => (float) $r->total]);
+
         return view('dashboard', [
             ...$totals,
             'recentTransactions' => $recentTransactions,
             'monthlyCategories' => $monthlyCategories,
             'monthlySeries' => $monthlySeries,
+
+            // category breakdowns
+            'expensesByCategory' => $expensesByCategory,
+            'recipesByCategory' => $recipesByCategory,
+            'expensesCategoryLabels' => $expensesCategoryLabels,
+            'expensesCategorySeries' => $expensesCategorySeries,
+            'recipesCategoryLabels' => $recipesCategoryLabels,
+            'recipesCategorySeries' => $recipesCategorySeries,
+
+            // cards
+            'creditCards' => $creditCards,
+            'cardsTotal' => $cardsTotal,
+            'totalExpensesWithCards' => $totalExpensesWithCards,
+
+            'topExpenseCategories' => $topExpenseCategories,
         ]);
     }
 
