@@ -30,7 +30,7 @@
                 ];
             @endphp
 
-            <x-table :columns="$columns" id="recipes-table" tbody-class="bg-white divide-y divide-gray-100">
+            <x-table compact :columns="$columns" id="recipes-table" tbody-class="bg-white divide-y divide-gray-100">
                 @forelse($recipes as $recipe)
                     <tr class="group transition-colors hover:bg-gray-50/70">
                         <td class="px-6 py-4 whitespace-nowrap">

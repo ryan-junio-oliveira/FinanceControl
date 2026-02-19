@@ -5,11 +5,12 @@
     'columns' => null, // array of ['label'=>..., 'class'=>..., 'sortable'=>bool]
     'id' => null,
     'tbodyClass' => 'bg-white divide-y divide-gray-100',
+    'compact' => false,
 ])
 
 <div class="overflow-x-auto w-full {{ $class }}" role="region" aria-label="{{ $ariaLabel ?? 'Data table' }}"
     @if ($ariaDesc) aria-describedby="{{ $ariaDesc }}" @endif>
-    <table @if ($id) id="{{ $id }}" @endif class="min-w-full text-sm bg-white"
+    <table @if ($id) id="{{ $id }}" @endif class="min-w-full text-sm bg-white {{ $compact ? 'table-compact' : '' }}"
         role="table">
         @if (is_array($columns) && count($columns) > 0)
             <thead>

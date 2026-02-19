@@ -11,7 +11,7 @@
 
     <x-form-errors />
 
-    <form action="{{ route('credit-cards.update', $creditCard) }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-sm">
+    <form action="{{ route('credit-cards.update', $creditCard) }}" method="POST" class="form-erp bg-white p-4 rounded-md shadow-sm space-y-4">
         @csrf
         @method('PUT')
 

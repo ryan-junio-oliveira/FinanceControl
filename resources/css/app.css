@@ -191,6 +191,33 @@
   }
 }
 
+/* Compact table variant for ERP-like density */
+.table-compact th,
+.table-compact td {
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+}
+.table-compact th {
+  font-size: 0.6875rem; /* text-xs */
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.table-compact td {
+  font-size: 0.875rem;
+}
+
+/* ERP-style compact form */
+.form-erp label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #6b7280; /* text-gray-500 */
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.form-erp .rounded-lg { border-radius: 0.375rem; } /* reduce input radius in ERP forms */
+.form-erp .space-y-1 { gap: 0.25rem; }
+.form-erp .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.form-erp .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
 @utility menu-item {
   @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
 }
@@ -747,6 +774,7 @@ span.flatpickr-weekday,
   @apply border-[6px] border-brand-500;
 }
 
+.taskCheckbox:checked ~ .box span {
   @apply opacity-100;
 }
 .taskCheckbox:checked ~ p {

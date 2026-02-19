@@ -13,6 +13,10 @@
                 </x-summary-cards>
             </x-slot>
 
+            <x-slot name="controls">
+                <x-table-controls placeholder="Pesquisar orçamentos" :perPageOptions="[10,20,50,100]" />
+            </x-slot>
+
             <div class="overflow-x-auto">
                 @php
                     $columns = [
@@ -26,7 +30,7 @@
                     ];
                 @endphp
 
-                <x-table :columns="$columns" id="budgets-table" tbody-class="bg-white divide-y divide-gray-100">
+                <x-table compact :columns="$columns" id="budgets-table" tbody-class="bg-white divide-y divide-gray-100">
                     @forelse($budgets as $b)
                         <tr class="border-t">
                             <td class="px-6 py-4">{{ $b->name }}</td>
@@ -41,16 +45,23 @@
                                 </div>
                                 <div class="text-xs text-gray-500 mt-1">{{ $b->progressPercent() }}%</div>
                             </td>
-                            <td class="px-6 py-4">
-                                <a href="{{ route('budgets.show', $b) }}" class="text-gray-600 mr-2">Ver</a>
-                                <a href="{{ route('budgets.edit', $b) }}" class="text-blue-600 mr-2">Editar</a>
-                                <form action="{{ route('budgets.destroy', $b) }}" method="POST" class="inline-block"
-                                    onsubmit="return confirm('Remover orçamento?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-red-600">Remover</button>
-                                </form>
-                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <a href="{{ route('budgets.show', $b) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" aria-label="Ver orçamento {{ $b->name }}">
+                                        <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    </a>
+                                    <a href="{{ route('budgets.edit', $b) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" aria-label="Editar orçamento {{ $b->name }}">
+                                        <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/></svg>
+                                    </a>
+                                    <form action="{{ route('budgets.destroy', $b) }}" method="POST" onsubmit="return confirm('Remover orçamento?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors" aria-label="Remover orçamento {{ $b->name }}">
+                                            <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9M21 6H3m16 0l-1 14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2L3 6"/></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td> 
                         </tr>
                     @empty
                         <tr>

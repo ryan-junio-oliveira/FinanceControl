@@ -19,7 +19,7 @@
         </div>
     @endif
 
-    <form action="{{ route('categories.store') }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-sm">
+    <form action="{{ route('categories.store') }}" method="POST" class="form-erp bg-white p-4 rounded-md shadow-sm space-y-4">
         @csrf
         <div>
             <label class="block text-sm font-medium mb-1">Nome</label>

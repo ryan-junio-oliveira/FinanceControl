@@ -30,7 +30,7 @@
             @endphp
 
             <div class="overflow-x-auto">
-                <x-table :columns="$columns" id="expenses-table" tbody-class="bg-white divide-y divide-gray-100">
+                <x-table compact :columns="$columns" id="expenses-table" tbody-class="bg-white divide-y divide-gray-100">
                     @forelse($expenses as $expense)
                         <tr class="hover:bg-gray-50 focus-within:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">

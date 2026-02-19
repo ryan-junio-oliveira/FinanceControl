@@ -21,7 +21,7 @@
     @endphp
 
     <div class="overflow-x-auto">
-        <x-table :columns="$columns" id="categories-table" tbody-class="bg-white divide-y divide-gray-100">
+        <x-table compact :columns="$columns" id="categories-table" tbody-class="bg-white divide-y divide-gray-100">
             @forelse($categories as $category)
                 <tr class="group hover:bg-gray-50 transition-colors">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $category->name }}</td>

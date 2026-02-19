@@ -6,7 +6,7 @@
 
     <h1 class="text-xl font-semibold mt-4 mb-4">Novo orçamento</h1>
 
-    <form action="{{ route('budgets.store') }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-sm">
+    <form action="{{ route('budgets.store') }}" method="POST" class="form-erp bg-white p-4 rounded-md shadow-sm space-y-4">
         @csrf
         <div>
             <label class="text-sm text-gray-600">Nome</label>
