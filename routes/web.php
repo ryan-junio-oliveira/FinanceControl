@@ -58,4 +58,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories/{category}/edit', [App\Http\Controllers\CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/categories/{category}', [App\Http\Controllers\CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [App\Http\Controllers\CategoryController::class, 'destroy'])->name('categories.destroy');
+
+    // Organization (settings / members)
+    Route::get('/organization', [App\Http\Controllers\OrganizationController::class, 'edit'])->name('organization.edit');
+    Route::put('/organization', [App\Http\Controllers\OrganizationController::class, 'update'])->name('organization.update');
+    Route::post('/organization/invite', [App\Http\Controllers\OrganizationController::class, 'inviteMember'])->name('organization.invite');
+    Route::delete('/organization/members/{user}', [App\Http\Controllers\OrganizationController::class, 'removeMember'])->name('organization.members.remove');
+    Route::post('/organization/archive', [App\Http\Controllers\OrganizationController::class, 'archive'])->name('organization.archive');
+    Route::post('/organization/unarchive', [App\Http\Controllers\OrganizationController::class, 'unarchive'])->name('organization.unarchive');
+    Route::delete('/organization', [App\Http\Controllers\OrganizationController::class, 'destroy'])->name('organization.destroy');
+
+    // CRUD Orçamentos
+    Route::get('/budgets', [App\Http\Controllers\BudgetController::class, 'index'])->name('budgets.index');
+    Route::get('/budgets/create', [App\Http\Controllers\BudgetController::class, 'create'])->name('budgets.create');
+    Route::post('/budgets', [App\Http\Controllers\BudgetController::class, 'store'])->name('budgets.store');
+    Route::get('/budgets/{budget}/edit', [App\Http\Controllers\BudgetController::class, 'edit'])->name('budgets.edit');
+    Route::put('/budgets/{budget}', [App\Http\Controllers\BudgetController::class, 'update'])->name('budgets.update');
+    Route::get('/budgets/{budget}', [App\Http\Controllers\BudgetController::class, 'show'])->name('budgets.show');
+    Route::delete('/budgets/{budget}', [App\Http\Controllers\BudgetController::class, 'destroy'])->name('budgets.destroy');
 });

@@ -155,6 +155,44 @@
             </div>
         </div>
 
+        <!-- CHART: Orçamentos — resumo e utilização -->
+        <div class="bg-white rounded-xl shadow-md p-6 mt-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700">Orçamentos</h3>
+                    <p class="text-xs text-gray-400 mt-1">Visão geral dos orçamentos ativos no mês</p>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <div>Orçamentos ativos: <strong>{{ ($budgetsThisMonth ?? collect())->count() }}</strong></div>
+                    <div>Total planejado: <strong>R$ {{ number_format($totalBudgetsPlanned ?? 0, 2, ',', '.') }}</strong></div>
+                </div>
+            </div>
+
+            @if(($budgetsThisMonth ?? collect())->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="text-sm text-gray-500 mb-2">Planejado vs Gasto (soma dos orçamentos ativos)</div>
+                    <div class="relative" style="height:220px; width:100%; max-width:360px;">
+                        <canvas id="chartBudgetsSummary"></canvas>
+                    </div>
+                    <div class="mt-3 text-sm text-gray-500">Planejado: <strong>R$ {{ number_format($totalBudgetsPlanned ?? 0, 2, ',', '.') }}</strong> · Gasto: <strong>R$ {{ number_format($totalBudgetsSpent ?? 0, 2, ',', '.') }}</strong></div>
+                </div>
+
+                <div>
+                    <div class="text-sm text-gray-500 mb-2">Utilização por orçamento (percentual)</div>
+                    <div class="relative" style="height:320px;">
+                        <canvas id="chartBudgetsProgress"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            @else
+            <div class="flex items-center justify-center h-40 text-gray-400 text-sm">
+                Nenhum orçamento ativo neste mês.
+            </div>
+            @endif
+        </div>
+
         <!-- CHART: Gastos diários do mês atual -->
         <div class="bg-white rounded-xl shadow-md p-6">
             <h3 class="text-lg font-semibold text-gray-700 mb-1">Gastos diários — {{ now()->format('F Y') }}</h3>
@@ -385,6 +423,82 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 responsive: true, maintainAspectRatio: false, cutout: '62%',
                 plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 10, font: { size: 12 } } }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}` } } },
+            },
+        });
+    }
+
+    // ------------------------------------------------------------------
+    // 4.5 Orçamentos — resumo e utilização
+    // ------------------------------------------------------------------
+    const ctxBudSummary = document.getElementById('chartBudgetsSummary');
+    if (ctxBudSummary) {
+        const totalPlanned = parseFloat(@json($totalBudgetsPlanned ?? 0));
+        const totalSpent   = parseFloat(@json($totalBudgetsSpent ?? 0));
+        if (totalPlanned <= 0) {
+            // nothing to show
+            ctxBudSummary.style.display = 'none';
+        } else {
+            const remaining = Math.max(0, totalPlanned - totalSpent);
+            const over     = Math.max(0, totalSpent - totalPlanned);
+
+            let labels, data, colors;
+            if (over > 0) {
+                labels = ['Planejado', 'Excedente'];
+                data = [totalPlanned, over];
+                colors = [hex2rgba(BLUE, 0.9), hex2rgba(RED, 0.9)];
+            } else {
+                labels = ['Gasto', 'Restante'];
+                data = [totalSpent, remaining];
+                colors = [hex2rgba(RED, 0.9), hex2rgba(BLUE, 0.9)];
+            }
+
+            new Chart(ctxBudSummary, {
+                type: 'doughnut',
+                data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '68%',
+                    plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 10 } }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}` } } },
+                },
+            });
+        }
+    }
+
+    const ctxBudProgress = document.getElementById('chartBudgetsProgress');
+    if (ctxBudProgress) {
+        const bLabels = @json($budgetLabels ?? []);
+        const bPct    = @json($budgetPercentSeries ?? []);
+        const bPlan   = @json($budgetPlannedSeries ?? []);
+        const bSpent  = @json($budgetSpentSeries ?? []);
+
+        const barColors = bPct.map(p => p >= 90 ? RED : p >= 70 ? '#F97316' : GREEN);
+
+        new Chart(ctxBudProgress, {
+            type: 'bar',
+            data: {
+                labels: bLabels,
+                datasets: [{ label: 'Utilização (%)', data: bPct, backgroundColor: barColors, borderRadius: 6 }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => {
+                                const i = ctx.dataIndex;
+                                const pct = ctx.parsed.x;
+                                const planned = bPlan[i] ?? 0;
+                                const spent = bSpent[i] ?? 0;
+                                return ` ${ctx.dataset.label}: ${pct}% — Planejado: ${fmtBRL(planned)} — Gasto: ${fmtBRL(spent)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    y: { grid: { display: false }, ticks: { font: { size: 12 } } },
+                },
             },
         });
     }

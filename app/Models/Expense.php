@@ -15,6 +15,7 @@ class Expense extends Model
         'fixed',
         'transaction_date',
         'monthly_financial_control_id',
+        'credit_card_id',
         'organization_id',
         'category_id',
     ];
@@ -38,5 +39,10 @@ class Expense extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function creditCard()
+    {
+        return $this->belongsTo(CreditCard::class);
     }
 }

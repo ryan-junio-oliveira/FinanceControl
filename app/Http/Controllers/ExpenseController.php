@@ -30,7 +30,9 @@ class ExpenseController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('expenses.create', compact('controls', 'categories'));
+        $creditCards = \App\Models\CreditCard::where('organization_id', Auth::user()->organization_id)->orderBy('name')->get();
+
+        return view('expenses.create', compact('controls', 'categories', 'creditCards'));
     }
 
     public function store(Request $request)
@@ -53,6 +55,13 @@ class ExpenseController extends Controller
                     $q->where('organization_id', $orgId)->where('type', 'expense');
                 }),
             ],
+            'credit_card_id' => [
+                'nullable',
+                'integer',
+                \Illuminate\Validation\Rule::exists('credit_cards', 'id')->where(function ($q) use ($orgId) {
+                    $q->where('organization_id', $orgId);
+                }),
+            ],
         ]);
         // ensure organization is set (used by the model/trait to create/find monthly control)
         $validated['organization_id'] = $orgId;
@@ -73,7 +82,8 @@ class ExpenseController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('expenses.edit', compact('expense', 'controls', 'categories'));
+        $creditCards = \App\Models\CreditCard::where('organization_id', Auth::user()->organization_id)->orderBy('name')->get();
+        return view('expenses.edit', compact('expense', 'controls', 'categories', 'creditCards'));
     }
 
     public function update(Request $request, Expense $expense)
@@ -88,6 +98,13 @@ class ExpenseController extends Controller
             'monthly_financial_control_id' => [
                 'nullable',
                 'exists:monthly_financial_controls,id',
+            ],
+            'credit_card_id' => [
+                'nullable',
+                'integer',
+                \Illuminate\Validation\Rule::exists('credit_cards', 'id')->where(function ($q) use ($orgId) {
+                    $q->where('organization_id', $orgId);
+                }),
             ],
             'category_id' => [
                 'required',

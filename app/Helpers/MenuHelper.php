@@ -33,6 +33,12 @@ class MenuHelper
                         'route' => 'expenses.*',
                         'icon' => 'credit-card',
                     ],
+                    [
+                        'name' => 'Orçamentos',
+                        'path' => '/budgets',
+                        'route' => 'budgets.*',
+                        'icon' => 'tags',
+                    ],
                     // [
                     //     'name' => 'Categorias',
                     //     'path' => '/categories',

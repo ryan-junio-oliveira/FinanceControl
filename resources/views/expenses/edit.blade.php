@@ -66,6 +66,16 @@
             </div>
         </div>
 
+        <div>
+            <label class="block text-sm font-medium mb-1">Cartão (opcional)</label>
+            <select name="credit_card_id" class="w-full rounded-lg border px-3 py-2">
+                <option value="">Nenhum</option>
+                @foreach($creditCards as $card)
+                    <option value="{{ $card->id }}" {{ (old('credit_card_id', $expense->credit_card_id) == $card->id) ? 'selected' : '' }}>{{ $card->name }} — {{ $card->bank }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="pt-4 flex gap-3">
             <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Atualizar</button>
             <a href="{{ route('expenses.index') }}" class="px-4 py-2 rounded-lg border">Cancelar</a>

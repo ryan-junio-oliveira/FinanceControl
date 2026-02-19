@@ -127,6 +127,25 @@ class DashboardController extends Controller
             }
         }
 
+        // Budgets — current month / overlapping budgets
+        $monthStart = now()->startOfMonth();
+        $monthEnd = now()->endOfMonth();
+
+        $budgetsThisMonth = \App\Models\Budget::where('organization_id', $orgId)
+            ->where('is_active', true)
+            ->whereDate('start_date', '<=', $monthEnd)
+            ->whereDate('end_date', '>=', $monthStart)
+            ->orderByDesc('amount')
+            ->get();
+
+        $budgetLabels = $budgetsThisMonth->pluck('name')->toArray();
+        $budgetPlannedSeries = $budgetsThisMonth->pluck('amount')->map(fn($v) => (float) $v)->toArray();
+        $budgetSpentSeries = $budgetsThisMonth->map(fn($b) => round($b->spent(), 2))->toArray();
+        $budgetPercentSeries = $budgetsThisMonth->map(fn($b) => round($b->progressPercent(), 2))->toArray();
+
+        $totalBudgetsPlanned = array_sum($budgetPlannedSeries);
+        $totalBudgetsSpent = array_sum($budgetSpentSeries);
+
         // Correct balance = receitas − (despesas + faturas de cartão)
         $correctedBalance = ($totals['totalRecipes'] ?? 0) - ($totals['totalExpenses'] ?? 0) - $cardsTotal;
 
@@ -165,6 +184,15 @@ class DashboardController extends Controller
             // top categories trend
             'trendLabels' => $trendLabels,
             'trendSeries' => $trendSeries,
+
+            // Budgets
+            'budgetsThisMonth'      => $budgetsThisMonth,
+            'budgetLabels'          => $budgetLabels,
+            'budgetPlannedSeries'   => $budgetPlannedSeries,
+            'budgetSpentSeries'     => $budgetSpentSeries,
+            'budgetPercentSeries'   => $budgetPercentSeries,
+            'totalBudgetsPlanned'   => $totalBudgetsPlanned,
+            'totalBudgetsSpent'     => $totalBudgetsSpent,
         ]);
     }
 

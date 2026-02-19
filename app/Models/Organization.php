@@ -8,11 +8,26 @@ class Organization extends Model
 {
     protected $fillable = [
         'name',
+        'archived_at',
+    ];
+
+    protected $casts = [
+        'archived_at' => 'datetime',
     ];
 
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function isArchived(): bool
+    {
+        return !is_null($this->archived_at);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereNull('archived_at');
     }
 
     public function monthlyFinancialControls()
