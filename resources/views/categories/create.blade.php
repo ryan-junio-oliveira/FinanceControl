@@ -36,8 +36,8 @@
         </div>
 
         <div class="pt-4 flex gap-3">
-            <button type="submit" class="px-4 py-2 rounded-lg bg-brand-500 text-white">Salvar</button>
-            <a href="{{ route('categories.index') }}" class="px-4 py-2 rounded-lg border">Cancelar</a>
+            <button type="submit" class="btn-primary">Salvar</button>
+            <a href="{{ route('categories.index') }}" class="btn-secondary">Cancelar</a>
         </div>
     </form>
 </div>

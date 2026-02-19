@@ -29,8 +29,8 @@
         </div>
 
         <div class="pt-4 flex gap-3">
-            <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 text-white">Criar</button>
-            <a href="{{ route('monthly-controls.index') }}" class="px-4 py-2 rounded-lg border">Cancelar</a>
+            <button type="submit" class="btn-primary">Criar</button>
+            <a href="{{ route('monthly-controls.index') }}" class="btn-secondary">Cancelar</a>
         </div>
     </form>
 </div>

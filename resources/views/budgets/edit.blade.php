@@ -48,8 +48,8 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <button class="px-4 py-2 rounded-lg bg-brand-500 text-white">Salvar</button>
-            <a href="{{ route('budgets.index') }}" class="px-4 py-2 rounded-lg border">Cancelar</a>
+            <button class="btn-primary">Salvar</button>
+            <a href="{{ route('budgets.index') }}" class="btn-secondary">Cancelar</a>
         </div>
     </form>
 </div>
