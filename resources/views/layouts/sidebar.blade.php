@@ -110,6 +110,8 @@
         if (!btn) return;
         const key = btn.getAttribute('data-submenu-key');
         const submenu = document.getElementById('submenu-' + key);
+        // safety: if submenu element is missing, bail out (prevents runtime errors)
+        if (!submenu) return;
         const chevron = btn.querySelector('.fa-chevron-down');
         const isHidden = submenu.classList.contains('hidden');
 

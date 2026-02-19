@@ -33,24 +33,24 @@ class MenuHelper
                         'route' => 'expenses.*',
                         'icon' => 'credit-card',
                     ],
-                    [
-                        'name' => 'Categorias',
-                        'path' => '/categories',
-                        'route' => 'categories.*',
-                        'icon' => 'tags',
-                    ],
-                    [
-                        'name' => 'Controles Mensais',
-                        'path' => '/monthly-controls',
-                        'route' => 'monthly-controls.*',
-                        'icon' => 'calendar',
-                    ],
-                    [
-                        'name' => 'Bancos',
-                        'path' => '/banks',
-                        'route' => 'banks.*',
-                        'icon' => 'bank',
-                    ],
+                    // [
+                    //     'name' => 'Categorias',
+                    //     'path' => '/categories',
+                    //     'route' => 'categories.*',
+                    //     'icon' => 'tags',
+                    // ],
+                    // [
+                    //     'name' => 'Controles Mensais',
+                    //     'path' => '/monthly-controls',
+                    //     'route' => 'monthly-controls.*',
+                    //     'icon' => 'calendar',
+                    // ],
+                    // [
+                    //     'name' => 'Bancos',
+                    //     'path' => '/banks',
+                    //     'route' => 'banks.*',
+                    //     'icon' => 'bank',
+                    // ],
                     [
                         'name' => 'Cartões',
                         'path' => '/credit-cards',

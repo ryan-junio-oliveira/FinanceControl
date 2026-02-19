@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BankEnum;
 use App\Models\Bank;
 use App\Models\CreditCard;
 use Illuminate\Http\Request;
@@ -17,8 +18,9 @@ class CreditCardController extends Controller
 
     public function create()
     {
-        $banks = Bank::orderBy('name')->get();
-        return view('credit-cards.create', compact('banks'));
+        $banks       = Bank::orderBy('name')->get();
+        $bankOptions = BankEnum::forSelect();
+        return view('credit-cards.create', compact('banks', 'bankOptions'));
     }
 
     public function store(Request $request)
@@ -48,8 +50,9 @@ class CreditCardController extends Controller
     public function edit(CreditCard $creditCard)
     {
         abort_unless($creditCard->organization_id === auth()->user()->organization_id, 404);
-        $banks = Bank::orderBy('name')->get();
-        return view('credit-cards.edit', compact('creditCard', 'banks'));
+        $banks       = Bank::orderBy('name')->get();
+        $bankOptions = BankEnum::forSelect();
+        return view('credit-cards.edit', compact('creditCard', 'banks', 'bankOptions'));
     }
 
     public function update(Request $request, CreditCard $creditCard)

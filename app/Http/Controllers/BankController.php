@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BankEnum;
 use App\Models\Bank;
 use Illuminate\Http\Request;
 
@@ -15,15 +16,19 @@ class BankController extends Controller
 
     public function create()
     {
-        return view('banks.create');
+        $bankOptions = BankEnum::forSelect();
+        return view('banks.create', compact('bankOptions'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:banks,name',
+            'name'  => 'required|string|max:255|unique:banks,name',
             'color' => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
+
+        // Auto-preenche a cor oficial se o nome corresponder ao enum
+        $validated['color'] ??= BankEnum::colorByName($validated['name']);
 
         Bank::create($validated);
 
@@ -32,15 +37,18 @@ class BankController extends Controller
 
     public function edit(Bank $bank)
     {
-        return view('banks.edit', compact('bank'));
+        $bankOptions = BankEnum::forSelect();
+        return view('banks.edit', compact('bank', 'bankOptions'));
     }
 
     public function update(Request $request, Bank $bank)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:banks,name,' . $bank->id,
+            'name'  => 'required|string|max:255|unique:banks,name,' . $bank->id,
             'color' => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
+
+        $validated['color'] ??= BankEnum::colorByName($validated['name']);
 
         $bank->update($validated);
 

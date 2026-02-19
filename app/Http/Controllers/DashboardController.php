@@ -47,7 +47,7 @@ class DashboardController extends Controller
             ->get();
 
         // Cards summary (current organization)
-        $creditCards = \App\Models\CreditCard::where('organization_id', $orgId)->get();
+        $creditCards = \App\Models\CreditCard::where('organization_id', $orgId)->with('bank')->get();
         $cardsTotal = $creditCards->sum('statement_amount');
 
         // Combined expense (expenses this month + cards statements)
@@ -60,11 +60,79 @@ class DashboardController extends Controller
         $recipesCategoryLabels = $recipesByCategory->pluck('category')->toArray();
         $recipesCategorySeries = $recipesByCategory->pluck('total')->map(fn($v) => (float) $v)->toArray();
 
+        // Combined small-series for current month (prepared server-side to avoid complex inline Blade arrays)
+        $combinedChartLabels = [ now()->format('M/Y') ];
+        $combinedChartSeries = [
+            [ 'name' => 'Receitas', 'data' => [ (float) ($totals['totalRecipes'] ?? 0) ] ],
+            [ 'name' => 'Despesas + Cartões', 'data' => [ (float) $totalExpensesWithCards ] ],
+        ];
+
         // Top expense categories (for bar chart)
         $topExpenseCategories = $expensesByCategory->take(5)->map(fn($r) => ['category' => $r->category, 'total' => (float) $r->total]);
 
+        // Top recipe (revenue) categories
+        $topRecipeCategories = $recipesByCategory->take(5)->map(fn($r) => ['category' => $r->category, 'total' => (float) $r->total]);
+
+        // Daily expenses — current month, grouped by day
+        $dailyExpenses = Expense::where('organization_id', $orgId)
+            ->whereYear('transaction_date', now()->year)
+            ->whereMonth('transaction_date', now()->month)
+            ->get(['transaction_date', 'amount'])
+            ->groupBy(fn($e) => Carbon::parse($e->transaction_date)->day)
+            ->map(fn($group) => $group->sum('amount'))
+            ->sortKeys();
+
+        $daysInMonth   = now()->daysInMonth;
+        $dailyLabels   = range(1, $daysInMonth);
+        $dailyData     = array_map(fn($d) => (float) ($dailyExpenses[$d] ?? 0), $dailyLabels);
+
+        // Cumulative daily expenses (to show spending pace vs the month)
+        $cumulative = 0;
+        $dailyCumulative = array_map(function ($v) use (&$cumulative) {
+            $cumulative += $v;
+            return round($cumulative, 2);
+        }, $dailyData);
+
+        // Top 3 expense categories trend — last 6 months
+        $top3Categories = $expensesByCategory->take(3)->pluck('category')->toArray();
+
+        $trendStart = now()->subMonths(5)->startOfMonth();
+        $trendEnd   = now()->endOfMonth();
+
+        $trendMonths = collect(range(0, 5))
+            ->map(fn($i) => $trendStart->copy()->addMonths($i));
+        $trendLabels = $trendMonths->map(fn($d) => $d->format('M/Y'))->toArray();
+
+        $trendSeries = [];
+        if (count($top3Categories) > 0) {
+            // Fetch raw rows and aggregate in PHP — avoids YEAR()/MONTH() which are MySQL-only
+            $trendExpenses = Expense::select('categories.name AS category', 'expenses.amount', 'expenses.transaction_date')
+                ->join('categories', 'categories.id', '=', 'expenses.category_id')
+                ->where('expenses.organization_id', $orgId)
+                ->whereIn('categories.name', $top3Categories)
+                ->whereBetween('expenses.transaction_date', [$trendStart, $trendEnd])
+                ->get();
+
+            foreach ($top3Categories as $cat) {
+                $data = [];
+                foreach ($trendMonths as $date) {
+                    $total = $trendExpenses
+                        ->filter(fn($r) => $r->category === $cat
+                            && Carbon::parse($r->transaction_date)->year  === $date->year
+                            && Carbon::parse($r->transaction_date)->month === $date->month)
+                        ->sum('amount');
+                    $data[] = round((float) $total, 2);
+                }
+                $trendSeries[] = ['name' => $cat, 'data' => $data];
+            }
+        }
+
+        // Correct balance = receitas − (despesas + faturas de cartão)
+        $correctedBalance = ($totals['totalRecipes'] ?? 0) - ($totals['totalExpenses'] ?? 0) - $cardsTotal;
+
         return view('dashboard', [
             ...$totals,
+            'balance'            => $correctedBalance,
             'recentTransactions' => $recentTransactions,
             'monthlyCategories' => $monthlyCategories,
             'monthlySeries' => $monthlySeries,
@@ -82,7 +150,21 @@ class DashboardController extends Controller
             'cardsTotal' => $cardsTotal,
             'totalExpensesWithCards' => $totalExpensesWithCards,
 
+            // combined chart
+            'combinedChartLabels' => $combinedChartLabels,
+            'combinedChartSeries' => $combinedChartSeries,
+
             'topExpenseCategories' => $topExpenseCategories,
+            'topRecipeCategories' => $topRecipeCategories,
+
+            // daily expenses
+            'dailyLabels'     => $dailyLabels,
+            'dailyData'       => $dailyData,
+            'dailyCumulative' => $dailyCumulative,
+
+            // top categories trend
+            'trendLabels' => $trendLabels,
+            'trendSeries' => $trendSeries,
         ]);
     }
 
@@ -111,16 +193,31 @@ class DashboardController extends Controller
         $zeroSeries = array_fill(0, 12, 0);
 
         return view('dashboard', [
-            'totalRecipes' => 0,
-            'totalExpenses' => 0,
-            'balance' => 0,
-            'executionPercent' => 0,
-            'recentTransactions' => collect(),
-            'monthlyCategories' => $categories,
-            'monthlySeries' => [
+            'totalRecipes'           => 0,
+            'totalExpenses'          => 0,
+            'balance'                => 0,
+            'executionPercent'       => 0,
+            'recentTransactions'     => collect(),
+            'monthlyCategories'      => $categories,
+            'monthlySeries'          => [
                 ['name' => 'Receitas', 'data' => $zeroSeries],
                 ['name' => 'Despesas', 'data' => $zeroSeries],
             ],
+            'expensesCategoryLabels' => [],
+            'expensesCategorySeries' => [],
+            'recipesCategoryLabels'  => [],
+            'recipesCategorySeries'  => [],
+            'topExpenseCategories'   => collect(),
+            'topRecipeCategories'    => collect(),
+            'totalInvestments'        => 0,
+            'creditCards'            => collect(),
+            'cardsTotal'             => 0,
+            'totalExpensesWithCards' => 0,
+            'dailyLabels'            => range(1, now()->daysInMonth),
+            'dailyData'              => array_fill(0, now()->daysInMonth, 0),
+            'dailyCumulative'        => array_fill(0, now()->daysInMonth, 0),
+            'trendLabels'            => [],
+            'trendSeries'            => [],
         ]);
     }
 
@@ -142,16 +239,24 @@ class DashboardController extends Controller
             ->whereMonth('transaction_date', $month)
             ->sum('amount');
 
-        $balance = $totalRecipes - $totalExpenses;
+        $totalInvestments = Expense::where('expenses.organization_id', $orgId)
+            ->join('categories', 'categories.id', '=', 'expenses.category_id')
+            ->where('categories.name', 'Investimentos')
+            ->whereYear('expenses.transaction_date', $year)
+            ->whereMonth('expenses.transaction_date', $month)
+            ->sum('expenses.amount');
+
+        $balance = $totalRecipes - $totalExpenses; // cards subtracted in index()
 
         $executionPercent = $totalRecipes > 0
             ? (int) min(100, round(($totalExpenses / $totalRecipes) * 100))
             : ($totalExpenses > 0 ? 100 : 0);
 
         return [
-            'totalRecipes' => $totalRecipes,
-            'totalExpenses' => $totalExpenses,
-            'balance' => $balance,
+            'totalRecipes'     => $totalRecipes,
+            'totalExpenses'    => $totalExpenses,
+            'totalInvestments' => (float) $totalInvestments,
+            'balance'          => $balance,
             'executionPercent' => $executionPercent,
         ];
     }
