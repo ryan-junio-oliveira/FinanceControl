@@ -47,6 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/monthly-controls/{monthly_control}', [App\Http\Controllers\MonthlyFinancialControlController::class, 'update'])->name('monthly-controls.update');
     Route::delete('/monthly-controls/{monthly_control}', [App\Http\Controllers\MonthlyFinancialControlController::class, 'destroy'])->name('monthly-controls.destroy');
 
+    // CRUD Bancos & Cartões
+    Route::resource('banks', App\Http\Controllers\BankController::class)->except(['show']);
+    Route::resource('credit-cards', App\Http\Controllers\CreditCardController::class);
+
     // CRUD Categorias
     Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [App\Http\Controllers\CategoryController::class, 'create'])->name('categories.create');

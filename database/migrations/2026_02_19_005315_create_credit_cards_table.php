@@ -15,6 +15,10 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
+            $table->foreignId('bank_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
             // Obrigatórios
             $table->string('name');
             $table->string('bank');
@@ -30,7 +34,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Índice para multi-tenant
-            $table->index(['organization_id', 'is_active']);
+            $table->index(['organization_id', 'is_active', 'closing_day', 'due_day', 'bank_id']);
         });
     }
 

@@ -45,6 +45,18 @@ class MenuHelper
                         'route' => 'monthly-controls.*',
                         'icon' => 'calendar',
                     ],
+                    [
+                        'name' => 'Bancos',
+                        'path' => '/banks',
+                        'route' => 'banks.*',
+                        'icon' => 'bank',
+                    ],
+                    [
+                        'name' => 'Cartões',
+                        'path' => '/credit-cards',
+                        'route' => 'credit-cards.*',
+                        'icon' => 'credit-card',
+                    ],
                 ],
             ],
             [
@@ -69,6 +81,7 @@ class MenuHelper
             'wallet' => '<i class="fa-solid fa-wallet fa-fw"></i>',
             'credit-card' => '<i class="fa-solid fa-credit-card fa-fw"></i>',
             'calendar' => '<i class="fa-solid fa-calendar-days fa-fw"></i>',
+            'bank' => '<i class="fa-solid fa-building-columns fa-fw"></i>',
             'user' => '<i class="fa-solid fa-user fa-fw"></i>',
             'tags' => '<i class="fa-solid fa-tags fa-fw"></i>',
         ];
