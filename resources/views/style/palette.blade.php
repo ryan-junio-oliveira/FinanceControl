@@ -29,7 +29,7 @@
 
                 @foreach($brand as $k => $hex)
                     <div class="rounded-lg overflow-hidden border">
-                        <div style="background: var(--color-brand-{{ $k }}); height:64px;" class="w-full"></div>
+                        <div class="w-full h-16 bg-brand-{{ $k }}"></div>
                         <div class="p-3 text-xs text-gray-700 font-medium">
                             <div>--color-brand-{{ $k }}</div>
                             <div class="mt-1 text-sm text-gray-500">{{ $hex }}</div>
@@ -45,7 +45,7 @@
                 <div class="p-4 border rounded">
                     <div class="font-semibold mb-2">Success</div>
                     <div class="flex gap-2 items-center">
-                        <div class="w-12 h-12 rounded" style="background:var(--color-success-500)"></div>
+                        <div class="w-12 h-12 rounded bg-success-500"></div>
                         <div class="text-sm text-gray-600">--color-success-500 · #12b76a</div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="p-4 border rounded">
                     <div class="font-semibold mb-2">Warning</div>
                     <div class="flex gap-2 items-center">
-                        <div class="w-12 h-12 rounded" style="background:var(--color-warning-500)"></div>
+                        <div class="w-12 h-12 rounded bg-warning-500"></div>
                         <div class="text-sm text-gray-600">--color-warning-500 · #f79009</div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                 <div class="p-4 border rounded">
                     <div class="font-semibold mb-2">Error</div>
                     <div class="flex gap-2 items-center">
-                        <div class="w-12 h-12 rounded" style="background:var(--color-error-500)"></div>
+                        <div class="w-12 h-12 rounded bg-error-500"></div>
                         <div class="text-sm text-gray-600">--color-error-500 · #f04438</div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                 <div class="p-4 border rounded">
                     <div class="font-semibold mb-2">Neutral</div>
                     <div class="flex gap-2 items-center">
-                        <div class="w-12 h-12 rounded" style="background:var(--color-gray-100)"></div>
+                        <div class="w-12 h-12 rounded bg-gray-100"></div>
                         <div class="text-sm text-gray-600">--color-gray-100 · #f2f4f7</div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
             <div class="mt-6">
                 <h3 class="text-sm font-semibold mb-2">Exemplos de uso</h3>
                 <div class="flex gap-3 flex-wrap">
-                    <button class="px-4 py-2 rounded bg-brand-500 text-white">Botão primário</button>
+                    <button class="px-4 py-2 rounded bg-cyan-800 text-white">Botão primário</button>
                     <button class="px-4 py-2 rounded border">Botão secundário</button>
                     <div class="px-4 py-2 rounded bg-success-500 text-white">Sucesso</div>
                     <div class="px-4 py-2 rounded bg-error-500 text-white">Erro</div>

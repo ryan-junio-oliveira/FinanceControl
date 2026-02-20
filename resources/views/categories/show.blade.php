@@ -7,14 +7,14 @@
 
     <div class="flex items-center gap-3 mb-6">
         <a href="{{ route('categories.index') }}" class="flex items-center justify-center h-9 w-9 rounded-xl border border-gray-200 bg-white text-gray-400 shadow-sm hover:bg-gray-50 hover:text-gray-600 transition-colors" aria-label="Voltar">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+            <i class="fa-solid fa-arrow-left text-sm"></i>
         </a>
         <div>
             <h1 class="text-xl font-semibold text-gray-900">{{ $category->name }}</h1>
             <p class="text-xs text-gray-400 mt-0.5">Detalhes da categoria</p>
         </div>
         <div class="ml-auto">
-            <a href="{{ route('categories.edit', $category) }}" class="btn-primary">Editar</a>
+            <a href="{{ route('categories.edit', $category) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-cyan-800 text-white text-sm font-medium shadow-sm hover:bg-cyan-800 transition">Editar</a>
         </div>
     </div>
 

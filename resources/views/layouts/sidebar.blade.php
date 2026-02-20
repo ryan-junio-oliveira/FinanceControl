@@ -28,8 +28,7 @@
     <div class="relative px-3 py-2.5 border-b border-gray-100 flex-shrink-0">
         <button type="button" id="org-toggle"
             class="w-full flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded px-1 py-1">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                style="background-color:var(--color-brand-500);">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0 bg-cyan-800">
                 {{ strtoupper(substr(auth()->user()->organization->name ?? (auth()->user()->username ?? 'F'), 0, 1)) }}
             </div>
             <span class="text-sm font-semibold text-gray-800 truncate flex-1 leading-tight">

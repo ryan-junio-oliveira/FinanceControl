@@ -30,73 +30,81 @@
                 ];
             @endphp
 
-            <x-table compact :columns="$columns" id="recipes-table" tbody-class="bg-white divide-y divide-gray-100">
+            <x-table :columns="$columns" id="recipes-table" tbody-class="bg-white">
+
                 @forelse($recipes as $recipe)
-                    <tr class="group transition-colors hover:bg-gray-50/70">
-                        <td class="px-6 py-4 whitespace-nowrap">
+                    <tr class="group odd:bg-white even:bg-gray-50/50 hover:bg-emerald-50/40 transition-colors duration-150">
+
+                        {{-- Nome --}}
+                        <td class="px-6 py-3.5">
                             <div class="flex items-center gap-3">
-                                <div
-                                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-700 text-sm font-medium">
+                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 text-xs font-bold">
                                     {{ strtoupper(mb_substr($recipe->name, 0, 1)) }}
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="text-sm font-medium text-gray-900 truncate">{{ $recipe->name }}
+                                    <div class="text-sm font-medium text-gray-900 truncate">
+                                        {{ $recipe->name }}
                                     </div>
                                     @if ($recipe->notes)
-                                        <div class="text-xs text-gray-500 mt-0.5 truncate max-w-[200px]">
-                                            {{ $recipe->notes }}</div>
+                                        <div class="text-xs text-gray-400 truncate max-w-[220px]">
+                                            {{ $recipe->notes }}
+                                        </div>
                                     @endif
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <span class="text-sm font-semibold tabular-nums text-gray-900">R$
-                                {{ number_format($recipe->amount, 2, ',', '.') }}</span>
+
+                        {{-- Valor --}}
+                        <td class="px-6 py-3.5 text-right">
+                            <span class="text-sm font-semibold text-emerald-600 tabular-nums">
+                                R$ {{ number_format($recipe->amount, 2, ',', '.') }}
+                            </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
+
+                        {{-- Fixa --}}
+                        <td class="px-6 py-3.5 text-center">
                             @if ($recipe->fixed)
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                    Sim
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">
+                                    <i class="fa-solid fa-check text-[10px]"></i>
+                                    Fixa
                                 </span>
                             @else
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>
-                                    Nao
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500 ring-1 ring-gray-200">
+                                    <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+                                    Variável
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $recipe->transaction_date ? \Carbon\Carbon::parse($recipe->transaction_date)->format('d/m/Y') : '-' }}
+
+                        {{-- Data --}}
+                        <td class="px-6 py-3.5">
+                            <span class="inline-flex items-center gap-1.5 text-sm text-gray-500">
+                                <i class="fa-regular fa-calendar text-gray-400 text-xs"></i>
+                                {{ $recipe->transaction_date ? \Carbon\Carbon::parse($recipe->transaction_date)->format('d/m/Y') : '—' }}
+                            </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <div
-                                class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                        {{-- Ações --}}
+                        <td class="px-6 py-3.5 text-right">
+                            <div class="flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+
                                 <a href="{{ route('recipes.edit', $recipe) }}"
-                                    class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                                    aria-label="Editar receita {{ $recipe->name }}">
-                                    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
-                                    </svg>
+                                    class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:bg-emerald-100 hover:text-emerald-600 transition-colors duration-150"
+                                    title="Editar">
+                                    <i class="fa-solid fa-pen-to-square text-sm"></i>
                                 </a>
+
                                 <form action="{{ route('recipes.destroy', $recipe) }}" method="POST"
                                     onsubmit="return confirm('Tem certeza que deseja remover esta receita?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-200"
-                                        aria-label="Remover receita {{ $recipe->name }}">
-                                        <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                        </svg>
+                                        class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:bg-red-100 hover:text-red-600 transition-colors duration-150"
+                                        title="Remover">
+                                        <i class="fa-solid fa-trash text-sm"></i>
                                     </button>
                                 </form>
+
                             </div>
                         </td>
                     </tr>
@@ -104,24 +112,15 @@
                     <tr>
                         <td colspan="5" class="px-6 py-16 text-center">
                             <div class="flex flex-col items-center justify-center">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 mb-4">
-                                    <svg class="h-7 w-7 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
-                                    </svg>
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-50 mb-4">
+                                    <i class="fa-solid fa-sack-dollar text-2xl text-emerald-500"></i>
                                 </div>
-                                <p class="text-base font-medium text-gray-900">Nenhuma receita encontrada</p>
-                                <p class="text-sm text-gray-500 mt-1">Comece adicionando sua primeira fonte de
-                                    renda.</p>
-                                <a href="{{ route('recipes.create') }}"
-                                    class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium shadow-sm hover:bg-emerald-700 transition-colors">
-                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                    Nova receita
-                                </a>
+                                <p class="text-base font-semibold text-gray-900">
+                                    Nenhuma receita encontrada
+                                </p>
+                                <p class="text-sm text-gray-500 mt-1">
+                                    Comece adicionando sua primeira fonte de renda.
+                                </p>
                             </div>
                         </td>
                     </tr>

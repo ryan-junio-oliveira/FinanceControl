@@ -7,7 +7,7 @@
     'createIcon' => null,
 ])
 
-<div class="mx-auto max-w-6xl px-4 py-8 md:px-6 lg:px-8">
+<div class="mx-auto px-4 py-8 md:px-6 lg:px-8">
     <x-list-header :title="$title" :subtitle="$subtitle" :create-url="$createUrl" :create-label="$createLabel" :create-color="$createColor"
         :create-icon="$createIcon">
         @if (isset($headerActions))
@@ -26,7 +26,7 @@
     @endif
 
     {{-- main content (table) --}}
-    <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">{{ $slot }}</div>
+    <div class="border border-gray-100 bg-white shadow-sm overflow-hidden">{{ $slot }}</div>
 
     {{-- pagination slot (optional) --}}
     @if (isset($pagination))

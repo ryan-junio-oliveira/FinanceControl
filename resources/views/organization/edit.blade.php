@@ -25,7 +25,7 @@
                 <x-form-input name="name" label="Nome da organização" :value="old('name', $org->name)" required />
             </div>
             <div class="flex items-center gap-3 px-6 py-4 bg-gray-50/60">
-                <button type="submit" class="btn-primary">Salvar alterações</button>
+                <x-button-primary type="submit">Salvar alterações</x-button-primary>
             </div>
         </form>
     </div>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 px-6 py-4 bg-gray-50/60">
-                <button type="submit" class="btn-primary">Enviar convite</button>
+                <x-button-primary type="submit">Enviar convite</x-button-primary>
             </div>
         </form>
     </div>
@@ -77,15 +77,15 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
             <h2 class="text-sm font-semibold text-gray-900">Membros</h2>
-            <span class="inline-flex items-center justify-center h-5 min-w-[1.25rem] px-1.5 rounded-full bg-brand-50 text-brand-600 text-xs font-semibold">{{ $members->count() }}</span>
+            <span class="inline-flex items-center justify-center h-5 min-w-[1.25rem] px-1.5 rounded-full bg-cyan-50 text-brand-600 text-xs font-semibold">{{ $members->count() }}</span>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="bg-gray-50 border-b border-gray-100">
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Usuário</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Ações</th>
+                    <tr class="bg-gray-700">
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Usuário</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-right text-xs font-semibold text-white uppercase tracking-wider">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -107,7 +107,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100" aria-label="Remover membro">
-                                    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z"/></svg>
+                                    <i class="fa-solid fa-user-xmark text-sm"></i>
                                 </button>
                             </form>
                             @endif

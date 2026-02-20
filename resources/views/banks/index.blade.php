@@ -3,7 +3,7 @@
 @section('page_title', 'Bancos')
 
 @section('content')
-<x-list-layout title="Bancos" subtitle="Gerencie seus bancos" create-url="{{ route('banks.create') }}" create-label="Novo banco" create-color="bg-brand-500">
+<x-list-layout title="Bancos" subtitle="Gerencie seus bancos" create-url="{{ route('banks.create') }}" create-label="Novo banco" create-color="bg-cyan-800">
 
     <x-slot name="controls">
         <x-table-controls placeholder="Pesquisar bancos" :perPageOptions="[10,20,50,100]" />
@@ -21,25 +21,21 @@
         <x-table compact :columns="$columns" id="banks-table" tbody-class="bg-white divide-y divide-gray-100">
             @forelse($banks as $bank)
                 <tr class="group hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $bank->name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-6 py-3.5 whitespace-nowrap text-sm font-medium text-gray-900">{{ $bank->name }}</td>
+                    <td class="px-6 py-3.5 whitespace-nowrap">
                         <span class="inline-block w-6 h-6 rounded" style="background-color: {{ $bank->color ?? '#eee' }}"></span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <a href="{{ route('banks.edit', $bank) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" aria-label="Editar banco {{ $bank->name }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                    <path d="M16.862 3.487a2.25 2.25 0 0 1 3.182 3.182L7.5 19.213l-4 1 1-4L16.862 3.487z" />
-                                </svg>
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
                             </a>
 
                             <form action="{{ route('banks.destroy', $bank) }}" method="POST" onsubmit="return confirm('Remover banco?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors" aria-label="Remover banco {{ $bank->name }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                        <path d="M3 6h18M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6M10 6V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2" />
-                                    </svg>
+                                    <i class="fa-solid fa-trash text-sm"></i>
                                 </button>
                             </form>
                         </div>
@@ -52,7 +48,7 @@
                             <div class="text-3xl text-gray-300 mb-3">—</div>
                             <p class="text-sm text-gray-500">Nenhum banco cadastrado.</p>
                             <div class="mt-4">
-                                <a href="{{ route('banks.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded bg-brand-500 text-white text-sm">Novo banco</a>
+                                <a href="{{ route('banks.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded bg-cyan-800 text-white text-sm">Novo banco</a>
                             </div>
                         </div>
                     </td>
