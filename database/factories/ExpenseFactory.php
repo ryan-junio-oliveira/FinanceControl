@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Expense;
-use App\Models\Organization;
-use App\Models\Category;
+use App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel as Expense;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
+use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Expense>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel>
  */
 class ExpenseFactory extends Factory
 {

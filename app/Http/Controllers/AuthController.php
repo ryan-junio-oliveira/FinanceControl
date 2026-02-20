@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Organization;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -40,7 +40,7 @@ class AuthController extends Controller
             'organization_name' => 'required|string|max:255',
         ]);
 
-        $organization = Organization::create([
+        $organization = OrganizationModel::create([
             'name' => $request->organization_name,
         ]);
 
@@ -73,7 +73,7 @@ class AuthController extends Controller
         ]);
 
         $user = $request->user();
-        $user->password = $request->password; // model casts will hash
+        $user->password = Hash::make($request->password);
         $user->must_change_password = false;
         $user->save();
 

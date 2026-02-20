@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\Organization;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use App\Models\User;
 use Carbon\Carbon;
 

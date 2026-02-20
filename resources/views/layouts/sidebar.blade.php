@@ -20,6 +20,7 @@
     }
 @endphp
 
+@auth
 <aside id="sidebar"
     class="fixed left-0 bg-white border-r border-gray-100 flex flex-col z-[99999] w-[220px] transition-transform duration-300 -translate-x-full lg:translate-x-0"
     style="top: var(--app-header-height, 56px); height: calc(100vh - var(--app-header-height, 56px));">
@@ -159,6 +160,7 @@
         @endforeach
     </nav>
 </aside>
+@endauth
 
 <script>
     // submenu toggle (vanilla JS)

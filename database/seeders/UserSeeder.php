@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Organization;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;

@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\Organization;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\InviteNotification;

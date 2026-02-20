@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Organization;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use Carbon\Carbon;
 
 class PurgeArchivedOrganizations extends Command

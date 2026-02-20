@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     public function index(\Illuminate\Http\Request $request)
     {
-        $org = auth()->user()->organization;
+        $org = Auth::user()->organization;
 
         $q = $request->query('q');
         $type = $request->query('type');
@@ -43,7 +44,7 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $org = auth()->user()->organization;
+        $org = Auth::user()->organization;
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -59,7 +60,7 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        $orgId = auth()->user()->organization_id;
+        $orgId = Auth::user()->organization_id;
         $category = Category::where('organization_id', $orgId)->findOrFail($id);
 
         return view('categories.show', compact('category'));
@@ -67,7 +68,7 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $orgId = auth()->user()->organization_id;
+        $orgId = Auth::user()->organization_id;
         $category = Category::where('organization_id', $orgId)->findOrFail($id);
 
         $types = [
@@ -80,7 +81,7 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $orgId = auth()->user()->organization_id;
+        $orgId = Auth::user()->organization_id;
         $category = Category::where('organization_id', $orgId)->findOrFail($id);
 
         $data = $request->validate([
@@ -95,7 +96,7 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-        $orgId = auth()->user()->organization_id;
+        $orgId = Auth::user()->organization_id;
         $category = Category::where('organization_id', $orgId)->findOrFail($id);
 
         // Defensive: only check relations if the FK column exists in the child table.

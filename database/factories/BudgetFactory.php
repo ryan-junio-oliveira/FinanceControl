@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Budget;
-use App\Models\Organization;
-use App\Models\Category;
+use App\Modules\Budget\Infrastructure\Persistence\Eloquent\BudgetModel as Budget;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
+use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Budget>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\Budget\Infrastructure\Persistence\Eloquent\BudgetModel>
  */
 class BudgetFactory extends Factory
 {

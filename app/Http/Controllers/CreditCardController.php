@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BankEnum;
-use App\Models\Bank;
-use App\Models\CreditCard;
+use App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel as Bank;
+use App\Modules\CreditCard\Infrastructure\Persistence\Eloquent\CreditCardModel as CreditCard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CreditCardController extends Controller
 {
     public function index(\Illuminate\Http\Request $request)
     {
-        $orgId = auth()->user()->organization_id;
+        $orgId = Auth::user()->organization_id;
         $q = $request->query('q');
         $perPage = (int) $request->query('per_page', 20);
         $perPage = in_array($perPage, [10,20,50,100]) ? $perPage : 20;
@@ -34,7 +35,7 @@ class CreditCardController extends Controller
 
     public function store(Request $request)
     {
-        $orgId = auth()->user()->organization_id;
+        $orgId = Auth::user()->organization_id;
 
         $validated = $request->validate([
             'name' => 'required|string|max:191',
@@ -58,7 +59,7 @@ class CreditCardController extends Controller
 
     public function edit(CreditCard $creditCard)
     {
-        abort_unless($creditCard->organization_id === auth()->user()->organization_id, 404);
+        abort_unless($creditCard->organization_id === Auth::user()->organization_id, 404);
         $banks       = Bank::orderBy('name')->get();
         $bankOptions = BankEnum::forSelect();
         return view('credit-cards.edit', compact('creditCard', 'banks', 'bankOptions'));
@@ -66,7 +67,7 @@ class CreditCardController extends Controller
 
     public function update(Request $request, CreditCard $creditCard)
     {
-        abort_unless($creditCard->organization_id === auth()->user()->organization_id, 404);
+        abort_unless($creditCard->organization_id === Auth::user()->organization_id, 404);
 
         $validated = $request->validate([
             'name' => 'required|string|max:191',
@@ -89,7 +90,7 @@ class CreditCardController extends Controller
 
     public function destroy(CreditCard $creditCard)
     {
-        abort_unless($creditCard->organization_id === auth()->user()->organization_id, 404);
+        abort_unless($creditCard->organization_id === Auth::user()->organization_id, 404);
         $creditCard->delete();
         return redirect()->route('credit-cards.index')->with('success', 'Cartão removido.');
     }

@@ -54,7 +54,7 @@ class OrganizationController extends Controller
         $org = Auth::user()->organization;
         abort_unless($org, 404);
         abort_unless($user->organization_id === $org->id, 404);
-        abort_if($user->id === auth()->id(), 400, 'Não é possível remover o próprio usuário.');
+        abort_if($user->id === Auth::id(), 400, 'Não é possível remover o próprio usuário.');
 
         $user->organization_id = null;
         $user->save();
@@ -91,8 +91,8 @@ class OrganizationController extends Controller
         $org->delete();
 
         // detach current user to keep app consistent
-        auth()->user()->organization_id = null;
-        auth()->user()->save();
+        Auth::user()->organization_id = null;
+        Auth::user()->save();
 
         return redirect('/')->with('success', 'Organização removida.');
     }

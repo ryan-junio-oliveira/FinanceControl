@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Recipe;
-use App\Models\Organization;
-use App\Models\Category;
+use App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeModel as Recipe;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
+use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Recipe>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeModel>
  */
 class RecipeFactory extends Factory
 {

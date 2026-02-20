@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Bank;
+use App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel as Bank;
 use App\Enums\BankEnum;
 
 class BankSeeder extends Seeder

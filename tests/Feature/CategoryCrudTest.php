@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\Organization;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use App\Models\User;
-use App\Models\Category;
+use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 
 class CategoryCrudTest extends TestCase
 {

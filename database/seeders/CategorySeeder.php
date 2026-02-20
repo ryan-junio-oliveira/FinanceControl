@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
-use App\Models\Organization;
+use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Expense;
-use App\Models\Recipe;
+use App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel as Expense;
+use App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeModel as Recipe;
+use App\Modules\CreditCard\Infrastructure\Persistence\Eloquent\CreditCardModel as CreditCard;
+use App\Modules\Budget\Domain\Contracts\BudgetRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +49,7 @@ class DashboardController extends Controller
             ->get();
 
         // Cards summary (current organization)
-        $creditCards = \App\Models\CreditCard::where('organization_id', $orgId)->with('bank')->get();
+        $creditCards = CreditCard::where('organization_id', $orgId)->with('bank')->get();
         $cardsTotal = $creditCards->sum('statement_amount');
 
         // Combined expense (expenses this month + cards statements)
@@ -131,7 +133,7 @@ class DashboardController extends Controller
         $monthStart = now()->startOfMonth();
         $monthEnd = now()->endOfMonth();
 
-        $budgetsThisMonth = \App\Models\Budget::where('organization_id', $orgId)
+        $budgetsThisMonth = \App\Modules\Budget\Infrastructure\Persistence\Eloquent\BudgetModel::where('organization_id', $orgId)
             ->where('is_active', true)
             ->whereDate('start_date', '<=', $monthEnd)
             ->whereDate('end_date', '>=', $monthStart)
@@ -140,8 +142,25 @@ class DashboardController extends Controller
 
         $budgetLabels = $budgetsThisMonth->pluck('name')->toArray();
         $budgetPlannedSeries = $budgetsThisMonth->pluck('amount')->map(fn($v) => (float) $v)->toArray();
-        $budgetSpentSeries = $budgetsThisMonth->map(fn($b) => round($b->spent(), 2))->toArray();
-        $budgetPercentSeries = $budgetsThisMonth->map(fn($b) => round($b->progressPercent(), 2))->toArray();
+        $repo = app(BudgetRepositoryInterface::class);
+        $budgetSpentSeries = $budgetsThisMonth->map(fn($b) => round($repo->calculateSpent(
+            new \App\Modules\Budget\Domain\Entities\Budget(
+                $b->id,
+                $b->name,
+                (float) $b->amount,
+                new \DateTime($b->start_date),
+                new \DateTime($b->end_date),
+                $b->category_id,
+                (bool) $b->is_active,
+                $b->organization_id
+            )
+        ), 2))->toArray();
+        $budgetPercentSeries = $budgetsThisMonth->map(fn($b, $i) =>
+            round(
+                $budgetPlannedSeries[$i] ? ($budgetSpentSeries[$i] / $budgetPlannedSeries[$i]) * 100 : 0,
+                2
+            )
+        )->toArray();
 
         $totalBudgetsPlanned = array_sum($budgetPlannedSeries);
         $totalBudgetsSpent = array_sum($budgetSpentSeries);

@@ -28,25 +28,25 @@
                     <tr class="group hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center gap-3">
-                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-700 text-sm font-medium">{{ strtoupper(mb_substr($card->name, 0, 1)) }}</div>
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-700 text-sm font-medium">{{ strtoupper(mb_substr($card->name(), 0, 1)) }}</div>
                                 <div class="min-w-0">
-                                    <div class="text-sm font-medium text-gray-900 truncate">{{ $card->name }}</div>
-                                    <div class="text-xs text-gray-500 mt-0.5 truncate max-w-[200px]">{{ $card->bank?->name ?? ($card->bank ?? '-') }}</div>
+                                    <div class="text-sm font-medium text-gray-900 truncate">{{ $card->name() }}</div>
+                                    <div class="text-xs text-gray-500 mt-0.5 truncate max-w-[200px]">{{ $card->bankName() ?? '-' }}</div>
                                 </div>
                             </div>
                         </td>
 
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $card->bank?->name ?? $card->bank }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $card->bankName() ?? '-' }}</td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <span class="text-sm font-semibold tabular-nums text-gray-900">R$ {{ number_format($card->statement_amount, 2, ',', '.') }}</span>
+                            <span class="text-sm font-semibold tabular-nums text-gray-900">R$ {{ number_format($card->statementAmount(), 2, ',', '.') }}</span>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <span class="text-sm tabular-nums text-gray-700">{{ $card->limit ? 'R$ ' . number_format($card->limit, 2, ',', '.') : '-' }}</span>
+                            <span class="text-sm tabular-nums text-gray-700">{{ $card->limit() ? 'R$ ' . number_format($card->limit(), 2, ',', '.') : '-' }}</span>
                         </td>
 
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $card->closing_day ?? '-' }} / {{ $card->due_day ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $card->closingDay() ?? '-' }} / {{ $card->dueDay() ?? '-' }}</td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
                             @if($card->is_active)
@@ -64,14 +64,14 @@
 
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <a href="{{ route('credit-cards.edit', $card) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" aria-label="Editar cartão {{ $card->name }}">
+                                <a href="{{ route('credit-cards.edit', ['id' => $card->id]) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" aria-label="Editar cartão {{ $card->name() }}">
                                     <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/></svg>
                                 </a>
 
-                                <form action="{{ route('credit-cards.destroy', $card) }}" method="POST" onsubmit="return confirm('Remover cartão?');">
+                                <form action="{{ route('credit-cards.destroy', ['id' => $card->id]) }}" method="POST" onsubmit="return confirm('Remover cartão?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors" aria-label="Remover cartão {{ $card->name }}">
+                                    <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors" aria-label="Remover cartão {{ $card->name() }}">
                                         <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9M21 6H3m16 0l-1 14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2L3 6"/></svg>
                                     </button>
                                 </form>

@@ -4,7 +4,7 @@ namespace App\Models\Concerns;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Models\MonthlyFinancialControl;
+use App\Modules\MonthlyFinancialControl\Infrastructure\Persistence\Eloquent\MonthlyFinancialControlModel as MonthlyFinancialControl;
 
 trait EnsuresMonthlyControl
 {
