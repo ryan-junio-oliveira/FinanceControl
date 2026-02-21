@@ -1,28 +1,23 @@
 @extends('layouts.app')
 
-@section('page_title', 'Novo Orçamento')
+@section('page_title', __('Novo Orçamento'))
 
 @section('content')
-@php
-    $breadcrumbs = [
-        ['label' => 'Dashboard', 'url' => route('dashboard')],
-        ['label' => 'Orçamentos', 'url' => route('budgets.index')],
-        ['label' => 'Novo Orçamento'],
-    ];
-@endphp
+<x-breadcrumbs :items="[
+    ['label' => __('Dashboard'), 'url' => route('dashboard')],
+    ['label' => __('Orçamentos'), 'url' => route('budgets.index')],
+    ['label' => __('Novo Orçamento')],
+]" />
 
 <div class="max-w-5xl mx-auto px-4">
     <x-form-errors />
 
     <x-form-container>
-        @include('budgets._form', [
-            'action' => route('budgets.store'),
-            'method' => 'POST',
-            'buttonLabel' => 'Salvar',
-            'backUrl' => route('budgets.index'),
-            'categories' => $categories,
-            'model' => null,
-        ])
+        <x-budget-form
+            :categories="$categories"
+            action="{{ route('budgets.store') }}"
+            button-label="{{ __('Salvar') }}"
+            back-url="{{ route('budgets.index') }}" />
     </x-form-container>
 </div>
 @endsection

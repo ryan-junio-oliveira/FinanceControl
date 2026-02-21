@@ -20,7 +20,7 @@ class UpdateRecipeRequest extends FormRequest
         return [
             'name' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0',
-            'transaction_date' => 'required|date',
+            'transaction_date' => 'nullable|date',
             'fixed' => 'boolean',
             'monthly_financial_control_id' => [
                 'nullable',
@@ -36,6 +36,8 @@ class UpdateRecipeRequest extends FormRequest
                     $q->where('organization_id', $orgId)->where('type', 'recipe');
                 }),
             ],
+            'received' => 'boolean',
+            'received_at' => 'nullable|date',
         ];
     }
 }

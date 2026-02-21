@@ -2,13 +2,15 @@
 
 namespace App\Modules\Bank\Domain\Entities;
 
+use App\Modules\Bank\Domain\ValueObjects\BankName;
+
 final class Bank
 {
     private int $id;
-    private string $name;
+    private BankName $name;
     private int $organizationId;
 
-    public function __construct(int $id, string $name, int $organizationId)
+    public function __construct(int $id, BankName $name, int $organizationId)
     {
         $this->id = $id;
         $this->name = $name;
@@ -20,7 +22,7 @@ final class Bank
         return $this->id;
     }
 
-    public function name(): string
+    public function name(): BankName
     {
         return $this->name;
     }

@@ -63,18 +63,14 @@
         @endphp
 
         @if($expenses->count() > 0)
-            <table class="w-full text-left text-sm">
-                <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    <tr>
-                        <th class="px-6 py-3">Data</th>
-                        <th class="px-6 py-3">Nome</th>
-                        <th class="px-6 py-3">Categoria</th>
-                        <th class="px-6 py-3 text-right">Valor</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
+            <x-table :columns="[
+                ['label' => 'Data'],
+                ['label' => 'Nome'],
+                ['label' => 'Categoria'],
+                ['label' => 'Valor', 'class' => 'text-right'],
+            ]">
                     @foreach($expenses as $e)
-                    <tr class="hover:bg-gray-50 transition-colors">
+                    <tr class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
                         <td class="px-6 py-3 text-gray-500 whitespace-nowrap">{{ $e->transaction_date?->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-6 py-3 font-medium text-gray-900">{{ $e->name }}</td>
                         <td class="px-6 py-3 text-gray-500">{{ $e->category?->name ?? '-' }}</td>

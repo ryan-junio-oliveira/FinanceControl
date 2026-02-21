@@ -16,13 +16,14 @@ class CreditCardModel extends Model
         'bank_id',
         'bank',
         'statement_amount',
+        'paid',
+        'paid_at',
         'limit',
         'closing_day',
         'due_day',
         'is_active',
         'color',
     ];
-
     public function bank()
     {
         return $this->belongsTo(\App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel::class, 'bank_id');

@@ -16,7 +16,7 @@ class CreditCardViewRepository implements CreditCardViewRepositoryInterface
      */
     public function listByOrganization(int $organizationId, ?string $search = null, int $perPage = 20, ?int $page = null)
     {
-        $query = CreditCardModel::with('bank')
+        $query = CreditCardModel::query()
             ->where('organization_id', $organizationId);
 
         if ($search) {
@@ -33,7 +33,7 @@ class CreditCardViewRepository implements CreditCardViewRepositoryInterface
             return new CreditCardDto(
                 $m->id,
                 $m->name,
-                $m->bank?->name,
+                $m->bank,
                 (float) $m->statement_amount,
                 $m->limit !== null ? (float) $m->limit : null,
                 $m->closing_day,

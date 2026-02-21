@@ -18,11 +18,13 @@
             </div>
         </div>
 
-        <!-- KPIs -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- KPIs grouped by type -->
 
-            {{-- Receitas --}}
+        <!-- receitas: total / fixa / variável -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {{-- Receitas totais --}}
             <div
+                title="Total de receitas registradas no mês atual"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-emerald-500">
                 <div
                     class="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 text-xl flex-shrink-0">
@@ -36,8 +38,44 @@
                 </div>
             </div>
 
-            {{-- Despesas --}}
+            {{-- Receitas fixas --}}
             <div
+                title="Parte das receitas marcadas como fixas/recorrentes"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-green-700">
+                <div
+                    class="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center text-green-700 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Receitas fixas</p>
+                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
+                        {{ number_format($fixedRecipes ?? 0, 2, ',', '.') }}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
+                </div>
+            </div>
+
+            {{-- Receitas variáveis --}}
+            <div
+                title="Parte das receitas não fixas"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-green-400">
+                <div
+                    class="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center text-green-400 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-random"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Receitas variáveis</p>
+                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
+                        {{ number_format($variableRecipes ?? 0, 2, ',', '.') }}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- despesas: total / fixa / variável -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+            {{-- Despesas totais --}}
+            <div
+                title="Total de despesas registradas no mês atual"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-red-500">
                 <div
                     class="w-14 h-14 rounded-xl bg-red-50 flex items-center justify-center text-red-500 text-xl flex-shrink-0">
@@ -51,24 +89,77 @@
                 </div>
             </div>
 
-            {{-- Faturas --}}
+            {{-- Despesas fixas --}}
             <div
+                title="Despesas classificadas como fixas"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-red-700">
+                <div
+                    class="w-14 h-14 rounded-xl bg-red-50 flex items-center justify-center text-red-700 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Despesas fixas</p>
+                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
+                        {{ number_format($fixedExpenses ?? 0, 2, ',', '.') }}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
+                </div>
+            </div>
+
+            {{-- Despesas variáveis --}}
+            <div
+                title="Despesas não fixas"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-red-400">
+                <div
+                    class="w-14 h-14 rounded-xl bg-red-50 flex items-center justify-center text-red-400 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-random"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Despesas variáveis</p>
+                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
+                        {{ number_format($variableExpenses ?? 0, 2, ',', '.') }}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- faturas, total+faturas e investimentos -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+            {{-- Total das faturas --}}
+            <div
+                title="Total das faturas de cartão abertas no mês"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-orange-500">
                 <div
                     class="w-14 h-14 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500 text-xl flex-shrink-0">
                     <i class="fa-solid fa-credit-card"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Faturas (Cartões)</p>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Faturas</p>
                     <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
                         {{ number_format($cardsTotal ?? 0, 2, ',', '.') }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">Total das faturas abertas</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
+                </div>
+            </div>
+
+            {{-- Despesas + Faturas --}}
+            <div
+                title="Soma das despesas e das faturas de cartão"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-orange-600">
+                <div
+                    class="w-14 h-14 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-calculator text-orange-600"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Despesas + Faturas</p>
+                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
+                        {{ number_format(($totalExpenses ?? 0) + ($cardsTotal ?? 0), 2, ',', '.') }}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
                 </div>
             </div>
 
             {{-- Investimentos --}}
             <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-violet-500">
+                title="Valor na categoria Investimentos"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-blue-500">
                 <div
                     class="w-14 h-14 rounded-xl bg-violet-50 flex items-center justify-center text-violet-500 text-xl flex-shrink-0">
                     <i class="fa-solid fa-piggy-bank"></i>
@@ -77,155 +168,148 @@
                     <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Investimentos</p>
                     <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
                         {{ number_format($totalInvestments ?? 0, 2, ',', '.') }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">Categoria Investimentos</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
                 </div>
             </div>
+        </div>
 
-            {{-- Despesas + Faturas --}}
+        <!-- saldos financeiros -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
             <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-rose-600">
+                title="Receitas menos despesas"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-gray-600">
                 <div
-                    class="w-14 h-14 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600 text-xl flex-shrink-0">
-                    <i class="fa-solid fa-calculator"></i>
+                    class="w-14 h-14 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-scale-balanced"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Despesas + Faturas</p>
-                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$
-                        {{ number_format(($totalExpenses ?? 0) + ($cardsTotal ?? 0), 2, ',', '.') }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">Total comprometido do mês</p>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Saldo (Receitas − Despesas)</p>
+                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$ {{ number_format(($totalRecipes ?? 0) - ($totalExpenses ?? 0),2,',','.')}}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
                 </div>
             </div>
 
-            {{-- Saldo = Receitas − (Despesas + Faturas) --}}
-            @php $bal = $balance ?? 0; @endphp
             <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 {{ $bal >= 0 ? 'border-l-blue-600' : 'border-l-red-600' }}">
+                title="Receitas menos (despesas + faturas)"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex gap-4 items-center border-l-4 border-l-gray-400">
                 <div
-                    class="w-14 h-14 rounded-xl {{ $bal >= 0 ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-600' }} flex items-center justify-center text-xl flex-shrink-0">
-                    <i class="fa-solid fa-wallet"></i>
+                    class="w-14 h-14 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-balance-scale-right"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Saldo</p>
-                    <p class="text-2xl font-bold mt-0.5 truncate {{ $bal >= 0 ? 'text-blue-700' : 'text-red-600' }}">R$
-                        {{ number_format($bal, 2, ',', '.') }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">Receitas &minus; (Despesas + Faturas)</p>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Execução -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-semibold text-gray-700">Execução mensal</h3>
-                <span class="text-sm font-semibold text-gray-600">
-                    {{ $executionPercent ?? 0 }}%
-                </span>
-            </div>
-
-            <div class="mt-4 w-full bg-gray-200 rounded-full h-3">
-                <div class="h-3 rounded-full bg-blue-600 transition-all duration-500"
-                    style="width: {{ $executionPercent ?? 0 }}%">
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Saldo (Receitas − (Despesas + Faturas))</p>
+                    <p class="text-2xl font-bold text-gray-800 mt-0.5 truncate">R$ {{ number_format(($totalRecipes ?? 0) - (($totalExpenses ?? 0) + ($cardsTotal ?? 0)),2,',','.')}}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Mês atual</p>
                 </div>
             </div>
         </div>
 
-        <!-- CHART: Receitas vs Despesas — últimos 12 meses -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">Receitas vs Despesas — últimos 12 meses</h3>
-            <div class="relative" style="height: 280px;">
-                <canvas id="chartMonthly"></canvas>
+        <!-- CHART: resumo financeiro em barras (receitas, despesas, faturas) -->
+        @php
+            $hasMonthly = false;
+            if(isset($monthlySeries) && is_array($monthlySeries)){
+                foreach($monthlySeries as $s){
+                    if(array_sum($s['data'] ?? [])>0){ $hasMonthly = true; break; }
+                }
+            }
+            if(!$hasMonthly && isset($cardsSeries)){
+                $hasMonthly = array_sum($cardsSeries) > 0;
+            }
+        @endphp
+        @if($hasMonthly)
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Resumo financeiro (Barras)</h3>
+                <div class="relative" style="height: 300px;">
+                    <canvas id="chartFinanceBars"></canvas>
+                </div>
             </div>
-        </div>
 
-        <!-- CHART: Evolução do Saldo -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">Evolução do Saldo — últimos 12 meses</h3>
-            <div class="relative" style="height: 220px;">
-                <canvas id="chartBalance"></canvas>
+            <!-- CHART: resumo financeiro em linhas (receitas, despesas, faturas, saldo) -->
+            <div class="bg-white rounded-xl shadow-md p-6 mt-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Resumo financeiro (Linhas)</h3>
+                <div class="relative" style="height: 260px;">
+                    <canvas id="chartFinanceLines"></canvas>
+                </div>
             </div>
-        </div>
+        @endif
 
         <!-- CHARTS: Categorias (doughnut) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        @if(count($expensesCategoryLabels ?? []) > 0 || count($recipesCategoryLabels ?? []) > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <!-- Despesas por Categoria -->
-            <div class="bg-white rounded-xl shadow-md p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">Despesas por Categoria</h3>
-                @if (count($expensesCategoryLabels ?? []) > 0)
-                    <div class="relative flex justify-center" style="height: 260px;">
-                        <canvas id="chartExpensesCategory"></canvas>
+                {{-- Despesas por Categoria --}}
+                @if(count($expensesCategoryLabels ?? []) > 0)
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Despesas por Categoria</h3>
+                        <div class="relative flex justify-center" style="height: 260px;">
+                            <canvas id="chartExpensesCategory"></canvas>
+                        </div>
                     </div>
-                @else
-                    <div class="flex items-center justify-center h-40 text-gray-400 text-sm">
-                        Nenhuma despesa registrada neste mês.
+                @endif
+
+                {{-- Receitas por Categoria --}}
+                @if(count($recipesCategoryLabels ?? []) > 0)
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Receitas por Categoria</h3>
+                        <div class="relative flex justify-center" style="height: 260px;">
+                            <canvas id="chartRecipesCategory"></canvas>
+                        </div>
                     </div>
                 @endif
             </div>
+        @endif
 
-            <!-- Receitas por Categoria -->
-            <div class="bg-white rounded-xl shadow-md p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">Receitas por Categoria</h3>
-                @if (count($recipesCategoryLabels ?? []) > 0)
-                    <div class="relative flex justify-center" style="height: 260px;">
-                        <canvas id="chartRecipesCategory"></canvas>
+        <!-- BUDGET IMPACT -->
+        @if(($availableBudgets ?? collect())->count() > 0)
+            <div class="bg-white rounded-xl shadow-md p-6 mt-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">{{ __('Orçamento') }}</h3>
+                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center">
+                        <select name="budget_id" onchange="this.form.submit()" class="rounded-xl border border-gray-200 px-3 py-2 text-sm">
+                            <option value="">{{ __('(nenhum)') }}</option>
+                            @foreach($availableBudgets ?? collect() as $b)
+                                <option value="{{ $b->id }}" @selected(request('budget_id') == $b->id)>
+                                    {{ $b->name }} ({{ \Carbon\Carbon::parse($b->start_date)->format('d/m') }}–{{ \Carbon\Carbon::parse($b->end_date)->format('d/m') }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+
+                @if($selectedBudget)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <x-card label="{{ __('Planejado') }}" :value="$budgetImpact['planned']" icon="fa-chart-pie" color="bg-emerald-500" />
+                        <x-card label="{{ __('Gasto no período') }}" :value="$budgetImpact['spent']" icon="fa-wallet" color="bg-red-500" />
+                    </div>
+                    <div class="mt-4 text-sm text-gray-500">
+                        {{ __('Utilização:') }} <strong>{{ $budgetImpact['percent'] }}%</strong>
+                    </div>
+
+                    {{-- comparison bar chart --}}
+                    <div class="mt-6 bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Saldo atual vs previsto</h3>
+                        <div class="relative" style="height:240px;">
+                            <canvas id="chartBudgetComparison"></canvas>
+                        </div>
                     </div>
                 @else
-                    <div class="flex items-center justify-center h-40 text-gray-400 text-sm">
-                        Nenhuma receita registrada neste mês.
+                    <div class="text-sm text-gray-400">
+                        {{ __('Selecione um orçamento para ver impacto nas despesas') }}
                     </div>
                 @endif
             </div>
-        </div>
-
-        <!-- CHART: Orçamentos — resumo e utilização -->
-        <div class="bg-white rounded-xl shadow-md p-6 mt-6">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700">Orçamentos</h3>
-                    <p class="text-xs text-gray-400 mt-1">Visão geral dos orçamentos ativos no mês</p>
-                </div>
-                <div class="text-sm text-gray-600">
-                    <div>Orçamentos ativos: <strong>{{ ($budgetsThisMonth ?? collect())->count() }}</strong></div>
-                    <div>Total planejado: <strong>R$ {{ number_format($totalBudgetsPlanned ?? 0, 2, ',', '.') }}</strong>
-                    </div>
-                </div>
-            </div>
-
-            @if (($budgetsThisMonth ?? collect())->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="flex flex-col items-center justify-center">
-                        <div class="text-sm text-gray-500 mb-2">Planejado vs Gasto (soma dos orçamentos ativos)</div>
-                        <div class="relative" style="height:220px; width:100%; max-width:360px;">
-                            <canvas id="chartBudgetsSummary"></canvas>
-                        </div>
-                        <div class="mt-3 text-sm text-gray-500">Planejado: <strong>R$
-                                {{ number_format($totalBudgetsPlanned ?? 0, 2, ',', '.') }}</strong> · Gasto: <strong>R$
-                                {{ number_format($totalBudgetsSpent ?? 0, 2, ',', '.') }}</strong></div>
-                    </div>
-
-                    <div>
-                        <div class="text-sm text-gray-500 mb-2">Utilização por orçamento (percentual)</div>
-                        <div class="relative" style="height:320px;">
-                            <canvas id="chartBudgetsProgress"></canvas>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="flex items-center justify-center h-40 text-gray-400 text-sm">
-                    Nenhum orçamento ativo neste mês.
-                </div>
-            @endif
-        </div>
+        @endif
 
         <!-- CHART: Gastos diários do mês atual -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-700 mb-1">Gastos diários — {{ now()->format('F Y') }}</h3>
-            <p class="text-xs text-gray-400 mb-4">Barras = valor do dia · Linha = acumulado</p>
-            <div class="relative" style="height: 240px;">
-                <canvas id="chartDailyExpenses"></canvas>
+        @if(array_sum($dailyData ?? []) > 0)
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-1">Gastos diários — {{ now()->format('F Y') }}</h3>
+                <p class="text-xs text-gray-400 mb-4">Barras = valor do dia · Linha = acumulado</p>
+                <div class="relative" style="height: 240px;">
+                    <canvas id="chartDailyExpenses"></canvas>
+                </div>
             </div>
-        </div>
+        @endif
 
         <!-- CHART: Tendência das top 3 categorias de despesa -->
         @if (count($trendSeries ?? []) > 0)
@@ -257,48 +341,87 @@
             </div>
         @endif
 
+        <!-- CHART: Distribuição de faturas por cartão -->
+        @if (($creditCards ?? collect())->count() > 0)
+            <div class="bg-white rounded-xl shadow-md p-6 mt-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Distribuição de faturas por cartão</h3>
+                <div class="relative" style="height: 240px;">
+                    <canvas id="chartCardPie"></canvas>
+                </div>
+            </div>
+        @endif
+
+        <!-- CHARTS: status pago/recebido -->
+        @if(isset($totalExpensesPaid) || isset($totalRecipesReceived) || isset($cardsPaid))
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Despesas pagas vs não pagas</h3>
+                    <div class="relative flex justify-center" style="height: 240px;">
+                        <canvas id="chartExpensesPaid"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Receitas recebidas vs não recebidas</h3>
+                    <div class="relative flex justify-center" style="height: 240px;">
+                        <canvas id="chartRecipesReceived"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Faturas pagas vs não pagas</h3>
+                    <div class="relative flex justify-center" style="height: 240px;">
+                        <canvas id="chartCardsPaid"></canvas>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Transações Recentes -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">Últimas Transações</h3>
-            @if (isset($recentTransactions) && $recentTransactions->count())
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-600">
-                        <thead>
-                            <tr class="border-b border-gray-100 text-xs uppercase tracking-wider text-gray-400">
-                                <th class="pb-3 pr-4">Tipo</th>
-                                <th class="pb-3 pr-4">Descrição</th>
-                                <th class="pb-3 pr-4">Data</th>
-                                <th class="pb-3 text-right">Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @foreach ($recentTransactions as $tx)
-                                <tr>
-                                    <td class="py-3 pr-4">
-                                        @if ($tx['type'] === 'income')
-                                            <span
-                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
-                                                <i class="fa-solid fa-arrow-up text-[10px]"></i> Receita
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-700">
-                                                <i class="fa-solid fa-arrow-down text-[10px]"></i> Despesa
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 pr-4 font-medium text-gray-700">{{ $tx['name'] }}</td>
-                                    <td class="py-3 pr-4 text-gray-400">
-                                        {{ \Carbon\Carbon::parse($tx['date'])->format('d/m/Y') }}</td>
-                                    <td
-                                        class="py-3 text-right font-semibold {{ $tx['type'] === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
-                                        {{ $tx['type'] === 'income' ? '+' : '-' }} R$
-                                        {{ number_format($tx['amount'], 2, ',', '.') }}
-                                    </td>
-                                </tr>
+        @if (isset($recentTransactions) && $recentTransactions->count())
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Últimas Transações</h3>
+                <x-table :columns="[
+                    ['label' => 'Tipo'],
+                    ['label' => 'Descrição'],
+                    ['label' => 'Data'],
+                    ['label' => 'Valor', 'class' => 'text-right'],
+                ]" class="text-gray-600">
+                    @foreach ($recentTransactions as $tx)
+                        <tr class="group bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if ($tx['type'] === 'income')
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                        Receita
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                                        Despesa
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full {{ $tx['type'] === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600' }} text-sm font-semibold">
+                                        {{ strtoupper(mb_substr($tx['name'], 0, 1)) }}
+                                    </div>
+                                    <span class="text-sm font-medium text-heading">{{ $tx['name'] }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fa-regular fa-calendar text-gray-400 text-xs"></i>
+                                    {{ \Carbon\Carbon::parse($tx['date'])->format('d/m/Y') }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <span class="text-sm font-semibold tabular-nums {{ $tx['type'] === 'income' ? 'text-emerald-600' : 'text-red-600' }}">
+                                    {{ $tx['type'] === 'income' ? '+' : '−' }} R$ {{ number_format($tx['amount'], 2, ',', '.') }}
+                                </span>
+                            </td>
+                        </tr>
                             @endforeach
-                        </tbody>
-                    </table>
+                </x-table>
                 </div>
             @else
                 <div class="flex items-center justify-center h-28 text-gray-400 text-sm">
@@ -321,6 +444,7 @@
             const GREEN = '#10B981';
             const RED = '#EF4444';
             const BLUE = '#3B82F6';
+            const ORANGE = '#F97316';
 
             const fmtBRL = v => 'R$ ' + (+v).toLocaleString('pt-BR', {
                 minimumFractionDigits: 2
@@ -337,173 +461,99 @@
             };
 
             // ------------------------------------------------------------------
-            // 1. Receitas vs Despesas + Saldo — últimos 12 meses (Bar + Line)
+            // 1a. Barra: receitas, despesas, faturas por mês
             // ------------------------------------------------------------------
-            const ctxMonthly = document.getElementById('chartMonthly');
-            if (ctxMonthly) {
-                const monthlyLabels = @json($monthlyCategories ?? []);
+            const ctxBars = document.getElementById('chartFinanceBars');
+            if (ctxBars) {
+                const labels = @json($monthlyCategories ?? []);
                 const monthlySeries = @json($monthlySeries ?? []);
-                const incomeData = monthlySeries.find(s => s.name === 'Receitas')?.data ?? [];
-                const expenseData = monthlySeries.find(s => s.name === 'Despesas')?.data ?? [];
+                const incomes = monthlySeries.find(s => s.name === 'Receitas')?.data ?? [];
+                const expenses = monthlySeries.find(s => s.name === 'Despesas')?.data ?? [];
+                const cards = @json($cardsSeries ?? []);
 
-                new Chart(ctxMonthly, {
+                new Chart(ctxBars, {
                     type: 'bar',
                     data: {
-                        labels: monthlyLabels,
-                        datasets: [{
+                        labels,
+                        datasets: [
+                            {
                                 label: 'Receitas',
-                                data: incomeData,
-                                backgroundColor: hex2rgba(GREEN, 0.75),
+                                data: incomes,
+                                backgroundColor: hex2rgba(GREEN,0.75),
                                 borderColor: GREEN,
-                                borderWidth: 1,
-                                borderRadius: 4,
-                                order: 2,
+                                borderWidth:1,
+                                borderRadius:3
                             },
                             {
                                 label: 'Despesas',
-                                data: expenseData,
-                                backgroundColor: hex2rgba(RED, 0.75),
+                                data: expenses,
+                                backgroundColor: hex2rgba(RED,0.75),
                                 borderColor: RED,
-                                borderWidth: 1,
-                                borderRadius: 4,
-                                order: 2,
+                                borderWidth:1,
+                                borderRadius:3
                             },
                             {
-                                label: 'Saldo',
-                                data: incomeData.map((v, i) => v - (expenseData[i] ?? 0)),
-                                type: 'line',
-                                borderColor: BLUE,
-                                backgroundColor: hex2rgba(BLUE, 0.1),
-                                borderWidth: 2,
-                                pointRadius: 3,
-                                fill: false,
-                                tension: 0.35,
-                                order: 1,
-                            },
-                        ],
+                                label: 'Faturas',
+                                data: cards,
+                                backgroundColor: hex2rgba(ORANGE,0.75),
+                                borderColor: ORANGE,
+                                borderWidth:1,
+                                borderRadius:3
+                            }
+                        ]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            mode: 'index',
-                            intersect: false
+                        responsive:true,
+                        maintainAspectRatio:false,
+                        interaction:{mode:'index',intersect:false},
+                        plugins:{
+                            legend:{position:'top',labels:{usePointStyle:true,boxWidth:10}},
+                            tooltip:{callbacks:{label:ttBRL}}
                         },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                labels: {
-                                    usePointStyle: true,
-                                    boxWidth: 10
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: ttBRL
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    font: {
-                                        size: 11
-                                    }
-                                }
-                            },
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: v => 'R$ ' + v.toLocaleString('pt-BR'),
-                                    font: {
-                                        size: 11
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
-                            },
-                        },
-                    },
+                        scales:{
+                            x:{grid:{display:false},ticks:{font:{size:11}}},
+                            y:{beginAtZero:true,ticks:{callback:v=>'R$ '+v.toLocaleString('pt-BR'),font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}
+                        }
+                    }
                 });
             }
 
             // ------------------------------------------------------------------
-            // 2. Evolução do Saldo — área azul, vermelho quando negativo
+            // 1b. Linha: receitas, despesas, faturas, saldo
             // ------------------------------------------------------------------
-            const ctxBalance = document.getElementById('chartBalance');
-            if (ctxBalance) {
-                const monthlyLabels = @json($monthlyCategories ?? []);
-                const monthlySeries = @json($monthlySeries ?? []);
-                const incomeData = monthlySeries.find(s => s.name === 'Receitas')?.data ?? [];
-                const expenseData = monthlySeries.find(s => s.name === 'Despesas')?.data ?? [];
-                const balanceData = incomeData.map((v, i) => v - (expenseData[i] ?? 0));
+            const ctxLines = document.getElementById('chartFinanceLines');
+            if (ctxLines) {
+                const labels = @json($monthlyCategories ?? []);
+                  const monthlySeries = @json($monthlySeries ?? []);
+                  const cards = @json($cardsSeries ?? []);
+                  const incomes = monthlySeries.find(s => s.name === 'Receitas')?.data ?? [];
+                  const expenses = monthlySeries.find(s => s.name === 'Despesas')?.data ?? [];
+                const saldo = incomes.map((v,i)=>v - ((expenses[i]||0) + (cards[i]||0)));
 
-                new Chart(ctxBalance, {
-                    type: 'line',
-                    data: {
-                        labels: monthlyLabels,
-                        datasets: [{
-                            label: 'Saldo',
-                            data: balanceData,
-                            borderColor: BLUE,
-                            backgroundColor: ctx => {
-                                const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 200);
-                                g.addColorStop(0, hex2rgba(BLUE, 0.35));
-                                g.addColorStop(1, hex2rgba(BLUE, 0));
-                                return g;
-                            },
-                            borderWidth: 2,
-                            pointRadius: 4,
-                            fill: true,
-                            tension: 0.4,
-                            segment: {
-                                borderColor: ctx => ctx.p1.parsed.y < 0 ? RED : BLUE,
-                                backgroundColor: ctx => ctx.p1.parsed.y < 0 ? hex2rgba(RED, 0.15) :
-                                    hex2rgba(BLUE, 0.2),
-                            },
-                        }],
+                new Chart(ctxLines, {
+                    type:'line',
+                    data:{
+                        labels,
+                        datasets:[
+                            {label:'Receitas',data:incomes,borderColor:GREEN,backgroundColor:hex2rgba(GREEN,0.1),tension:0.3},
+                            {label:'Despesas',data:expenses,borderColor:RED,backgroundColor:hex2rgba(RED,0.1),tension:0.3},
+                            {label:'Faturas',data:cards,borderColor:ORANGE,backgroundColor:hex2rgba(ORANGE,0.1),tension:0.3},
+                            {label:'Saldo',data:saldo,borderColor:BLUE,backgroundColor:hex2rgba(BLUE,0.1),tension:0.3}
+                        ]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: ttBRL
-                                }
-                            }
+                    options:{
+                        responsive:true,
+                        maintainAspectRatio:false,
+                        interaction:{mode:'index',intersect:false},
+                        plugins:{
+                            legend:{position:'top',labels:{usePointStyle:true,boxWidth:10}},
+                            tooltip:{callbacks:{label:ttBRL}}
                         },
-                        scales: {
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    font: {
-                                        size: 11
-                                    }
-                                }
-                            },
-                            y: {
-                                ticks: {
-                                    callback: v => 'R$ ' + v.toLocaleString('pt-BR'),
-                                    font: {
-                                        size: 11
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
-                            },
-                        },
-                    },
+                        scales:{
+                            x:{grid:{display:false},ticks:{font:{size:11}}},
+                            y:{beginAtZero:true,ticks:{callback:v=>'R$ '+v.toLocaleString('pt-BR'),font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}
+                        }
+                    }
                 });
             }
 
@@ -596,134 +646,6 @@
                                     label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}`
                                 }
                             }
-                        },
-                    },
-                });
-            }
-
-            // ------------------------------------------------------------------
-            // 4.5 Orçamentos — resumo e utilização
-            // ------------------------------------------------------------------
-            const ctxBudSummary = document.getElementById('chartBudgetsSummary');
-            if (ctxBudSummary) {
-                const totalPlanned = parseFloat(@json($totalBudgetsPlanned ?? 0));
-                const totalSpent = parseFloat(@json($totalBudgetsSpent ?? 0));
-                if (totalPlanned <= 0) {
-                    // nothing to show
-                    ctxBudSummary.style.display = 'none';
-                } else {
-                    const remaining = Math.max(0, totalPlanned - totalSpent);
-                    const over = Math.max(0, totalSpent - totalPlanned);
-
-                    let labels, data, colors;
-                    if (over > 0) {
-                        labels = ['Planejado', 'Excedente'];
-                        data = [totalPlanned, over];
-                        colors = [hex2rgba(BLUE, 0.9), hex2rgba(RED, 0.9)];
-                    } else {
-                        labels = ['Gasto', 'Restante'];
-                        data = [totalSpent, remaining];
-                        colors = [hex2rgba(RED, 0.9), hex2rgba(BLUE, 0.9)];
-                    }
-
-                    new Chart(ctxBudSummary, {
-                        type: 'doughnut',
-                        data: {
-                            labels,
-                            datasets: [{
-                                data,
-                                backgroundColor: colors,
-                                borderWidth: 2,
-                                borderColor: '#fff'
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            cutout: '68%',
-                            plugins: {
-                                legend: {
-                                    position: 'right',
-                                    labels: {
-                                        usePointStyle: true,
-                                        boxWidth: 10
-                                    }
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}`
-                                    }
-                                }
-                            },
-                        },
-                    });
-                }
-            }
-
-            const ctxBudProgress = document.getElementById('chartBudgetsProgress');
-            if (ctxBudProgress) {
-                const bLabels = @json($budgetLabels ?? []);
-                const bPct = @json($budgetPercentSeries ?? []);
-                const bPlan = @json($budgetPlannedSeries ?? []);
-                const bSpent = @json($budgetSpentSeries ?? []);
-
-                const barColors = bPct.map(p => p >= 90 ? RED : p >= 70 ? '#F97316' : GREEN);
-
-                new Chart(ctxBudProgress, {
-                    type: 'bar',
-                    data: {
-                        labels: bLabels,
-                        datasets: [{
-                            label: 'Utilização (%)',
-                            data: bPct,
-                            backgroundColor: barColors,
-                            borderRadius: 6
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: ctx => {
-                                        const i = ctx.dataIndex;
-                                        const pct = ctx.parsed.x;
-                                        const planned = bPlan[i] ?? 0;
-                                        const spent = bSpent[i] ?? 0;
-                                        return ` ${ctx.dataset.label}: ${pct}% — Planejado: ${fmtBRL(planned)} — Gasto: ${fmtBRL(spent)}`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    callback: v => v + '%',
-                                    font: {
-                                        size: 11
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
-                            },
-                            y: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    font: {
-                                        size: 12
-                                    }
-                                }
-                            },
                         },
                     },
                 });
@@ -970,10 +892,6 @@
                 });
             }
 
-            // ------------------------------------------------------------------
-            // 8. Cartões — Utilização do limite (% barra horizontal)
-            //    Verde < 70% · Laranja 70-89% · Vermelho ≥ 90%
-            // ------------------------------------------------------------------
             const ctxUtil = document.getElementById('chartCardUtilization');
             if (ctxUtil) {
                 const cards2 = @json(($creditCards ?? collect())->values());
@@ -1042,6 +960,168 @@
                         },
                     },
                 });
+            }
+
+            // ------------------------------------------------------------------
+            // 9. Pie: distribuição de faturas por cartão
+            // ------------------------------------------------------------------
+            const ctxPie = document.getElementById('chartCardPie');
+            if (ctxPie) {
+                const cards3 = @json(($creditCards ?? collect())->values());
+                const labels3 = cards3.map(c => c.name);
+                const data3 = cards3.map(c => parseFloat(c.statement_amount) || 0);
+                const colors3 = cards3.map(c => (c.bank && c.bank.color) ? c.bank.color : (c.color || '#6B7280'));
+                console.log('pie cards', labels3, data3, colors3);
+                new Chart(ctxPie, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels3,
+                        datasets: [{
+                            data: data3,
+                            backgroundColor: colors3,
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    usePointStyle: true,
+                                    boxWidth: 10
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}`
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ------------------------------------------------------------------
+            // 9b. Paid/received breakdowns
+            // ------------------------------------------------------------------
+            const ctxExpPaid = document.getElementById('chartExpensesPaid');
+            if (ctxExpPaid) {
+                const paid = {{ $totalExpensesPaid ?? 0 }};
+                const unpaid = {{ ($totalExpenses ?? 0) - ($totalExpensesPaid ?? 0) }};
+                new Chart(ctxExpPaid, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pagas', 'Não pagas'],
+                        datasets: [{
+                            data: [paid, unpaid],
+                            backgroundColor: [GREEN, RED],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { usePointStyle: true, boxWidth: 10 }
+                            },
+                            tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}` } }
+                        }
+                    }
+                });
+            }
+            const ctxRecPaid = document.getElementById('chartRecipesReceived');
+            if (ctxRecPaid) {
+                const rec = {{ $totalRecipesReceived ?? 0 }};
+                const recPend = {{ ($totalRecipes ?? 0) - ($totalRecipesReceived ?? 0) }};
+                new Chart(ctxRecPaid, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Recebidas', 'Não recebidas'],
+                        datasets: [{
+                            data: [rec, recPend],
+                            backgroundColor: [GREEN, RED],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { usePointStyle: true, boxWidth: 10 }
+                            },
+                            tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}` } }
+                        }
+                    }
+                });
+            }
+            const ctxCardsPaid = document.getElementById('chartCardsPaid');
+            if (ctxCardsPaid) {
+                const cp = {{ $cardsPaid ?? 0 }};
+                const cup = {{ ($cardsTotal ?? 0) - ($cardsPaid ?? 0) }};
+                new Chart(ctxCardsPaid, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pagas', 'Não pagas'],
+                        datasets: [{
+                            data: [cp, cup],
+                            backgroundColor: [GREEN, RED],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { usePointStyle: true, boxWidth: 10 }
+                            },
+                            tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}` } }
+                        }
+                    }
+                });
+            }
+
+            // ------------------------------------------------------------------
+            // 10. Budget comparison bar
+            // ------------------------------------------------------------------
+            const ctxBudComp = document.getElementById('chartBudgetComparison');
+            if (ctxBudComp) {
+                const comp = @json($budgetComparison ?? null);
+                if (comp) {
+                    new Chart(ctxBudComp, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Atual', 'Previsto'],
+                            datasets: [{
+                                data: [comp.actual, comp.predicted],
+                                backgroundColor: [BLUE, ORANGE]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {display: false},
+                                tooltip: {callbacks:{label:ttBRL}}
+                            },
+                            scales: {
+                                y: {beginAtZero:true,ticks:{callback:v=>'R$ '+v.toLocaleString('pt-BR'),font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}},
+                                x: {grid:{display:false},ticks:{font:{size:11}}}
+                            }
+                        }
+                    });
+                }
             }
 
         });

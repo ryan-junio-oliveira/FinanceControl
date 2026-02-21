@@ -20,7 +20,7 @@ trait EnsuresMonthlyControl
                 return;
             }
 
-            // determine date (fallback to now)
+            // determine date (fallback to now). also backfill transaction_date
             $date = null;
             if (!empty($model->transaction_date)) {
                 $date = $model->transaction_date instanceof Carbon
@@ -28,6 +28,8 @@ trait EnsuresMonthlyControl
                     : Carbon::parse($model->transaction_date);
             } else {
                 $date = Carbon::now();
+                // if caller didn't pass a date, persist today's date
+                $model->transaction_date = $date->format('Y-m-d');
             }
 
             // determine organization (prefer model value, fallback to authenticated user)

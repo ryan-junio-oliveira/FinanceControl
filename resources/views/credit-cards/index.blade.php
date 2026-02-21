@@ -1,130 +1,57 @@
 @extends('layouts.app')
 
-@section('page_title', 'Cartões de Crédito')
+@section('page_title', __('Cartões de Crédito'))
 
-@section('content')@php
-    $breadcrumbs = [['label' => 'Dashboard', 'url' => route('dashboard')], ['label' => 'Cartões']];
-@endphp
+@section('content')
+<x-breadcrumbs :items="[
+    ['label' => __('Dashboard'), 'url' => route('dashboard')],
+    ['label' => __('Cartões')],
+]" />
 
-    <x-list-layout title="Cartões de Crédito" subtitle="Gerencie seus cartões" create-url="{{ route('credit-cards.create') }}"
-        create-label="Novo cartão" create-color="bg-brand-500">
+    <x-list-layout title="{{ __('Cartões de Crédito') }}" subtitle="{{ __('Gerencie seus cartões') }}" create-url="{{ route('credit-cards.create') }}"
+        create-label="{{ __('Novo cartão') }}" create-color="bg-brand-500">
 
         <x-slot name="controls">
-            <x-table-controls placeholder="Pesquisar cartões" :perPageOptions="[10, 20, 50, 100]" />
+            <x-table-controls placeholder="{{ __('Pesquisar cartões') }}" :perPageOptions="[10, 20, 50, 100]" />
         </x-slot>
 
-        @php
-            $columns = [
-                ['label' => 'Nome', 'class' => 'text-left'],
-                ['label' => 'Banco', 'class' => 'text-left'],
-                ['label' => 'Fatura', 'class' => 'text-right'],
-                ['label' => 'Limite', 'class' => 'text-right'],
-                ['label' => 'Fech./Venc.', 'class' => 'text-left'],
-                ['label' => 'Ativo', 'class' => 'text-center'],
-                ['label' => 'Ações', 'class' => 'text-right'],
-            ];
-        @endphp
-
-        <div class="overflow-x-auto">
-            <x-table compact :columns="$columns" id="credit-cards-table" tbody-class="bg-white divide-y divide-gray-100">
-                @forelse($creditCards as $card)
-                    <tr class="group hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-700 text-sm font-medium">
-                                    {{ strtoupper(mb_substr($card->name(), 0, 1)) }}</div>
-                                <div class="min-w-0">
-                                    <div class="text-sm font-medium text-gray-900 truncate">{{ $card->name() }}</div>
-                                    <div class="text-xs text-gray-500 mt-0.5 truncate max-w-[200px]">
-                                        {{ $card->bankName() ?? '-' }}</div>
-                                </div>
-                            </div>
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $card->bankName() ?? '-' }}</td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <span class="text-sm font-semibold tabular-nums text-gray-900">R$
-                                {{ number_format($card->statementAmount(), 2, ',', '.') }}</span>
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <span
-                                class="text-sm tabular-nums text-gray-700">{{ $card->limit() ? 'R$ ' . number_format($card->limit(), 2, ',', '.') : '-' }}</span>
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $card->closingDay() ?? '-' }} /
-                            {{ $card->dueDay() ?? '-' }}</td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
-                            @if ($card->is_active)
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                    Sim
-                                </span>
-                            @else
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>
-                                    Não
-                                </span>
-                            @endif
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div
-                                class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <x-link variant="ghost" href="{{ route('credit-cards.edit', ['id' => $card->id]) }}"
-                                    class="h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 p-0"
-                                    aria-label="Editar cartão {{ $card->name() }}">
-                                    <x-fa-icon name="pen" class="h-3.5 w-3.5 text-current" />
-                                </x-link>
-
-                                <form action="{{ route('credit-cards.destroy', ['id' => $card->id]) }}" method="POST"
-                                    onsubmit="return confirm('Remover cartão?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <x-button variant="ghost" type="submit"
-                                        class="h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 p-0"
-                                        aria-label="Remover cartão {{ $card->name() }}">
-                                        <x-fa-icon name="trash" class="h-3.5 w-3.5 text-current" />
-                                    </x-button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
+        <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
+            <table class="w-full text-sm text-left rtl:text-right text-body">
+                <thead class="text-sm text-body bg-neutral-secondary-medium border-b border-default-medium">
                     <tr>
-                        <td colspan="7" class="px-6 py-12 text-center">
-                            <div class="mx-auto max-w-md">
-                                <div class="text-3xl text-gray-300 mb-3">—</div>
-                                <p class="text-sm text-gray-500">Nenhum cartão cadastrado.</p>
-                                <div class="mt-4">
-                                    <x-link variant="primary" href="{{ route('credit-cards.create') }}"
-                                        class="bg-brand-500">
-                                        Novo cartão
-                                    </x-link>
-                                </div>
-                            </div>
-                        </td>
+                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Nome') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Banco') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Fatura') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Limite') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Fech./Venc.') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Ativo') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium"><span class="sr-only">{{ __('Ações') }}</span></th>
                     </tr>
-                @endforelse
-            </x-table>
+                </thead>
+                <tbody>
+                    @forelse($creditCards as $card)
+                        @include('credit-cards.partials.row', ['card' => $card])
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-4">
+                                <x-empty-state
+                                    :cols="7"
+                                    icon="credit-card"
+                                    title="{{ __('Nenhum cartão cadastrado.') }}"
+                                    button-url="{{ route('credit-cards.create') }}"
+                                    button-label="{{ __('Novo cartão') }}"
+                                    button-class="bg-brand-500" />
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
 
         <x-slot name="pagination">
             @if ($creditCards->hasPages())
-                <div class="flex items-center justify-between border-t border-gray-600 px-6 py-3 server-pager credit-cards">
-                    <p class="text-sm text-gray-500">
-                        Exibindo <span class="font-medium text-gray-900">{{ $creditCards->firstItem() }}</span> a
-                        <span class="font-medium text-gray-900">{{ $creditCards->lastItem() }}</span> de
-                        <span class="font-medium text-gray-900">{{ $creditCards->total() }}</span> resultados
-                    </p>
-                    <div>
-                        {{ $creditCards->links() }}
-                    </div>
+                <div class="border-t border-default px-6 py-3">
+                    {{ $creditCards->links() }}
                 </div>
             @endif
         </x-slot>

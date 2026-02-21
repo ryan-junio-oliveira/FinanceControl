@@ -38,6 +38,12 @@ class ModuleServiceProvider extends ServiceProvider
             \App\Modules\Bank\Domain\Contracts\BankRepositoryInterface::class,
             \App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankRepository::class
         );
+
+        // application use-case bindings
+        $this->app->bind(
+            \App\Modules\Bank\Application\Contracts\ListBanksInterface::class,
+            \App\Modules\Bank\Application\UseCases\ListBanks::class
+        );
         $this->app->bind(
             \App\Modules\CreditCard\Domain\Contracts\CreditCardRepositoryInterface::class,
             \App\Modules\CreditCard\Infrastructure\Persistence\Eloquent\CreditCardRepository::class

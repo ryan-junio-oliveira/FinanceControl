@@ -23,6 +23,11 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->boolean('fixed')->default(false);
             $table->date('transaction_date')->nullable();
+
+            // novos campos para controlar recebimento
+            $table->boolean('received')->default(false);
+            $table->date('received_at')->nullable();
+
             $table->unsignedBigInteger('monthly_financial_control_id');
             $table->timestamps();
 

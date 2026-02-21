@@ -1,29 +1,26 @@
 @extends('layouts.app')
 
-@section('page_title', 'Editar Receita')
+@section('page_title', __('Editar Receita'))
 
 @section('content')
-@php
-    $breadcrumbs = [
-        ['label' => 'Dashboard', 'url' => route('dashboard')],
-        ['label' => 'Receitas', 'url' => route('recipes.index')],
-        ['label' => 'Editar Receita'],
-    ];
-@endphp
+<x-breadcrumbs :items="[
+    ['label' => __('Dashboard'), 'url' => route('dashboard')],
+    ['label' => __('Receitas'), 'url' => route('recipes.index')],
+    ['label' => __('Editar Receita')],
+]" />
 
 <div class="max-w-5xl mx-auto px-4">
     {{-- header removed per request --}}
     <x-form-errors />
 
     <x-form-container>
-        @include('recipes._form', [
-            'action' => route('recipes.update', $recipe),
-            'method' => 'PUT',
-            'buttonLabel' => 'Atualizar',
-            'backUrl' => route('recipes.index'),
-            'categories' => $categories,
-            'model' => $recipe,
-        ])
+        <x-recipe-form
+            :categories="$categories"
+            :model="$recipe"
+            action="{{ route('recipes.update', $recipe) }}"
+            method="PUT"
+            button-label="{{ __('Atualizar') }}"
+            back-url="{{ route('recipes.index') }}" />
     </x-form-container>
 </div>
 @endsection

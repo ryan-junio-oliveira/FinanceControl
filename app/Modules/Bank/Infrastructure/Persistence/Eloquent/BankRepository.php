@@ -19,10 +19,24 @@ class BankRepository implements BankRepositoryInterface
         return $models->map(fn($m) => $this->toEntity($m))->all();
     }
 
+    public function allByOrganization(int $organizationId): array
+    {
+        $models = BankModel::where('organization_id', $organizationId)
+            ->orderBy('name')
+            ->get();
+
+        return $models->map(fn($m) => $this->toEntity($m))->all();
+    }
+
     public function save(BankEntity $bank): BankEntity
     {
-        $attributes = ['name' => $bank->name(), 'organization_id' => $bank->organizationId()];
+        $attributes = [
+            'name' => (string) $bank->name(),
+            'organization_id' => $bank->organizationId(),
+        ];
+
         $model = BankModel::updateOrCreate(['id' => $bank->id()], $attributes);
+
         return $this->toEntity($model);
     }
 
@@ -33,6 +47,10 @@ class BankRepository implements BankRepositoryInterface
 
     private function toEntity(BankModel $model): BankEntity
     {
-        return new BankEntity($model->id, $model->name, $model->organization_id);
+        return new BankEntity(
+            $model->id,
+            new \App\Modules\Bank\Domain\ValueObjects\BankName($model->name),
+            $model->organization_id
+        );
     }
 }

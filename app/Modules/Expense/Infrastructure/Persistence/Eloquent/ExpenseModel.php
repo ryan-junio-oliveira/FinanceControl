@@ -15,6 +15,8 @@ class ExpenseModel extends Model
         'amount',
         'fixed',
         'transaction_date',
+        'paid',
+        'paid_at',
         'monthly_financial_control_id',
         'credit_card_id',
         'category_id',
@@ -24,7 +26,18 @@ class ExpenseModel extends Model
     protected $casts = [
         'amount' => 'decimal:2',
         'transaction_date' => 'date',
+        'paid' => 'boolean',
+        'paid_at' => 'date',
     ];
+
+    public static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->transaction_date)) {
+                $model->transaction_date = now()->toDateString();
+            }
+        });
+    }
 
     public function category()
     {

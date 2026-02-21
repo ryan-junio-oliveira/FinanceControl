@@ -10,10 +10,11 @@ use App\Modules\Budget\Domain\Contracts\BudgetRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $orgId = Auth::user()?->organization_id;
 
@@ -39,6 +40,7 @@ class DashboardController extends Controller
             ->orderByDesc('total')
             ->get();
 
+
         // Recipes by category (current month)
         $recipesByCategory = Recipe::selectRaw('categories.name AS category, SUM(recipes.amount) AS total')
             ->join('categories', 'categories.id', '=', 'recipes.category_id')
@@ -52,6 +54,14 @@ class DashboardController extends Controller
         // Cards summary (current organization)
         $creditCards = CreditCard::where('organization_id', $orgId)->with('bank')->get();
         $cardsTotal = $creditCards->sum('statement_amount');
+
+        // add a separate slice for card statement totals so they appear in the pie
+        if ($cardsTotal > 0) {
+            $expensesByCategory->push((object)[
+                'category' => 'Cartões',
+                'total' => $cardsTotal,
+            ]);
+        }
 
         // Combined expense (expenses this month + cards statements)
         $totalExpensesWithCards = ($totals['totalExpenses'] ?? 0) + $cardsTotal;
@@ -69,6 +79,18 @@ class DashboardController extends Controller
             [ 'name' => 'Receitas', 'data' => [ (float) ($totals['totalRecipes'] ?? 0) ] ],
             [ 'name' => 'Despesas + Cartões', 'data' => [ (float) $totalExpensesWithCards ] ],
         ];
+
+        // when rendering monthly graphs, we want a parallel series of card totals
+        // only show values for months where we actually have a financial control record
+        $mfcMonths = DB::table('monthly_financial_controls')
+            ->where('organization_id', $orgId)
+            ->get(['year','month'])
+            ->map(fn($r) => sprintf('%04d-%02d', $r->year, $r->month))
+            ->toArray();
+
+        $cardsSeries = $months->map(fn($date) =>
+            in_array($date->format('Y-m'), $mfcMonths) ? (float)$cardsTotal : 0
+        )->toArray();
 
         // Top expense categories (for bar chart)
         $topExpenseCategories = $expensesByCategory->take(5)->map(fn($r) => ['category' => $r->category, 'total' => (float) $r->total]);
@@ -130,44 +152,58 @@ class DashboardController extends Controller
             }
         }
 
-        // Budgets — current month / overlapping budgets
+        // Budgets available for dashboard dropdown (active budgets overlapping current month)
         $monthStart = now()->startOfMonth();
         $monthEnd = now()->endOfMonth();
 
-        $budgetsThisMonth = \App\Modules\Budget\Infrastructure\Persistence\Eloquent\BudgetModel::where('organization_id', $orgId)
+        $availableBudgets = \App\Modules\Budget\Infrastructure\Persistence\Eloquent\BudgetModel::where('organization_id', $orgId)
             ->where('is_active', true)
             ->whereDate('start_date', '<=', $monthEnd)
             ->whereDate('end_date', '>=', $monthStart)
             ->orderByDesc('amount')
             ->get();
 
-        $budgetLabels = $budgetsThisMonth->pluck('name')->toArray();
-        $budgetPlannedSeries = $budgetsThisMonth->pluck('amount')->map(fn($v) => (float) $v)->toArray();
-        $repo = app(BudgetRepositoryInterface::class);
-        $budgetSpentSeries = $budgetsThisMonth->map(fn($b) => round($repo->calculateSpent(
-            new \App\Modules\Budget\Domain\Entities\Budget(
-                $b->id,
-                $b->name,
-                (float) $b->amount,
-                new \DateTime($b->start_date),
-                new \DateTime($b->end_date),
-                $b->category_id,
-                (bool) $b->is_active,
-                $b->organization_id
-            )
-        ), 2))->toArray();
-        $budgetPercentSeries = $budgetsThisMonth->map(fn($b, $i) =>
-            round(
-                $budgetPlannedSeries[$i] ? ($budgetSpentSeries[$i] / $budgetPlannedSeries[$i]) * 100 : 0,
-                2
-            )
-        )->toArray();
-
-        $totalBudgetsPlanned = array_sum($budgetPlannedSeries);
-        $totalBudgetsSpent = array_sum($budgetSpentSeries);
-
-        // Correct balance = receitas − (despesas + faturas de cartão)
+        // compute corrected balance before using it for budget comparison
         $correctedBalance = ($totals['totalRecipes'] ?? 0) - ($totals['totalExpenses'] ?? 0) - $cardsTotal;
+
+        // compute selected budget impact if requested
+        $selectedBudget = null;
+        $budgetImpact = null;
+        $budgetComparison = null;
+        if ($request->filled('budget_id')) {
+            $b = $availableBudgets->firstWhere('id', $request->budget_id);
+            if ($b) {
+                $selectedBudget = $b;
+                $repo = app(BudgetRepositoryInterface::class);
+                $spent = $repo->calculateSpent(
+                    new \App\Modules\Budget\Domain\Entities\Budget(
+                        $b->id,
+                        $b->name,
+                        (float) $b->amount,
+                        new \DateTime($b->start_date),
+                        new \DateTime($b->end_date),
+                        $b->category_id,
+                        (bool) $b->is_active,
+                        $b->organization_id
+                    )
+                );
+
+                $budgetImpact = [
+                    'planned' => (float) $b->amount,
+                    'spent' => $spent,
+                    'percent' => $b->amount ? round(($spent / $b->amount) * 100, 2) : 0,
+                ];
+
+                // comparison data: current corrected balance vs remaining budget
+                $budgetComparison = [
+                    'actual' => $correctedBalance,
+                    'predicted' => (float) $b->amount - $spent,
+                ];
+            }
+        }
+
+        // Correct balance already computed above
+        // $correctedBalance = ($totals['totalRecipes'] ?? 0) - ($totals['totalExpenses'] ?? 0) - $cardsTotal;
 
         return view('dashboard', [
             ...$totals,
@@ -204,15 +240,13 @@ class DashboardController extends Controller
             // top categories trend
             'trendLabels' => $trendLabels,
             'trendSeries' => $trendSeries,
+            'cardsSeries' => $cardsSeries,
 
-            // Budgets
-            'budgetsThisMonth'      => $budgetsThisMonth,
-            'budgetLabels'          => $budgetLabels,
-            'budgetPlannedSeries'   => $budgetPlannedSeries,
-            'budgetSpentSeries'     => $budgetSpentSeries,
-            'budgetPercentSeries'   => $budgetPercentSeries,
-            'totalBudgetsPlanned'   => $totalBudgetsPlanned,
-            'totalBudgetsSpent'     => $totalBudgetsSpent,
+            // Budgets for selection and impact
+            'availableBudgets' => $availableBudgets,
+            'selectedBudget' => $selectedBudget,
+            'budgetImpact' => $budgetImpact,
+            'budgetComparison' => $budgetComparison,
         ]);
     }
 
@@ -244,7 +278,7 @@ class DashboardController extends Controller
             'totalRecipes'           => 0,
             'totalExpenses'          => 0,
             'balance'                => 0,
-            'executionPercent'       => 0,
+            // 'executionPercent'       => 0,
             'recentTransactions'     => collect(),
             'monthlyCategories'      => $categories,
             'monthlySeries'          => [
@@ -266,6 +300,12 @@ class DashboardController extends Controller
             'dailyCumulative'        => array_fill(0, now()->daysInMonth, 0),
             'trendLabels'            => [],
             'trendSeries'            => [],
+            'cardsSeries'            => [],
+
+            // budgets (none when there is no org)
+            'availableBudgets' => collect(),
+            'selectedBudget' => null,
+            'budgetImpact' => null,
         ]);
     }
 
@@ -277,15 +317,33 @@ class DashboardController extends Controller
         $month = now()->month;
         $year = now()->year;
 
+        // receitas
         $totalRecipes = Recipe::where('organization_id', $orgId)
             ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
             ->sum('amount');
 
+        $fixedRecipes = Recipe::where('organization_id', $orgId)
+            ->whereYear('transaction_date', $year)
+            ->whereMonth('transaction_date', $month)
+            ->where('fixed', true)
+            ->sum('amount');
+
+        $variableRecipes = $totalRecipes - $fixedRecipes;
+
+        // despesas
         $totalExpenses = Expense::where('organization_id', $orgId)
             ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
             ->sum('amount');
+
+        $fixedExpenses = Expense::where('organization_id', $orgId)
+            ->whereYear('transaction_date', $year)
+            ->whereMonth('transaction_date', $month)
+            ->where('fixed', true)
+            ->sum('amount');
+
+        $variableExpenses = $totalExpenses - $fixedExpenses;
 
         $totalInvestments = Expense::where('expenses.organization_id', $orgId)
             ->join('categories', 'categories.id', '=', 'expenses.category_id')
@@ -294,18 +352,37 @@ class DashboardController extends Controller
             ->whereMonth('expenses.transaction_date', $month)
             ->sum('expenses.amount');
 
-        $balance = $totalRecipes - $totalExpenses; // cards subtracted in index()
+        // paid/received subtotals for liveliness
+        $totalRecipesReceived = Recipe::where('organization_id', $orgId)
+            ->whereYear('transaction_date', $year)
+            ->whereMonth('transaction_date', $month)
+            ->where('received', true)
+            ->sum('amount');
 
-        $executionPercent = $totalRecipes > 0
-            ? (int) min(100, round(($totalExpenses / $totalRecipes) * 100))
-            : ($totalExpenses > 0 ? 100 : 0);
+        $totalExpensesPaid = Expense::where('organization_id', $orgId)
+            ->whereYear('transaction_date', $year)
+            ->whereMonth('transaction_date', $month)
+            ->where('paid', true)
+            ->sum('amount');
+
+        $cardsPaid = CreditCard::where('organization_id', $orgId)
+            ->where('paid', true)
+            ->sum('statement_amount');
+
+        $balance = $totalRecipesReceived - $totalExpensesPaid - $cardsPaid;
 
         return [
-            'totalRecipes'     => $totalRecipes,
-            'totalExpenses'    => $totalExpenses,
-            'totalInvestments' => (float) $totalInvestments,
-            'balance'          => $balance,
-            'executionPercent' => $executionPercent,
+            'totalRecipes'      => $totalRecipes,
+            'fixedRecipes'      => (float) $fixedRecipes,
+            'variableRecipes'   => (float) $variableRecipes,
+            'totalRecipesReceived' => (float) $totalRecipesReceived,
+            'totalExpenses'     => $totalExpenses,
+            'fixedExpenses'     => (float) $fixedExpenses,
+            'variableExpenses'  => (float) $variableExpenses,
+            'totalExpensesPaid' => (float) $totalExpensesPaid,
+            'totalInvestments'  => (float) $totalInvestments,
+            'cardsPaid'         => (float) $cardsPaid,
+            'balance'           => $balance,
         ];
     }
 
@@ -392,8 +469,11 @@ class DashboardController extends Controller
                 'date' => $e->transaction_date ?? $e->created_at,
             ]);
 
-        return $recipes
-            ->merge($expenses)
+        // ensure we are working with a plain support collection since elements
+        // are simple arrays (not models) and Eloquent\Collection->merge would
+        // attempt to call getKey() on each item.
+        return collect($recipes->all())
+            ->merge($expenses->all())
             ->sortByDesc('date')
             ->take(5)
             ->values();

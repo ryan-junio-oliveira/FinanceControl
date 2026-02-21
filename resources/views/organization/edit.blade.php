@@ -1,14 +1,12 @@
 @extends('layouts.app')
 
-@section('page_title', 'Organização')
+@section('page_title', __('Organização'))
 
 @section('content')
-@php
-    $breadcrumbs = [
-        ['label' => 'Dashboard', 'url' => route('dashboard')],
-        ['label' => 'Organização'],
-    ];
-@endphp
+<x-breadcrumbs :items="[
+    ['label' => __('Dashboard'), 'url' => route('dashboard')],
+    ['label' => __('Organização')],
+]" />
 
 <div class="max-w-4xl mx-auto space-y-6">
 
@@ -17,7 +15,7 @@
     {{-- Organization name --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-sm font-semibold text-gray-900">Dados da organização</h2>
+            <h2 class="text-sm font-semibold text-gray-900">{{ __('Dados da organização') }}</h2>
         </div>
         <form action="{{ route('organization.update') }}" method="POST" class="divide-y divide-gray-100">
             @csrf
@@ -26,7 +24,7 @@
                 <x-form-input name="name" label="Nome da organização" :value="old('name', $org->name)" required />
             </div>
             <div class="flex items-center gap-3 px-6 py-4 bg-gray-50/60">
-                <x-button variant="primary" type="submit">Salvar alterações</x-button>
+                <x-button variant="primary" type="submit">{{ __('Salvar alterações') }}</x-button>
             </div>
         </form>
     </div>
@@ -34,12 +32,12 @@
     {{-- Archive / Unarchive --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-sm font-semibold text-gray-900">Zona de perigo</h2>
+            <h2 class="text-sm font-semibold text-gray-900">{{ __('Zona de perigo') }}</h2>
         </div>
         <div class="px-6 py-5 flex items-start justify-between gap-4">
             <div>
-                <p class="text-sm font-medium text-gray-700">Arquivar organização</p>
-                <p class="text-xs text-gray-400 mt-0.5">Marca a organização como inativa. Após 6 meses será removida permanentemente.</p>
+                <p class="text-sm font-medium text-gray-700">{{ __('Arquivar organização') }}</p>
+                <p class="text-xs text-gray-400 mt-0.5">{{ __('Marca a organização como inativa. Após 6 meses será removida permanentemente.') }}</p>
             </div>
             @if($org->isArchived())
                 <form action="{{ route('organization.unarchive') }}" method="POST">
@@ -80,18 +78,13 @@
             <h2 class="text-sm font-semibold text-gray-900">Membros</h2>
             <span class="inline-flex items-center justify-center h-5 min-w-[1.25rem] px-1.5 rounded-full bg-brand-50 text-brand-600 text-xs font-semibold">{{ $members->count() }}</span>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-gray-50 border-b border-gray-100">
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Usuário</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Ações</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
+        <x-table :columns="[
+            ['label' => 'Usuário'],
+            ['label' => 'Email'],
+            ['label' => 'Ações', 'class' => 'text-right'],
+        ]">
                     @foreach($members as $mem)
-                    <tr class="group hover:bg-gray-50 transition-colors">
+                    <tr class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase">{{ substr($mem->username, 0, 1) }}</span>

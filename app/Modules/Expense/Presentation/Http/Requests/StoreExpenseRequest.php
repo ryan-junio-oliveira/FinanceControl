@@ -21,7 +21,7 @@ class StoreExpenseRequest extends FormRequest
             'name' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0',
             'fixed' => 'boolean',
-            'transaction_date' => 'required|date',
+            'transaction_date' => 'nullable|date',
             'monthly_financial_control_id' => [
                 'nullable',
                 'integer',
@@ -43,6 +43,8 @@ class StoreExpenseRequest extends FormRequest
                     $q->where('organization_id', $orgId);
                 }),
             ],
+            'paid' => 'boolean',
+            'paid_at' => 'nullable|date',
         ];
     }
 }

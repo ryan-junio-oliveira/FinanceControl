@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Bank\Application\UseCases;
 
+use App\Modules\Bank\Application\Contracts\ListBanksInterface;
 use App\Modules\Bank\Domain\Contracts\BankRepositoryInterface;
 
-final class ListBanks
+final class ListBanks implements ListBanksInterface
 {
     private BankRepositoryInterface $repository;
 
@@ -13,8 +16,12 @@ final class ListBanks
         $this->repository = $repository;
     }
 
-    public function execute(): array
+    public function execute(?int $organizationId = null): array
     {
-        return $this->repository->all();
+        if ($organizationId === null) {
+            return [];
+        }
+
+        return $this->repository->allByOrganization($organizationId);
     }
 }

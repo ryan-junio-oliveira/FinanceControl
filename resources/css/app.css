@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap') layer(base);
 /* prism import removed — package not installed in this project */
 @import 'tailwindcss';
+@import "flowbite/src/themes/default";
 
+@plugin "flowbite/plugin";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
+@source "../../node_modules/flowbite";
 
 @theme {
   --font-*: initial;

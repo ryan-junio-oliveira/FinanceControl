@@ -24,6 +24,10 @@ return new class extends Migration
             $table->boolean('fixed')->default(false);
             $table->date('transaction_date')->nullable();
 
+            // novos campos para controlar pagamento
+            $table->boolean('paid')->default(false);
+            $table->date('paid_at')->nullable();
+
             $table->foreignId('monthly_financial_control_id')
                 ->constrained()
                 ->cascadeOnDelete(); // aqui pode manter

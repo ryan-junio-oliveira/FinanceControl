@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('bank');
             $table->decimal('statement_amount', 12, 2);
 
+            // controle de pagamento da fatura atual
+            $table->boolean('paid')->default(false);
+            $table->date('paid_at')->nullable();
+
             // Opcionais
             $table->decimal('limit', 12, 2)->nullable();
             $table->unsignedTinyInteger('closing_day')->nullable();     // 1-31

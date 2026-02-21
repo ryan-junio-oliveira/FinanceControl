@@ -15,6 +15,8 @@ class RecipeModel extends Model
         'amount',
         'fixed',
         'transaction_date',
+        'received',
+        'received_at',
         'monthly_financial_control_id',
         'category_id',
         'organization_id',
@@ -23,7 +25,18 @@ class RecipeModel extends Model
     protected $casts = [
         'amount' => 'decimal:2',
         'transaction_date' => 'date',
+        'received' => 'boolean',
+        'received_at' => 'date',
     ];
+
+    public static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->transaction_date)) {
+                $model->transaction_date = now()->toDateString();
+            }
+        });
+    }
 
     public function category()
     {

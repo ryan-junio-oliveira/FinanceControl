@@ -1,31 +1,28 @@
 @extends('layouts.app')
 
-@section('page_title', 'Editar Despesa')
+@section('page_title', __('Editar Despesa'))
 
 @section('content')
-@php
-    $breadcrumbs = [
-        ['label' => 'Dashboard', 'url' => route('dashboard')],
-        ['label' => 'Despesas', 'url' => route('expenses.index')],
-        ['label' => 'Editar Despesa'],
-    ];
-@endphp
+<x-breadcrumbs :items="[
+    ['label' => __('Dashboard'), 'url' => route('dashboard')],
+    ['label' => __('Despesas'), 'url' => route('expenses.index')],
+    ['label' => __('Editar Despesa')],
+]" />
 
 <div class="max-w-5xl mx-auto px-4">
     
     <x-form-errors />
 
     <x-form-container>
-        @include('expenses._form', [
-            'action' => route('expenses.update', $expense),
-            'method' => 'PUT',
-            'buttonLabel' => 'Atualizar',
-            'backUrl' => route('expenses.index'),
-            'categories' => $categories,
-            'controls' => $controls,
-            'creditCards' => $creditCards,
-            'model' => $expense,
-        ])
+        <x-expense-form
+            :categories="$categories"
+            :controls="$controls"
+            :credit-cards="$creditCards"
+            :model="$expense"
+            action="{{ route('expenses.update', $expense) }}"
+            method="PUT"
+            button-label="{{ __('Atualizar') }}"
+            back-url="{{ route('expenses.index') }}" />
     </x-form-container>
 </div>
 @endsection
