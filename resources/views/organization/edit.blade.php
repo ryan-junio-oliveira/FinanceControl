@@ -3,13 +3,14 @@
 @section('page_title', 'Organização')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
+@php
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('dashboard')],
+        ['label' => 'Organização'],
+    ];
+@endphp
 
-    {{-- Page header --}}
-    <div>
-        <h1 class="text-2xl font-semibold text-gray-900">Organização</h1>
-        <p class="text-sm text-gray-400 mt-0.5">Configurações e membros</p>
-    </div>
+<div class="max-w-4xl mx-auto space-y-6">
 
     <x-form-errors />
 
@@ -25,7 +26,7 @@
                 <x-form-input name="name" label="Nome da organização" :value="old('name', $org->name)" required />
             </div>
             <div class="flex items-center gap-3 px-6 py-4 bg-gray-50/60">
-                <button type="submit" class="btn-primary">Salvar alterações</button>
+                <x-button variant="primary" type="submit">Salvar alterações</x-button>
             </div>
         </form>
     </div>
@@ -43,12 +44,12 @@
             @if($org->isArchived())
                 <form action="{{ route('organization.unarchive') }}" method="POST">
                     @csrf
-                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-sm font-medium hover:bg-emerald-100 transition-colors">Restaurar</button>
+                    <x-button variant="secondary" class="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100">Restaurar</x-button>
                 </form>
             @else
                 <form action="{{ route('organization.archive') }}" method="POST">
                     @csrf
-                    <button type="submit" onclick="return confirm('Arquivar organização? Após 6 meses será excluída definitivamente.')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 text-sm font-medium hover:bg-rose-100 transition-colors">Arquivar</button>
+                    <x-button variant="secondary" onclick="return confirm('Arquivar organização? Após 6 meses será excluída definitivamente.')" class="border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100">Arquivar</x-button>
                 </form>
             @endif
         </div>
@@ -68,7 +69,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 px-6 py-4 bg-gray-50/60">
-                <button type="submit" class="btn-primary">Enviar convite</button>
+                <x-button variant="primary" type="submit">Enviar convite</x-button>
             </div>
         </form>
     </div>
@@ -107,7 +108,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100" aria-label="Remover membro">
-                                    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z"/></svg>
+                                    <x-fa-icon name="user-minus" class="h-3.5 w-3.5 text-current" />
                                 </button>
                             </form>
                             @endif

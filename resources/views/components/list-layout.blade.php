@@ -7,7 +7,8 @@
     'createIcon' => null,
 ])
 
-<div class="mx-auto max-w-6xl px-4 py-8 md:px-6 lg:px-8">
+<div class="w-full px-4 py-8 md:px-6 lg:px-8">
+    
     <x-list-header :title="$title" :subtitle="$subtitle" :create-url="$createUrl" :create-label="$createLabel" :create-color="$createColor"
         :create-icon="$createIcon">
         @if (isset($headerActions))

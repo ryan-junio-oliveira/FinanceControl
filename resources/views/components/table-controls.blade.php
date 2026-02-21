@@ -9,9 +9,7 @@
     <div class="flex-1 min-w-0 relative">
         <label for="q" class="sr-only">Pesquisar</label>
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.197 5.197a7.5 7.5 0 0 0 10.606 10.606Z"/>
-            </svg>
+            <x-fa-icon name="search" class="h-4 w-4" />
         </div>
         <input
             id="q" name="q"
@@ -37,7 +35,7 @@
     </div>
     @endif
 
-    <button type="submit" class="shrink-0 inline-flex items-center gap-1.5 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+    <x-button type="submit" variant="primary" class="shrink-0">
         Buscar
-    </button>
+    </x-button>
 </form>

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Organization\Application\UseCases\ListOrganizations;
 use App\Modules\Organization\Presentation\Http\Requests\UpdateOrganizationRequest;
 use App\Modules\Organization\Presentation\Http\Requests\InviteOrganizationRequest;
-use App\Services\OrganizationInviteService;
+use App\Modules\Organization\Application\Services\OrganizationInviteService;
 use App\Models\User;
 use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel;
 use Illuminate\Support\Facades\Auth;

@@ -11,6 +11,7 @@ use App\Modules\Bank\Application\UseCases\ListBanks;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Modules\Shared\Domain\Enums\BankEnum;
 
 class CreditCardController extends Controller
 {
@@ -51,8 +52,8 @@ class CreditCardController extends Controller
             $orgId = Auth::user()->organization_id;
             $banks = collect($this->listBanks->execute($orgId));
             $banks = $banks->map(fn($b) => (object) ['id' => $b->id(), 'name' => $b->name()]);
-            $bankOptions = \App\Enums\BankEnum::forSelect();
-            return view('credit-cards.create', compact('banks', 'bankOptions'));
+            $bankOptions = BankEnum::forSelect();
+            return view('credit-cards.create', compact('banks', 'bankOptions')); 
         } catch (\Throwable $e) {
             Log::error($e);
             return redirect()->back()->with('error', 'Erro ao carregar formulário de cartão.');
@@ -98,7 +99,7 @@ class CreditCardController extends Controller
 
             $banks = collect($this->listBanks->execute($orgId))
                 ->map(fn($b) => (object) ['id' => $b->id(), 'name' => $b->name()]);
-            $bankOptions = \App\Enums\BankEnum::forSelect();
+            $bankOptions = BankEnum::forSelect();
             return view('credit-cards.edit', compact('card', 'banks', 'bankOptions'));
         } catch (\Throwable $e) {
             Log::error($e);

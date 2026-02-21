@@ -1,5 +1,5 @@
 @php
-    use App\Helpers\MenuHelper;
+    use App\Modules\Shared\Presentation\Helpers\MenuHelper;
     $menuGroups = MenuHelper::getMenuGroups();
     // prefer route names for active checks when available
     $currentRoute = request()->route() ? request()->route()->getName() : null;

@@ -3,6 +3,12 @@
 @section('page_title', 'Despesas')
 
 @section('content')
+@php
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('dashboard')],
+        ['label' => 'Despesas'],
+    ];
+@endphp
     <x-list-layout title="Despesas" subtitle="Gerencie suas saídas" create-url="{{ route('expenses.create') }}"
         create-label="Nova despesa" create-color="bg-red-600">
 
@@ -59,16 +65,11 @@
 
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-2">
-                                    <a href="{{ route('expenses.edit', $expense) }}"
+                                    <x-link variant="ghost" href="{{ route('expenses.edit', $expense) }}"
                                         class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
                                         aria-label="Editar despesa {{ $expense->name }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" class="w-4 h-4">
-                                            <path
-                                                d="M16.862 3.487a2.25 2.25 0 0 1 3.182 3.182L7.5 19.213l-4 1 1-4L16.862 3.487z" />
-                                        </svg>
-                                    </a>
+                                        <x-fa-icon name="pen" class="w-4 h-4 text-current" />
+                                    </x-link>
 
                                     <form action="{{ route('expenses.destroy', $expense) }}" method="POST"
                                         onsubmit="return confirm('Remover despesa?');">
@@ -77,12 +78,7 @@
                                         <button type="submit"
                                             class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-200"
                                             aria-label="Remover despesa {{ $expense->name }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" class="w-4 h-4">
-                                                <path
-                                                    d="M3 6h18M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6M10 6V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2" />
-                                            </svg>
+                                            <x-fa-icon name="trash" class="w-4 h-4 text-current" />
                                         </button>
                                     </form>
                                 </div>
@@ -95,9 +91,9 @@
                                     <div class="text-3xl text-gray-300 mb-3">—</div>
                                     <p class="text-sm text-gray-500">Nenhuma despesa encontrada.</p>
                                     <div class="mt-4">
-                                        <a href="{{ route('expenses.create') }}"
-                                            class="inline-flex items-center gap-2 px-4 py-2 rounded bg-red-600 text-white text-sm">Nova
-                                            despesa</a>
+                                        <x-link variant="primary" href="{{ route('expenses.create') }}" class="bg-red-600">
+                                            Nova despesa
+                                        </x-link>
                                     </div>
                                 </div>
                             </td>

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Shared\Presentation\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel;
 use Illuminate\Http\Request;

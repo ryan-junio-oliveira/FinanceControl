@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel as Bank;
-use App\Enums\BankEnum;
+use App\Modules\Shared\Domain\Enums\BankEnum;
+use Illuminate\Database\Seeder;
 
 class BankSeeder extends Seeder
 {

@@ -3,6 +3,11 @@
 @section('page_title', 'Dashboard Financeiro')
 
 @section('content')
+@php
+    $breadcrumbs = [
+        ['label' => 'Painel'],
+    ];
+@endphp
     <div class="space-y-6">
 
         <!-- HEADER -->

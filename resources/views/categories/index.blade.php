@@ -3,6 +3,12 @@
 @section('page_title', 'Categorias')
 
 @section('content')
+@php
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('dashboard')],
+        ['label' => 'Categorias'],
+    ];
+@endphp
 <x-list-layout title="Categorias" subtitle="Gerencie categorias" create-url="{{ route('categories.create') }}" create-label="Nova categoria">
 
     <x-slot name="controls">
@@ -29,21 +35,17 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $category->created_at->format('d/m/Y') }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <a href="{{ route('categories.edit', $category) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" aria-label="Editar categoria {{ $category->name }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                    <path d="M16.862 3.487a2.25 2.25 0 0 1 3.182 3.182L7.5 19.213l-4 1 1-4L16.862 3.487z" />
-                                </svg>
-                            </a>
+                            <x-link variant="ghost" href="{{ route('categories.edit', $category) }}" class="h-8 w-8 rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 p-0" aria-label="Editar categoria {{ $category->name }}">
+                                <x-fa-icon name="pen" class="w-4 h-4 text-current" />
+                            </x-link>
 
                             <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Remover categoria?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors" aria-label="Remover categoria {{ $category->name }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                        <path d="M3 6h18M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6M10 6V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2" />
-                                    </svg>
-                                </button>
-                            </form>
+                                <x-button variant="ghost" type="submit" class="h-8 w-8 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 p-0" aria-label="Remover categoria {{ $category->name }}">
+                                    <x-fa-icon name="trash" class="w-4 h-4 text-current" />
+</x-button>
+
                         </div>
                     </td>
                 </tr>
@@ -54,7 +56,7 @@
                             <div class="text-3xl text-gray-300 mb-3">—</div>
                             <p class="text-sm text-gray-500">Nenhuma categoria encontrada.</p>
                             <div class="mt-4">
-                                <a href="{{ route('categories.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded bg-emerald-600 text-white text-sm">Nova categoria</a>
+                                <x-link variant="primary" href="{{ route('categories.create') }}" class="bg-emerald-600">Nova categoria</x-link>
                             </div>
                         </div>
                     </td>

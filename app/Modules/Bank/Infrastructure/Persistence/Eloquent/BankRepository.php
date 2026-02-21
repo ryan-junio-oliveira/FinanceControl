@@ -13,9 +13,9 @@ class BankRepository implements BankRepositoryInterface
         return $model ? $this->toEntity($model) : null;
     }
 
-    public function listByOrganization(int $organizationId): array
+    public function all(): array
     {
-        $models = BankModel::where('organization_id', $organizationId)->get();
+        $models = BankModel::orderBy('name')->get();
         return $models->map(fn($m) => $this->toEntity($m))->all();
     }
 

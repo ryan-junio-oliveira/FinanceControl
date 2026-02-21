@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\InviteNotification;
+use App\Modules\Shared\Presentation\Notifications\InviteNotification;
 
 class OrganizationInviteTest extends TestCase
 {

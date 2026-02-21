@@ -13,8 +13,8 @@ final class ListBanks
         $this->repository = $repository;
     }
 
-    public function execute(int $organizationId): array
+    public function execute(): array
     {
-        return $this->repository->listByOrganization($organizationId);
+        return $this->repository->all();
     }
 }

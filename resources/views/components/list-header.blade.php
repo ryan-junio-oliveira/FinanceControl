@@ -19,12 +19,12 @@
         {{ $slot }}
 
         @if($createUrl)
-            <a href="{{ $createUrl }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg {{ $createColor }} text-white font-medium text-sm shadow-sm hover:opacity-95 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500/30">
+            <x-link variant="primary" href="{{ $createUrl }}" class="{{ $createColor }} text-white">
                 @if($createIcon)
                     <i class="fa-solid {{ $createIcon }}"></i>
                 @endif
                 {{ $createLabel }}
-            </a>
+            </x-link>
         @endif
     </div>
 </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace App\Modules\Shared\Domain\Enums;
 
 enum BankEnum: string
 {

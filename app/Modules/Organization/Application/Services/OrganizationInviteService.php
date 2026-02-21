@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Organization\Application\Services;
 
 use App\Models\User;
 use Illuminate\Support\Str;
-use App\Notifications\InviteNotification;
+use App\Modules\Shared\Presentation\Notifications\InviteNotification;
 
 class OrganizationInviteService
 {

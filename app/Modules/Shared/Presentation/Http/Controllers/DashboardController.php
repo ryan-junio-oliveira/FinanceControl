@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Shared\Presentation\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel as Expense;
 use App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeModel as Recipe;
 use App\Modules\CreditCard\Infrastructure\Persistence\Eloquent\CreditCardModel as CreditCard;

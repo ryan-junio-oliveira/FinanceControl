@@ -6,15 +6,15 @@
 <div class="max-w-2xl">
 
     <div class="flex items-center gap-3 mb-6">
-        <a href="{{ route('categories.index') }}" class="flex items-center justify-center h-9 w-9 rounded-xl border border-gray-200 bg-white text-gray-400 shadow-sm hover:bg-gray-50 hover:text-gray-600 transition-colors" aria-label="Voltar">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+        <x-button variant="secondary" href="{{ route('categories.index') }}" class="h-9 w-9 rounded-xl">
+            <x-fa-icon name="arrow-left" class="h-4 w-4" />
         </a>
         <div>
             <h1 class="text-xl font-semibold text-gray-900">{{ $category->name }}</h1>
             <p class="text-xs text-gray-400 mt-0.5">Detalhes da categoria</p>
         </div>
         <div class="ml-auto">
-            <a href="{{ route('categories.edit', $category) }}" class="btn-primary">Editar</a>
+            <x-link variant="primary" href="{{ route('categories.edit', $category) }}">Editar</x-link>
         </div>
     </div>
 

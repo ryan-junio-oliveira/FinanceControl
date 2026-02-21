@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Modules\Shared\Presentation\Helpers;
 
 class MenuHelper
 {

@@ -9,8 +9,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
         :root {
@@ -24,9 +23,6 @@
     {{-- Preloader --}}
     <x-preloader />
 
-    {{-- Flash --}}
-    <x-flash />
-
     {{-- Header --}}
     @include('layouts.app-header')
 
@@ -34,8 +30,15 @@
         @include('layouts.backdrop')
         @include('layouts.sidebar')
 
+        <x-application.alerts.container />
+
         <main class="flex-1 transition-all duration-300 lg:ml-[220px]">
             <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+                {{-- global breadcrumbs (pages must provide $breadcrumbs manually) --}}
+                @if (!empty($breadcrumbs) && is_array($breadcrumbs))
+                    <x-breadcrumbs :items="$breadcrumbs" />
+                @endif
+
                 @yield('content')
             </div>
         </main>
@@ -136,4 +139,5 @@
     @stack('scripts')
 
 </body>
+
 </html>
