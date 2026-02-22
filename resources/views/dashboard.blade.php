@@ -1006,7 +1006,6 @@
                 const labels3 = cards3.map(c => c.name);
                 const data3 = cards3.map(c => parseFloat(c.statement_amount) || 0);
                 const colors3 = cards3.map(c => (c.bank && c.bank.color) ? c.bank.color : (c.color || '#6B7280'));
-                console.log('pie cards', labels3, data3, colors3);
                 new Chart(ctxPie, {
                     type: 'doughnut',
                     data: {

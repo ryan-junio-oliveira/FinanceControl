@@ -65,9 +65,12 @@ class DashboardController extends Controller
             ->pluck(DB::raw('SUM(amount)'), 'credit_card_id');
 
         $creditCards = CreditCard::where('organization_id', $orgId)->with('bank')->get();
-        // overwrite statement_amount with actual sums for the month
+        // overwrite statement_amount with actual sums for the month, but fall back
+        // to the configured value when there are no expenses (i.e. card was just
+        // created and no transactions yet).
         $creditCards = $creditCards->map(function ($c) use ($cardSumsCurrent) {
-            $c->statement_amount = $cardSumsCurrent[$c->id] ?? 0;
+            $original = $c->statement_amount;
+            $c->statement_amount = $cardSumsCurrent[$c->id] ?? $original;
             return $c;
         });
 
