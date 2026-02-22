@@ -34,7 +34,7 @@
             </div>
             <div class="border-t border-gray-100 bg-gray-50/60 px-8 py-4 text-center text-sm text-gray-500">
                 Já tem conta?
-                <x-link href="{{ route('login') }}" variant="ghost" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">Entrar</x-link>
+                <a href="{{ route('login') }}" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">Entrar</a>
             </div>
         </div>
     </div>

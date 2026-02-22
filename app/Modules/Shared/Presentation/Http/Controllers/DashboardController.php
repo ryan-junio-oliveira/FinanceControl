@@ -37,6 +37,7 @@ class DashboardController extends Controller
         $expensesByCategory = Expense::selectRaw('categories.name AS category, SUM(expenses.amount) AS total')
             ->join('categories', 'categories.id', '=', 'expenses.category_id')
             ->where('expenses.organization_id', $orgId)
+            ->where('categories.name', '<>', 'Investimentos')
             ->whereYear('expenses.transaction_date', now()->year)
             ->whereMonth('expenses.transaction_date', now()->month)
             ->groupBy('categories.name')

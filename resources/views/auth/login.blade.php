@@ -5,9 +5,7 @@
 @section('content')
     <div class="w-full max-w-md mx-auto">
         <div class="text-center mb-8">
-            <div class="text-3xl font-bold text-gray-900 tracking-tight">
-                Finance<span class="text-amber-400">Control</span> <span class="ml-1 text-xs font-medium bg-gray-200 px-1.5 py-0.5 rounded">ERP</span>
-            </div>
+            <h1 class="text-3xl font-bold text-gray-900">Finance<span class="text-brand-500">Control</span></h1>
             <p class="mt-2 text-sm text-gray-500">{{ __('Acesse sua conta para continuar') }}</p>
         </div>
 
@@ -23,7 +21,7 @@
 
                     <div class="flex items-center justify-between text-sm">
                         <x-form-checkbox name="remember" label="{{ __('Lembrar-me') }}" />
-                        <x-link href="{{ route('password.request') }}" variant="ghost" class="text-brand-500 hover:text-brand-600 font-medium transition-colors">{{ __('Esqueceu a senha?') }}</x-link>
+                        <a href="{{ route('password.request') }}" class="text-brand-500 hover:text-brand-600 font-medium transition-colors">{{ __('Esqueceu a senha?') }}</a>
                     </div>
 
                     <x-button type="submit" variant="primary" class="w-full rounded-xl px-4 py-2.5 text-sm font-semibold">
@@ -33,7 +31,7 @@
             </div>
             <div class="border-t border-gray-100 bg-gray-50/60 px-8 py-4 text-center text-sm text-gray-500">
                 {{ __('Não tem conta?') }}
-                <x-link href="{{ route('register') }}" variant="ghost" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">{{ __('Criar agora') }}</x-link>
+                <a href="{{ route('register') }}" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">{{ __('Criar agora') }}</a>
             </div>
         </div>
     </div>
