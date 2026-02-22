@@ -45,17 +45,31 @@ class DashboardController extends Controller
         $recipesByCategory = Recipe::selectRaw('categories.name AS category, SUM(recipes.amount) AS total')
             ->join('categories', 'categories.id', '=', 'recipes.category_id')
             ->where('recipes.organization_id', $orgId)
+            ->where('categories.type','recipe')
             ->whereYear('recipes.transaction_date', now()->year)
             ->whereMonth('recipes.transaction_date', now()->month)
             ->groupBy('categories.name')
             ->orderByDesc('total')
             ->get();
 
-        // Cards summary (current organization)
+        // Cards summary calculated from expenses linked to cards
+        $cardSumsCurrent = Expense::where('organization_id', $orgId)
+            ->whereYear('transaction_date', $year)
+            ->whereMonth('transaction_date', $month)
+            ->whereNotNull('credit_card_id')
+            ->groupBy('credit_card_id')
+            ->pluck(DB::raw('SUM(amount)'), 'credit_card_id');
+
         $creditCards = CreditCard::where('organization_id', $orgId)->with('bank')->get();
+        // overwrite statement_amount with actual sums for the month
+        $creditCards = $creditCards->map(function ($c) use ($cardSumsCurrent) {
+            $c->statement_amount = $cardSumsCurrent[$c->id] ?? 0;
+            return $c;
+        });
+
         $cardsTotal = $creditCards->sum('statement_amount');
 
-        // add a separate slice for card statement totals so they appear in the pie
+        // add slice for cards if any
         if ($cardsTotal > 0) {
             $expensesByCategory->push((object)[
                 'category' => 'Cartões',
@@ -63,7 +77,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Combined expense (expenses this month + cards statements)
+        // Combined expense (expenses this month + cards amounts)
         $totalExpensesWithCards = ($totals['totalExpenses'] ?? 0) + $cardsTotal;
 
         // Prepare chart-friendly arrays
@@ -88,9 +102,16 @@ class DashboardController extends Controller
             ->map(fn($r) => sprintf('%04d-%02d', $r->year, $r->month))
             ->toArray();
 
-        $cardsSeries = $months->map(fn($date) =>
-            in_array($date->format('Y-m'), $mfcMonths) ? (float)$cardsTotal : 0
-        )->toArray();
+        $cardsSeries = $months->map(function($date) use ($orgId, $mfcMonths) {
+            if (in_array($date->format('Y-m'), $mfcMonths)) {
+                return Expense::where('organization_id', $orgId)
+                    ->whereYear('transaction_date', $date->year)
+                    ->whereMonth('transaction_date', $date->month)
+                    ->whereNotNull('credit_card_id')
+                    ->sum('amount');
+            }
+            return 0;
+        })->toArray();
 
         // Top expense categories (for bar chart)
         $topExpenseCategories = $expensesByCategory->take(5)->map(fn($r) => ['category' => $r->category, 'total' => (float) $r->total]);
@@ -317,17 +338,21 @@ class DashboardController extends Controller
         $month = now()->month;
         $year = now()->year;
 
-        // receitas
-        $totalRecipes = Recipe::where('organization_id', $orgId)
+        // receitas (somente categorias do tipo recipe)
+        $totalRecipes = Recipe::join('categories','categories.id','=','recipes.category_id')
+            ->where('recipes.organization_id', $orgId)
+            ->where('categories.type','recipe')
             ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
-            ->sum('amount');
+            ->sum('recipes.amount');
 
-        $fixedRecipes = Recipe::where('organization_id', $orgId)
+        $fixedRecipes = Recipe::join('categories','categories.id','=','recipes.category_id')
+            ->where('recipes.organization_id', $orgId)
+            ->where('categories.type','recipe')
             ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
-            ->where('fixed', true)
-            ->sum('amount');
+            ->where('recipes.fixed', true)
+            ->sum('recipes.amount');
 
         $variableRecipes = $totalRecipes - $fixedRecipes;
 
