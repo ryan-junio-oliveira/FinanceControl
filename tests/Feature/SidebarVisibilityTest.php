@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class SidebarVisibilityTest extends TestCase
@@ -29,10 +30,15 @@ class SidebarVisibilityTest extends TestCase
         $response = $this->get('/dashboard');
         $response->assertStatus(200);
         $response->assertSee('Orçamentos');
+        $response->assertSee('Investimentos');
 
         // the budgets route should be accessible without redirecting to login
         $budgets = $this->get('/budgets');
         $budgets->assertStatus(200);
         $budgets->assertSee('Orçamentos');
+
+        // investments route should also be available
+        $inv = $this->get('/investments');
+        $inv->assertStatus(200);
     }
 }

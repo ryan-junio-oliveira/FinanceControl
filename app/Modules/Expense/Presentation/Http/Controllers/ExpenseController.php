@@ -12,7 +12,6 @@ use App\Modules\Expense\Presentation\Http\Requests\UpdateExpenseRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 
 class ExpenseController extends Controller
 {
@@ -51,6 +50,7 @@ class ExpenseController extends Controller
 
             $categories = Category::where('organization_id', $orgId)
                 ->where('type', 'expense')
+                ->where('name', '<>', 'Investimentos')
                 ->orderBy('name')
                 ->get();
 
@@ -97,6 +97,7 @@ class ExpenseController extends Controller
 
             $categories = Category::where('organization_id', $orgId)
                 ->where('type', 'expense')
+                ->where('name', '<>', 'Investimentos')
                 ->orderBy('name')
                 ->get();
 

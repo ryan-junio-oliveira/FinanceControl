@@ -34,6 +34,12 @@ class MenuHelper
                         'icon' => 'credit-card',
                     ],
                     [
+                        'name' => 'Investimentos',
+                        'path' => '/investments',
+                        'route' => 'investments.*',
+                        'icon' => 'chart-line',
+                    ],
+                    [
                         'name' => 'Orçamentos',
                         'path' => '/budgets',
                         'route' => 'budgets.*',
@@ -90,6 +96,7 @@ class MenuHelper
             'bank' => '<i class="fa-solid fa-building-columns fa-fw"></i>',
             'user' => '<i class="fa-solid fa-user fa-fw"></i>',
             'tags' => '<i class="fa-solid fa-tags fa-fw"></i>',
+            'chart-line' => '<i class="fa-solid fa-chart-line fa-fw"></i>',
         ];
 
         return $icons[$name] ?? '';

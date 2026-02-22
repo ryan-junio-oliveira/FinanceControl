@@ -16,6 +16,9 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
+
         $orgId = Auth::user()?->organization_id;
 
         [$months, $monthlyCategories] = $this->buildMonthWindow();
@@ -370,12 +373,12 @@ class DashboardController extends Controller
 
         $variableExpenses = $totalExpenses - $fixedExpenses;
 
-        $totalInvestments = Expense::where('expenses.organization_id', $orgId)
-            ->join('categories', 'categories.id', '=', 'expenses.category_id')
-            ->where('categories.name', 'Investimentos')
-            ->whereYear('expenses.transaction_date', $year)
-            ->whereMonth('expenses.transaction_date', $month)
-            ->sum('expenses.amount');
+        // investimentos agora têm sua própria tabela
+        $totalInvestments = \App\Modules\Investment\Infrastructure\Persistence\Eloquent\InvestmentModel::
+            where('organization_id', $orgId)
+            ->whereYear('transaction_date', $year)
+            ->whereMonth('transaction_date', $month)
+            ->sum('amount');
 
         // paid/received subtotals for liveliness
         $totalRecipesReceived = Recipe::where('organization_id', $orgId)

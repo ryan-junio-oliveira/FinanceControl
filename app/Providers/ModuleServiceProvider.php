@@ -58,6 +58,13 @@ class ModuleServiceProvider extends ServiceProvider
             \App\Modules\MonthlyFinancialControl\Domain\Contracts\MonthlyFinancialControlRepositoryInterface::class,
             \App\Modules\MonthlyFinancialControl\Infrastructure\Persistence\Eloquent\MonthlyFinancialControlRepository::class
         );
+
+        // Investment bindings
+        $this->app->bind(
+            \App\Modules\Investment\Domain\Contracts\InvestmentRepositoryInterface::class,
+            \App\Modules\Investment\Infrastructure\Persistence\Eloquent\InvestmentRepository::class
+        );
+
     }
 
     /**

@@ -81,7 +81,7 @@
                     title="Investimentos"
                     :value="'R$ ' . number_format($totalInvestments ?? 0, 2, ',', '.')"
                     icon="piggy-bank"
-                    color="blue"
+                    color="cyan"
                     subtitle="Mês atual"
                 />
             </div>

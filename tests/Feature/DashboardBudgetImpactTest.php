@@ -116,6 +116,19 @@ class DashboardBudgetImpactTest extends TestCase
         $this->assertEquals(now()->format('Y-m-d'),
             Carbon::parse(DB::table('recipes')->where('id', $rec->id)->value('transaction_date'))->format('Y-m-d')
         );
+
+        // finally insert an investment and verify dashboard calculation
+        $mfcId = DB::table('monthly_financial_controls')->where('organization_id', $orgId)->value('id');
+        DB::table('investments')->insert([
+            'name' => 'Teste Inv',
+            'amount' => 500.00,
+            'transaction_date' => now()->format('Y-m-d'),
+            'organization_id' => $orgId,
+            'monthly_financial_control_id' => $mfcId,
+        ]);
+
+        $resp3 = $this->get('/dashboard');
+        $resp3->assertViewHas('totalInvestments', 500.00);
     }
 
     public function test_dashboard_displays_budget_impact_when_budget_selected()

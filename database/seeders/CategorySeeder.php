@@ -13,7 +13,6 @@ class CategorySeeder extends Seeder
         $incomeCategories = [
             'Salário',
             'Horas extras',
-            'Investimentos',
             'Adiantamentos',
             'Outras receitas',
         ];

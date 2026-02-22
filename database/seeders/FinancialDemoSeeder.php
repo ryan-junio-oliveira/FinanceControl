@@ -35,7 +35,7 @@ class FinancialDemoSeeder extends Seeder
 
         // ensure categories exist – a few income and expense categories
         $incomeCats = ['Salário', 'Freelance', 'Outras receitas'];
-        $expenseCats = ['Despesas', 'Investimentos', 'Alimentação', 'Transporte'];
+        $expenseCats = ['Despesas', 'Alimentação', 'Transporte'];
 
         $catIds = [];
         foreach ($incomeCats as $name) {
@@ -133,11 +133,29 @@ class FinancialDemoSeeder extends Seeder
                     'organization_id' => $orgId,
                     'category_id' => $catIds[$name],
                     'monthly_financial_control_id' => $mfcId,
-                    'fixed' => in_array($name,['Investimentos']),
+                    'fixed' => false,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-            }        }
+            }
+
+            // sample investments – split 1500 between two example items
+            $invCats = ['Ação XP', 'Fundo Imobiliário'];
+            $amt3 = 1500.00 / count($invCats);
+            foreach ($invCats as $name) {
+                $dt = $date->copy()->addDays(10)->format('Y-m-d');
+                DB::table('investments')->insert([
+                    'name' => $name,
+                    'amount' => round($amt3,2),
+                    'transaction_date' => $dt,
+                    'organization_id' => $orgId,
+                    'monthly_financial_control_id' => $mfcId,
+                    'fixed' => false,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
         $this->command->info('Financial demo data inserted for 3 months.');
     }
