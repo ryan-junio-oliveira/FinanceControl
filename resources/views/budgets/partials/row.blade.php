@@ -25,31 +25,19 @@
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-right">
         <div class="flex items-center justify-end gap-1">
-            <a href="{{ route('budgets.show', ['id' => $budget->id()]) }}"
-               class="inline-flex items-center justify-center h-8 w-8 rounded-md bg-blue-100
-                      text-blue-500 hover:text-white hover:bg-blue-500
-                      transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400/40"
-               aria-label="Ver orçamento {{ $budget->name() }}">
+            <x-link href="{{ route('budgets.show', ['id' => $budget->id()]) }}" variant="ghost" aria-label="Ver orçamento {{ $budget->name() }}" class="h-8 w-8">
                 <x-fa-icon name="eye" class="h-3.5 w-3.5 text-current" />
-            </a>
-            <a href="{{ route('budgets.edit', ['id' => $budget->id()]) }}"
-               class="inline-flex items-center justify-center h-8 w-8 rounded-md bg-blue-100
-                      text-blue-500 hover:text-white hover:bg-blue-500
-                      transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400/40"
-               aria-label="Editar orçamento {{ $budget->name() }}">
+            </x-link>
+            <x-link href="{{ route('budgets.edit', ['id' => $budget->id()]) }}" variant="ghost" aria-label="Editar orçamento {{ $budget->name() }}" class="h-8 w-8">
                 <x-fa-icon name="pen" class="h-3.5 w-3.5 text-current" />
-            </a>
+            </x-link>
             <form action="{{ route('budgets.destroy', ['id' => $budget->id()]) }}" method="POST"
                 onsubmit="return confirm('Remover orçamento?');">
                 @csrf
                 @method('DELETE')
-                <button type="submit"
-                    class="inline-flex items-center justify-center h-8 w-8 rounded-md bg-red-100
-                           text-red-500 hover:text-white hover:bg-red-500
-                           transition-colors focus:outline-none focus:ring-2 focus:ring-red-200"
-                    aria-label="Remover orçamento {{ $budget->name() }}">
+                <x-button type="submit" variant="ghost" aria-label="Remover orçamento {{ $budget->name() }}" class="h-8 w-8 bg-red-100 text-red-500 hover:text-white hover:bg-red-500 focus:ring-2 focus:ring-red-200">
                     <x-fa-icon name="trash" class="h-3.5 w-3.5 text-current" />
-                </button>
+                </x-button>
             </form>
         </div>
     </td>

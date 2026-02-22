@@ -21,17 +21,17 @@
 
                     <div class="flex items-center justify-between text-sm">
                         <x-form-checkbox name="remember" label="{{ __('Lembrar-me') }}" />
-                        <a href="{{ route('password.request') }}" class="text-brand-500 hover:text-brand-600 font-medium transition-colors">{{ __('Esqueceu a senha?') }}</a>
+                        <x-link href="{{ route('password.request') }}" variant="ghost" class="text-brand-500 hover:text-brand-600 font-medium transition-colors">{{ __('Esqueceu a senha?') }}</x-link>
                     </div>
 
-                    <button type="submit" class="w-full inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+                    <x-button type="submit" variant="primary" class="w-full rounded-xl px-4 py-2.5 text-sm font-semibold">
                         {{ __('Entrar') }}
-                    </button>
+                    </x-button>
                 </form>
             </div>
             <div class="border-t border-gray-100 bg-gray-50/60 px-8 py-4 text-center text-sm text-gray-500">
                 {{ __('Não tem conta?') }}
-                <a href="{{ route('register') }}" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">{{ __('Criar agora') }}</a>
+                <x-link href="{{ route('register') }}" variant="ghost" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">{{ __('Criar agora') }}</x-link>
             </div>
         </div>
     </div>

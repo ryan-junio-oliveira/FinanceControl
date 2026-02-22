@@ -10,7 +10,7 @@
             <p class="text-sm text-gray-500">Preview das variáveis CSS e suas variações (brand, semantic, neutras).</p>
         </div>
         <div>
-            <a href="{{ url()->previous() }}" class="px-4 py-2 rounded-lg border">Voltar</a>
+            <x-link href="{{ url()->previous() }}" variant="ghost" class="px-4 py-2 rounded-lg border">Voltar</x-link>
         </div>
     </div>
 
@@ -78,8 +78,8 @@
             <div class="mt-6">
                 <h3 class="text-sm font-semibold mb-2">Exemplos de uso</h3>
                 <div class="flex gap-3 flex-wrap">
-                    <button class="px-4 py-2 rounded bg-brand-500 text-white">Botão primário</button>
-                    <button class="px-4 py-2 rounded border">Botão secundário</button>
+                    <x-button variant="primary">Botão primário</x-button>
+                    <x-button variant="secondary">Botão secundário</x-button>
                     <div class="px-4 py-2 rounded bg-success-500 text-white">Sucesso</div>
                     <div class="px-4 py-2 rounded bg-error-500 text-white">Erro</div>
                     <div class="px-4 py-2 rounded bg-warning-500 text-white">Alerta</div>

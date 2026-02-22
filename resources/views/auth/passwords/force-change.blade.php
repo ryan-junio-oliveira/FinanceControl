@@ -19,9 +19,9 @@
                     <x-form-input name="password_confirmation" label="Confirmar nova senha" type="password" required />
                 </div>
                 <div class="flex justify-end px-8 py-4 bg-gray-50/60">
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 transition-colors">
+                    <x-button type="submit" variant="primary" class="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold">
                         Alterar senha
-                    </button>
+                    </x-button>
                 </div>
             </form>
         </div>

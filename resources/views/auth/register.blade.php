@@ -25,14 +25,14 @@
                         <x-form-input name="password_confirmation" label="Confirmar senha" type="password" placeholder="••••••••" required />
                     </div>
 
-                    <button type="submit" class="w-full inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+                    <x-button type="submit" variant="primary" class="w-full rounded-xl px-4 py-2.5 text-sm font-semibold">
                         Criar conta
-                    </button>
+                    </x-button>
                 </form>
             </div>
             <div class="border-t border-gray-100 bg-gray-50/60 px-8 py-4 text-center text-sm text-gray-500">
                 Já tem conta?
-                <a href="{{ route('login') }}" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">Entrar</a>
+                <x-link href="{{ route('login') }}" variant="ghost" class="text-brand-500 hover:text-brand-600 font-semibold transition-colors">Entrar</x-link>
             </div>
         </div>
     </div>

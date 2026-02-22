@@ -100,9 +100,9 @@
                             <form action="{{ route('organization.members.remove', $mem) }}" method="POST" class="inline-block" onsubmit="return confirm('Remover membro?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100" aria-label="Remover membro">
+                                <x-button type="submit" variant="ghost" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100" aria-label="Remover membro">
                                     <x-fa-icon name="user-minus" class="h-3.5 w-3.5 text-current" />
-                                </button>
+                                </x-button>
                             </form>
                             @endif
                         </td>

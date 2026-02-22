@@ -4,9 +4,9 @@
 
     {{-- Left: brand (removed desktop hamburger to avoid duplicate) --}}
     <div class="flex items-center gap-3 min-w-[200px]">
-        <a href="{{ route('dashboard') }}" class="text-white font-bold text-lg tracking-tight select-none">
+        <x-link href="{{ route('dashboard') }}" variant="ghost" class="text-white font-bold text-lg tracking-tight select-none">
             Finance<span class="text-amber-400">Control</span> <span class="ml-1 text-xs font-medium bg-white/20 px-1.5 py-0.5 rounded">ERP</span>
-        </a>
+        </x-link>
     </div>
 
     {{-- Center: page title --}}
@@ -23,11 +23,10 @@
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit"
-                    class="bg-white text-gray-700 p-2 rounded text-sm font-medium flex items-center gap-1 hover:text-cyan-600 transition cursor-pointer">
+            <x-button type="submit" variant="ghost" class="bg-white text-gray-700 p-2 rounded text-sm font-medium flex items-center gap-1 hover:text-cyan-600 transition cursor-pointer">
                 Sair
                 <i class="fa-solid fa-right-from-bracket text-[14px]"></i>
-            </button>
+            </x-button>
         </form>
     </div>
 

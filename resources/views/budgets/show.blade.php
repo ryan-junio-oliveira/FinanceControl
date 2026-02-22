@@ -7,9 +7,9 @@
 
     {{-- Page header --}}
     <div class="flex items-center gap-3 mb-6">
-        <a href="{{ route('budgets.index') }}" class="flex items-center justify-center h-9 w-9 rounded-xl border border-gray-200 bg-white text-gray-400 shadow-sm hover:bg-gray-50 hover:text-gray-600 transition-colors" aria-label="Voltar">
+        <x-link href="{{ route('budgets.index') }}" variant="ghost" aria-label="Voltar" class="flex items-center justify-center h-9 w-9 rounded-xl border border-gray-200 bg-white text-gray-400 shadow-sm hover:bg-gray-50 hover:text-gray-600 transition-colors">
             <x-fa-icon name="arrow-left" class="h-4 w-4" />
-        </a>
+        </x-link>
         <div class="flex-1">
             <h1 class="text-xl font-semibold text-gray-900">{{ $budget->name() }}</h1>
             <p class="text-xs text-gray-400 mt-0.5">{{ $categoryName ?? 'Sem categoria' }} — {{ $budget->startDate()->format('d/m/Y') }} até {{ $budget->endDate()->format('d/m/Y') }}</p>
