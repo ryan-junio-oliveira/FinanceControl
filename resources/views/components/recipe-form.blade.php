@@ -14,7 +14,7 @@
     $categoryIdVal = old('category_id', $model?->category_id ?? '');
     $fixedVal = old('fixed', $model?->fixed ?? false);
     $receivedVal = old('received', $model?->received ?? false);
-    $receivedAtVal = old('received_at', isset($model?->received_at) && $model->received_at ? $model->received_at->format('Y-m-d') : '');
+    $receivedAtVal = '';
 @endphp
 
 <form action="{{ $action }}" method="POST" class="divide-y divide-gray-100">
@@ -31,27 +31,21 @@
             <x-form-input name="transaction_date" label="{{ __('Data da transação') }}" type="date" :value="$dateVal" />
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Categoria') }} <span class="text-rose-500">*</span></label>
-                <select name="category_id" required class="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20">
-                    <option value="" disabled>{{ __('Selecione uma categoria') }}</option>
-                    @foreach($categories as $c)
-                        <option value="{{ $c->id }}" @selected((string)$categoryIdVal === (string)$c->id)>{{ $c->name }}</option>
-                    @endforeach
-                </select>
+                <x-form-select
+                    name="category_id"
+                    label="{{ __('Categoria') }}"
+                    :options="$categories"
+                    :value="$categoryIdVal"
+                    placeholder="{{ __('Selecione uma categoria') }}"
+                    required
+                />
             </div>
         </div>
 
-        <label class="flex items-center gap-2 cursor-pointer">
-            <x-form-checkbox name="fixed" :checked="$fixedVal" />
-            <span class="text-sm font-medium text-gray-700">{{ __('Receita fixa (recorrente)') }}</span>
-        </label>
+        <x-form-checkbox name="fixed" :checked="$fixedVal" label="{{ __('Receita fixa (recorrente)') }}" class="cursor-pointer" />
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <label class="flex items-center gap-2 cursor-pointer">
-                <x-form-checkbox name="received" :checked="$receivedVal" />
-                <span class="text-sm font-medium text-gray-700">{{ __('Recebido') }}</span>
-            </label>
-            <x-form-input name="received_at" label="{{ __('Data de recebimento') }}" type="date" :value="$receivedAtVal" />
+            <x-form-checkbox name="received" :checked="$receivedVal" label="{{ __('Recebido') }}" class="cursor-pointer" />
         </div>
     </div>
 

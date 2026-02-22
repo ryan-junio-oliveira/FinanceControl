@@ -16,8 +16,6 @@ class RecipeModel extends Model
         'fixed',
         'transaction_date',
         'received',
-        'received_at',
-        'monthly_financial_control_id',
         'category_id',
         'organization_id',
     ];
@@ -26,7 +24,10 @@ class RecipeModel extends Model
         'amount' => 'decimal:2',
         'transaction_date' => 'date',
         'received' => 'boolean',
-        'received_at' => 'date',
+    ];
+
+    protected $hidden = [
+        'monthly_financial_control_id',
     ];
 
     public static function booted()

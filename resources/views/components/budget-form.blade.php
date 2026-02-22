@@ -32,19 +32,16 @@
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Categoria') }} <span class="text-xs text-gray-400">({{ __('opcional') }})</span></label>
-            <select name="category_id" class="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20">
-                <option value="">Nenhuma (todas as categorias)</option>
-                @foreach($categories as $c)
-                    <option value="{{ $c->id() }}" @selected((string)$categoryVal === (string)$c->id())>{{ $c->name() }}</option>
-                @endforeach
-            </select>
+            <x-form-select
+                name="category_id"
+                label="{{ __('Categoria') }}"
+                :options="$categories"
+                :value="$categoryVal"
+                nullable-option="{{ __('Nenhuma (todas as categorias)') }}"
+            />
         </div>
 
-        <label class="flex items-center gap-2 cursor-pointer">
-            <x-form-checkbox name="is_active" :checked="$activeVal" />
-            <span class="text-sm font-medium text-gray-700">{{ __('Orçamento ativo') }}</span>
-        </label>
+        <x-form-checkbox name="is_active" :checked="$activeVal" label="{{ __('Orçamento ativo') }}" class="cursor-pointer" />
     </div>
 
     <div class="flex items-center gap-3 px-6 py-4 bg-gray-50/60">

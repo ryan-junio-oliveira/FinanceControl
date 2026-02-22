@@ -21,7 +21,6 @@ class RecipeFactory extends Factory
             'amount' => fake()->randomFloat(2, 1, 1000),
             'fixed' => fake()->boolean(20),
             'transaction_date' => now()->subDays(fake()->numberBetween(0, 90)),
-            'monthly_financial_control_id' => null,
             'organization_id' => Organization::factory(),
             'category_id' => Category::factory(),
         ];

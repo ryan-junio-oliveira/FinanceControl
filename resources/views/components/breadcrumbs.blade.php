@@ -6,7 +6,7 @@
         @foreach($items as $i => $item)
             <li class="flex items-center">
                 @if(isset($item['url']))
-                    <x-link href="{{ $item['url'] }}" variant="ghost" class="hover:underline">{{ $item['label'] }}</x-link>
+                    <a href="{{ $item['url'] }}" class="hover:underline text-gray-500">{{ $item['label'] }}</a>
                 @else
                     <span class="font-semibold text-gray-700">{{ $item['label'] }}</span>
                 @endif

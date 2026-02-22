@@ -5,7 +5,9 @@
 
     {{-- Navbar --}}
     <header class="flex items-center justify-between px-6 py-4 sm:px-10">
-        <span class="text-xl font-bold tracking-tight text-gray-900">Finance<span class="text-brand-500">Control</span></span>
+        <span class="text-xl font-bold tracking-tight text-gray-900">
+            Finance<span class="text-amber-400">Control</span> <span class="ml-1 text-xs font-medium bg-gray-200 px-1.5 py-0.5 rounded">ERP</span>
+        </span>
         <div class="flex items-center gap-3">
             <x-link href="{{ route('login') }}" variant="ghost" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Entrar</x-link>
             <x-button href="{{ route('register') }}" variant="primary" class="rounded-xl px-4 py-2 text-sm font-semibold">Criar conta grátis</x-button>

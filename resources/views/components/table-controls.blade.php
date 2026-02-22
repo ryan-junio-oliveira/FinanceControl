@@ -38,4 +38,8 @@
     <x-button type="submit" variant="primary" class="shrink-0">
         Buscar
     </x-button>
+
+    <x-button href="{{ url()->current() }}" variant="secondary" class="shrink-0" aria-label="Limpar formulário">
+        Limpar
+    </x-button>
 </form>

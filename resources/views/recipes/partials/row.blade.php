@@ -52,7 +52,7 @@
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         @if ($recipe->transaction_date)
             <div class="flex items-center gap-1.5">
-                <x-fa-icon name="calendar" class="h-3.5 w-3.5 text-emerald-600" />
+                <x-fa-icon name="calendar" class="fa-md text-emerald-600" />
                 {{ \Carbon\Carbon::parse($recipe->transaction_date)->format('d/m/Y') }}
             </div>
         @else
@@ -63,8 +63,8 @@
     {{-- Ações --}}
     <td class="px-6 py-4 whitespace-nowrap text-right">
         <div class="flex items-center justify-end gap-1">
-            <x-link href="{{ route('recipes.edit', $recipe) }}" variant="ghost" aria-label="{{ __('Editar receita :name', ['name' => $recipe->name]) }}" class="h-8 w-8">
-                <x-fa-icon name="pen" class="h-3.5 w-3.5 text-current" />
+            <x-link href="{{ route('recipes.edit', $recipe) }}" variant="ghost" aria-label="{{ __('Editar receita :name', ['name' => $recipe->name]) }}" class="inline-flex items-center justify-center">
+                <x-fa-icon name="pen" class="fa-md text-current" />
             </x-link>
 
             <form
@@ -75,8 +75,8 @@
                 @csrf
                 @method('DELETE')
 
-                <x-button type="submit" variant="ghost" aria-label="{{ __('Remover receita :name', ['name' => $recipe->name]) }}" class="h-8 w-8 bg-red-100 text-red-500 hover:text-white hover:bg-red-500 focus:ring-2 focus:ring-red-200">
-                    <x-fa-icon name="trash" class="h-3.5 w-3.5 text-current" />
+                <x-button type="submit" variant="ghost" aria-label="{{ __('Remover receita :name', ['name' => $recipe->name]) }}" class="inline-flex items-center justify-center bg-red-100 text-red-500 hover:text-white hover:bg-red-500 focus:ring-2 focus:ring-red-200">
+                    <x-fa-icon name="trash" class="fa-md text-current" />
                 </x-button>
             </form>
         </div>

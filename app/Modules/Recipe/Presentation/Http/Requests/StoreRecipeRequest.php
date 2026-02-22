@@ -22,13 +22,6 @@ class StoreRecipeRequest extends FormRequest
             'amount' => 'required|numeric|min:0',
             'transaction_date' => 'nullable|date',
             'fixed' => 'boolean',
-            'monthly_financial_control_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('monthly_financial_controls', 'id')->where(function ($q) use ($orgId) {
-                    $q->where('organization_id', $orgId);
-                }),
-            ],
             'category_id' => [
                 'required',
                 'integer',
@@ -37,7 +30,6 @@ class StoreRecipeRequest extends FormRequest
                 }),
             ],
             'received' => 'boolean',
-            'received_at' => 'nullable|date',
         ];
     }
 }

@@ -24,10 +24,6 @@ return new class extends Migration
             $table->boolean('fixed')->default(false);
             $table->date('transaction_date')->nullable();
 
-            // novos campos para controlar recebimento
-            $table->boolean('received')->default(false);
-            $table->date('received_at')->nullable();
-
             $table->unsignedBigInteger('monthly_financial_control_id');
             $table->timestamps();
 
@@ -47,3 +43,4 @@ return new class extends Migration
         Schema::dropIfExists('recipes');
     }
 };
+ 

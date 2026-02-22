@@ -37,13 +37,13 @@
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-right">
         <div class="flex items-center justify-end gap-1">
-            <x-link href="{{ route('credit-cards.edit', $card->id) }}" variant="ghost" aria-label="{{ __('Editar cartão :name', ['name' => $card->name]) }}" class="h-8 w-8">
+            <x-link href="{{ route('credit-cards.edit', $card->id) }}" variant="ghost" aria-label="{{ __('Editar cartão :name', ['name' => $card->name]) }}" class="inline-flex items-center justify-center">
                 <x-fa-icon name="pen" class="h-3.5 w-3.5 text-current" />
             </x-link>
             <form action="{{ route('credit-cards.destroy', $card->id) }}" method="POST" onsubmit="return confirm('{{ __('Remover cartão?') }}');">
                 @csrf
                 @method('DELETE')
-                <x-button type="submit" variant="ghost" aria-label="{{ __('Remover cartão :name', ['name' => $card->name]) }}" class="h-8 w-8 bg-red-100 text-red-500 hover:text-white hover:bg-red-500 focus:ring-2 focus:ring-red-200">
+                <x-button type="submit" variant="ghost" aria-label="{{ __('Remover cartão :name', ['name' => $card->name]) }}" class="inline-flex items-center justify-center bg-red-100 text-red-500 hover:text-white hover:bg-red-500 focus:ring-2 focus:ring-red-200">
                     <x-fa-icon name="trash" class="h-3.5 w-3.5 text-current" />
                 </x-button>
             </form>

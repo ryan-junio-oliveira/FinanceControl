@@ -4,9 +4,9 @@
 
     {{-- Left: brand (removed desktop hamburger to avoid duplicate) --}}
     <div class="flex items-center gap-3 min-w-[200px]">
-        <x-link href="{{ route('dashboard') }}" variant="ghost" class="text-white font-bold text-lg tracking-tight select-none">
+        <div class="text-white font-bold text-lg tracking-tight select-none">
             Finance<span class="text-amber-400">Control</span> <span class="ml-1 text-xs font-medium bg-white/20 px-1.5 py-0.5 rounded">ERP</span>
-        </x-link>
+        </div>
     </div>
 
     {{-- Center: page title --}}

@@ -15,7 +15,6 @@
     <x-form-container>
         <x-expense-form
             :categories="$categories"
-            :controls="$controls"
             :credit-cards="$creditCards"
             action="{{ route('expenses.store') }}"
             button-label="{{ __('Salvar') }}"

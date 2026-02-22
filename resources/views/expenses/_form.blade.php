@@ -2,7 +2,6 @@
 <x-expense-form
     :model="$model"
     :categories="$categories"
-    :controls="$controls"
     :credit-cards="$creditCards"
     action="{{ $action }}"
     method="{{ $method ?? 'POST' }}"

@@ -4,7 +4,6 @@ namespace App\Modules\Expense\Presentation\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Expense\Application\UseCases\ListExpenses;
-use App\Modules\MonthlyFinancialControl\Infrastructure\Persistence\Eloquent\MonthlyFinancialControlModel as MonthlyFinancialControl;
 use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 use App\Modules\CreditCard\Infrastructure\Persistence\Eloquent\CreditCardModel as CreditCard;
 use App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel;
@@ -49,10 +48,6 @@ class ExpenseController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
-            $controls = MonthlyFinancialControl::where('organization_id', $orgId)
-                ->orderByDesc('year')
-                ->orderByDesc('month')
-                ->get();
 
             $categories = Category::where('organization_id', $orgId)
                 ->where('type', 'expense')
@@ -61,7 +56,7 @@ class ExpenseController extends Controller
 
             $creditCards = CreditCard::where('organization_id', $orgId)->orderBy('name')->get();
 
-            return view('expenses.create', compact('controls', 'categories', 'creditCards'));
+            return view('expenses.create', compact('categories', 'creditCards'));
         } catch (\Throwable $e) {
             Log::error($e);
             return redirect()->back()->with('error','Erro ao abrir formulário de despesa.');
@@ -100,18 +95,13 @@ class ExpenseController extends Controller
             $orgId = Auth::user()->organization_id;
             $expense = ExpenseModel::where('organization_id', $orgId)->findOrFail($id);
 
-            $controls = MonthlyFinancialControl::where('organization_id', $orgId)
-                ->orderByDesc('year')
-                ->orderByDesc('month')
-                ->get();
-
             $categories = Category::where('organization_id', $orgId)
                 ->where('type', 'expense')
                 ->orderBy('name')
                 ->get();
 
             $creditCards = CreditCard::where('organization_id', $orgId)->orderBy('name')->get();
-            return view('expenses.edit', compact('expense', 'controls', 'categories', 'creditCards'));        
+            return view('expenses.edit', compact('expense', 'categories', 'creditCards'));
         } catch (\Throwable $e) {
             Log::error($e);
             return redirect()->back()->with('error','Erro ao carregar despesa.');

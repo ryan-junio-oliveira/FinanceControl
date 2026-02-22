@@ -10,7 +10,6 @@ class ExpenseForm extends Component
 {
     public $model;
     public $categories;
-    public $controls;
     public $creditCards;
     public $action;
     public $method;
@@ -23,13 +22,11 @@ class ExpenseForm extends Component
         string $backUrl,
         $model = null,
         $categories = [],
-        $controls = [],
         $creditCards = [],
         string $method = 'POST'
     ) {
         $this->model = $model;
         $this->categories = $categories;
-        $this->controls = $controls;
         $this->creditCards = $creditCards;
         $this->action = $action;
         $this->method = strtoupper($method);

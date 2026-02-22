@@ -5,7 +5,9 @@
 @section('content')
     <div class="w-full max-w-md mx-auto">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Finance<span class="text-brand-500">Control</span></h1>
+            <div class="text-3xl font-bold text-gray-900 tracking-tight">
+                Finance<span class="text-amber-400">Control</span> <span class="ml-1 text-xs font-medium bg-gray-200 px-1.5 py-0.5 rounded">ERP</span>
+            </div>
             <p class="mt-2 text-sm text-gray-500">{{ __('Acesse sua conta para continuar') }}</p>
         </div>
 

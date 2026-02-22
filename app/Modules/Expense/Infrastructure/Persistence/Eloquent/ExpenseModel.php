@@ -16,8 +16,6 @@ class ExpenseModel extends Model
         'fixed',
         'transaction_date',
         'paid',
-        'paid_at',
-        'monthly_financial_control_id',
         'credit_card_id',
         'category_id',
         'organization_id',
@@ -27,7 +25,10 @@ class ExpenseModel extends Model
         'amount' => 'decimal:2',
         'transaction_date' => 'date',
         'paid' => 'boolean',
-        'paid_at' => 'date',
+    ];
+
+    protected $hidden = [
+        'monthly_financial_control_id',
     ];
 
     public static function booted()

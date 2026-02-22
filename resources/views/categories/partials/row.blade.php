@@ -16,13 +16,13 @@
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $category->created_at->format('d/m/Y') }}</td>
     <td class="px-6 py-4 whitespace-nowrap text-right">
         <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <x-link variant="ghost" href="{{ route('categories.edit', $category) }}" class="h-8 w-8 rounded-md text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 p-0" aria-label="{{ __('Editar categoria :name', ['name' => $category->name]) }}">
+            <x-link variant="ghost" href="{{ route('categories.edit', $category) }}" class="inline-flex items-center justify-center rounded-md text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 p-0" aria-label="{{ __('Editar categoria :name', ['name' => $category->name]) }}">
                 <x-fa-icon name="pen" class="w-4 h-4 text-current" />
             </x-link>
             <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('{{ __('Remover categoria?') }}');">
                 @csrf
                 @method('DELETE')
-                <x-button variant="ghost" type="submit" class="h-8 w-8 rounded-md text-gray-500 hover:text-red-600 hover:bg-red-50 p-0" aria-label="{{ __('Remover categoria :name', ['name' => $category->name]) }}">
+                <x-button variant="ghost" type="submit" class="inline-flex items-center justify-center rounded-md text-gray-500 hover:text-red-600 hover:bg-red-50 p-0" aria-label="{{ __('Remover categoria :name', ['name' => $category->name]) }}">
                     <x-fa-icon name="trash" class="w-4 h-4 text-current" />
                 </x-button>
             </form>

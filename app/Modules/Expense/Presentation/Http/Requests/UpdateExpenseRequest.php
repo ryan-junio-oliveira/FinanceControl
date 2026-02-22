@@ -22,13 +22,6 @@ class UpdateExpenseRequest extends FormRequest
             'amount' => 'required|numeric|min:0',
             'fixed' => 'boolean',
             'transaction_date' => 'nullable|date',
-            'monthly_financial_control_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('monthly_financial_controls', 'id')->where(function ($q) use ($orgId) {
-                    $q->where('organization_id', $orgId);
-                }),
-            ],
             'category_id' => [
                 'required',
                 'integer',
@@ -44,7 +37,6 @@ class UpdateExpenseRequest extends FormRequest
                 }),
             ],
             'paid' => 'boolean',
-            'paid_at' => 'nullable|date',
         ];
     }
 }

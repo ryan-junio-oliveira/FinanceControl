@@ -16,7 +16,6 @@
     <x-form-container>
         <x-expense-form
             :categories="$categories"
-            :controls="$controls"
             :credit-cards="$creditCards"
             :model="$expense"
             action="{{ route('expenses.update', $expense) }}"

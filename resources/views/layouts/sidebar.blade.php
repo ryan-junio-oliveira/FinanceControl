@@ -22,8 +22,8 @@
 
 @auth
 <aside id="sidebar"
-    class="fixed left-0 bg-white border-r border-gray-100 flex flex-col z-[99999] w-[220px] transition-transform duration-300 -translate-x-full lg:translate-x-0"
-    style="top: var(--app-header-height, 56px); height: calc(100vh - var(--app-header-height, 56px));">
+    class="fixed left-0 bg-white/95 backdrop-blur-lg border-r border-gray-200 flex flex-col z-[99999] w-[240px] transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-xl"
+    style="top: var(--app-header-height, 64px); height: calc(100vh - var(--app-header-height, 64px));">
 
     {{-- User / Org (dropdown) --}}
     <div class="relative px-3 py-2.5 border-b border-gray-100 flex-shrink-0">
@@ -104,13 +104,13 @@
                             @if (isset($item['subItems']))
                                 @php $isOpen = in_array($key, $openKeys); @endphp
                                 <button type="button" data-submenu-key="{{ $key }}"
-                                    class="submenu-toggle w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm font-medium transition-colors {{ $isOpen ? 'text-blue-700 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
-                                    <span class="flex-shrink-0 {{ $isOpen ? 'text-blue-600' : 'text-gray-500' }}">
+                                    class="submenu-toggle group relative w-full flex items-center gap-2 px-3 py-2 rounded text-sm font-medium transition-colors {{ $isOpen ? 'text-cyan-700 bg-cyan-50 border-l-4 border-cyan-500' : 'text-gray-700 hover:bg-gray-100' }}">
+                                    <span class="flex-shrink-0 {{ $isOpen ? 'text-cyan-600' : 'text-gray-500' }} group-hover:text-cyan-500">
                                         {!! MenuHelper::getIconSvg($item['icon']) !!}
                                     </span>
                                     <span class="flex-1 text-left">{{ $item['name'] }}</span>
                                     <i
-                                        class="fa-solid fa-chevron-down flex-shrink-0 transition-transform duration-200 text-[14px] {{ $isOpen ? 'rotate-180 text-blue-500' : 'text-gray-400' }}"></i>
+                                        class="fa-solid fa-chevron-down flex-shrink-0 transition-transform duration-200 text-[14px] {{ $isOpen ? 'rotate-180 text-cyan-500' : 'text-gray-400' }}"></i>
                                 </button>
                                 <ul id="submenu-{{ $key }}"
                                     class="mt-0.5 ml-7 pl-2 border-l border-gray-100 space-y-0.5 {{ $isOpen ? '' : 'hidden' }}">
@@ -126,7 +126,7 @@
                                                 }
                                             @endphp
                                             <a href="{{ $sub['path'] }}"
-                                                class="block px-2 py-1.5 rounded text-sm transition-colors {{ $isActive ? 'text-blue-700 bg-blue-50 font-medium' : 'text-gray-600 hover:bg-gray-100' }}">
+                                                class="block relative pl-8 px-2 py-1.5 rounded text-sm transition-colors {{ $isActive ? 'text-cyan-700 bg-cyan-50 font-medium border-l-4 border-cyan-500' : 'text-gray-600 hover:bg-gray-100 border-l-4 border-transparent' }}">
                                                 {{ $sub['name'] }}
                                             </a>
                                         </li>
@@ -143,8 +143,8 @@
                                     }
                                 @endphp
                                 <a href="{{ $item['path'] }}"
-                                    class="flex items-center gap-2 px-2 py-1.5 rounded text-sm font-medium transition-colors {{ $isActiveTop ? 'text-blue-700 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
-                                    <span class="flex-shrink-0 {{ $isActiveTop ? 'text-blue-600' : 'text-gray-500' }}">
+                                    class="relative group flex items-center gap-2 px-3 py-2 rounded text-sm font-medium transition-colors {{ $isActiveTop ? 'text-cyan-700 bg-cyan-50 border-l-4 border-cyan-500' : 'text-gray-700 hover:bg-gray-100 border-l-4 border-transparent' }}">
+                                    <span class="flex-shrink-0 {{ $isActiveTop ? 'text-cyan-600' : 'text-gray-500' }} group-hover:text-cyan-500">
                                         {!! MenuHelper::getIconSvg($item['icon']) !!}
                                     </span>
                                     {{ $item['name'] }}

@@ -28,7 +28,7 @@ return new class extends Migration
 
             // controle de pagamento da fatura atual
             $table->boolean('paid')->default(false);
-            $table->date('paid_at')->nullable();
+            // (paid_at removed – transaction_date used instead)
 
             // Opcionais
             $table->decimal('limit', 12, 2)->nullable();

@@ -24,6 +24,13 @@ class CreditCardModel extends Model
         'is_active',
         'color',
     ];
+    /**
+     * internal field not shown to users/api
+     */
+    protected $hidden = [
+        'monthly_financial_control_id',
+    ];
+
     public function bank()
     {
         return $this->belongsTo(\App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel::class, 'bank_id');

@@ -28,13 +28,14 @@
         <x-form-input name="name" label="{{ __('Nome do cartão') }}" :value="$nameVal" required placeholder="{{ __('Ex: Nubank, Inter, Bradesco') }}" />
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Banco') }} <span class="text-rose-500">*</span></label>
-            <select name="bank_id" required class="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20">
-                <option value="" disabled>{{ __('Selecione um banco') }}</option>
-                @foreach($banks as $b)
-                    <option value="{{ $b->id ?? $b->id() }}" @selected((string)$bankIdVal === (string)($b->id ?? $b->id()))>{{ $b->name }}</option>
-                @endforeach
-            </select>
+            <x-form-select
+                name="bank_id"
+                label="{{ __('Banco') }}"
+                :options="$banks"
+                :value="$bankIdVal"
+                placeholder="{{ __('Selecione um banco') }}"
+                required
+            />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -48,10 +49,7 @@
         </div>
 
         <div class="flex items-center gap-6">
-            <label class="flex items-center gap-2 cursor-pointer">
-                <x-form-checkbox name="is_active" :checked="$activeVal" />
-                <span class="text-sm font-medium text-gray-700">{{ __('Cartão ativo') }}</span>
-            </label>
+            <x-form-checkbox name="is_active" :checked="$activeVal" label="{{ __('Cartão ativo') }}" class="cursor-pointer" />
 
             <div class="flex-1">
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Cor') }} <span class="text-xs text-gray-400">({{ __('opcional') }})</span></label>
