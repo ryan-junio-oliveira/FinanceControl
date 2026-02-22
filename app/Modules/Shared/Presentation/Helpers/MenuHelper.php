@@ -33,6 +33,12 @@ class MenuHelper
                         'route' => 'expenses.*',
                         'icon' => 'credit-card',
                     ],
+                                        [
+                        'name' => 'Cartões',
+                        'path' => '/credit-cards',
+                        'route' => 'credit-cards.*',
+                        'icon' => 'credit-card',
+                    ],
                     [
                         'name' => 'Investimentos',
                         'path' => '/investments',
@@ -63,12 +69,6 @@ class MenuHelper
                     //     'route' => 'banks.*',
                     //     'icon' => 'bank',
                     // ],
-                    [
-                        'name' => 'Cartões',
-                        'path' => '/credit-cards',
-                        'route' => 'credit-cards.*',
-                        'icon' => 'credit-card',
-                    ],
                 ],
             ],
             [

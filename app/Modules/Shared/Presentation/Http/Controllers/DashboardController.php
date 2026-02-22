@@ -504,10 +504,26 @@ class DashboardController extends Controller
         // ensure we are working with a plain support collection since elements
         // are simple arrays (not models) and Eloquent\Collection->merge would
         // attempt to call getKey() on each item.
-        return collect($recipes->all())
+        $result = collect($recipes->all())
             ->merge($expenses->all())
             ->sortByDesc('date')
             ->take(5)
             ->values();
+
+        // convert each entry into an object with computed helpers used by view
+        return $result->map(function($tx) {
+            if (is_array($tx)) {
+                $type = $tx['type'] ?? '';
+                return (object)[
+                    'type' => $type,
+                    'type_icon' => $type === 'income' ? 'arrow-trend-up' : 'arrow-trend-down',
+                    'description' => $tx['name'] ?? '',
+                    'amount' => $tx['amount'] ?? 0,
+                    'amountFormatted' => 'R$ ' . number_format($tx['amount'] ?? 0, 2, ',', '.'),
+                    'date' => $tx['date'] ?? null,
+                ];
+            }
+            return $tx;
+        });
     }
 }
