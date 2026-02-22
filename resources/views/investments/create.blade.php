@@ -9,16 +9,15 @@
         ['label' => __('Novo investimento')],
     ]" />
 
-    <x-form-section>
-        <x-slot name="title">{{ __('Criar investimento') }}</x-slot>
-        <x-slot name="description">{{ __('Registre uma nova aplicação financeira.') }}</x-slot>
+    <div class="max-w-5xl mx-auto px-4">
+        <x-form-errors />
 
-        <x-slot name="form">
+        <x-form-container>
             <x-investment-form
                 action="{{ route('investments.store') }}"
                 button-label="{{ __('Salvar investimento') }}"
                 back-url="{{ route('investments.index') }}"
             />
-        </x-slot>
-    </x-form-section>
+        </x-form-container>
+    </div>
 @endsection

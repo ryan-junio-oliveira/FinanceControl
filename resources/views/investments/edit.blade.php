@@ -9,11 +9,10 @@
         ['label' => __('Editar investimento')],
     ]" />
 
-    <x-form-section>
-        <x-slot name="title">{{ __('Editar investimento') }}</x-slot>
-        <x-slot name="description">{{ __('Atualize os dados da aplicação financeira.') }}</x-slot>
+    <div class="max-w-5xl mx-auto px-4">
+        <x-form-errors />
 
-        <x-slot name="form">
+        <x-form-container>
             <x-investment-form
                 :model="$investment"
                 action="{{ route('investments.update', $investment) }}"
@@ -21,6 +20,6 @@
                 button-label="{{ __('Atualizar investimento') }}"
                 back-url="{{ route('investments.index') }}"
             />
-        </x-slot>
-    </x-form-section>
+        </x-form-container>
+    </div>
 @endsection

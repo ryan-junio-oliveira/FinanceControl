@@ -18,22 +18,24 @@
         </x-slot>
     </x-page-header>
 
-    <div class="bg-white shadow rounded-lg p-6 space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <strong>{{ __('Valor:') }}</strong> R$ {{ number_format($investment->amount, 2, ',', '.') }}
-            </div>
-            <div>
-                <strong>{{ __('Data:') }}</strong>
-                @if ($investment->transaction_date)
-                    {{ \Carbon\Carbon::parse($investment->transaction_date)->format('d/m/Y') }}
-                @else
-                    —
-                @endif
-            </div>
-            <div>
-                <strong>{{ __('Fixo / recorrente:') }}</strong>
-                {{ $investment->fixed ? __('Sim') : __('Não') }}
+    <div class="max-w-5xl mx-auto px-4">
+        <div class="bg-white shadow rounded-lg p-6 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <strong>{{ __('Valor:') }}</strong> R$ {{ number_format($investment->amount, 2, ',', '.') }}
+                </div>
+                <div>
+                    <strong>{{ __('Data:') }}</strong>
+                    @if ($investment->transaction_date)
+                        {{ \Carbon\Carbon::parse($investment->transaction_date)->format('d/m/Y') }}
+                    @else
+                        —
+                    @endif
+                </div>
+                <div>
+                    <strong>{{ __('Fixo / recorrente:') }}</strong>
+                    {{ $investment->fixed ? __('Sim') : __('Não') }}
+                </div>
             </div>
         </div>
     </div>
