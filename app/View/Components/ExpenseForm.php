@@ -18,13 +18,13 @@ class ExpenseForm extends Component
     public $backUrl;
 
     public function __construct(
+        string $action,
+        string $buttonLabel,
+        string $backUrl,
         $model = null,
         $categories = [],
         $controls = [],
         $creditCards = [],
-        string $action,
-        string $buttonLabel,
-        string $backUrl,
         string $method = 'POST'
     ) {
         $this->model = $model;

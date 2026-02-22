@@ -8,13 +8,11 @@ final class Bank
 {
     private int $id;
     private BankName $name;
-    private int $organizationId;
 
-    public function __construct(int $id, BankName $name, int $organizationId)
+    public function __construct(int $id, BankName $name)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->organizationId = $organizationId;
     }
 
     public function id(): int
@@ -25,10 +23,5 @@ final class Bank
     public function name(): BankName
     {
         return $this->name;
-    }
-
-    public function organizationId(): int
-    {
-        return $this->organizationId;
     }
 }

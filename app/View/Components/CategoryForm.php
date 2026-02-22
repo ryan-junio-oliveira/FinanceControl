@@ -16,11 +16,11 @@ class CategoryForm extends Component
     public $backUrl;
 
     public function __construct(
-        $model = null,
-        array $types = [],
         string $action,
         string $buttonLabel,
         string $backUrl,
+        $model = null,
+        array $types = [],
         string $method = 'POST'
     ) {
         $this->model = $model;

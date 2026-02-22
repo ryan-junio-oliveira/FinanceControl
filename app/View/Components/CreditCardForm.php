@@ -16,11 +16,11 @@ class CreditCardForm extends Component
     public $backUrl;
 
     public function __construct(
-        $model = null,
-        $banks = [],
         string $action,
         string $buttonLabel,
         string $backUrl,
+        $model = null,
+        $banks = [],
         string $method = 'POST'
     ) {
         $this->model = $model;

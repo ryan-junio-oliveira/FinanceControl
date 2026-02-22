@@ -14,10 +14,15 @@ final class ListBudgets
     }
 
     /**
-     * @return \App\Modules\Budget\Domain\Entities\Budget[]
+     * Execute the list operation and return a paginator of budgets.
+     *
+     * @param int $organizationId
+     * @param int $perPage
+     * @param int|null $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<\App\Modules\Budget\Domain\Entities\Budget>
      */
-    public function execute(int $organizationId): array
+    public function execute(int $organizationId, int $perPage = 20, ?int $page = null)
     {
-        return $this->repository->listByOrganization($organizationId);
+        return $this->repository->listByOrganization($organizationId, $perPage, $page);
     }
 }

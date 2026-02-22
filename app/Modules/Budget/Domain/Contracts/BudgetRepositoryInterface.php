@@ -7,7 +7,16 @@ use App\Modules\Budget\Domain\Entities\Budget;
 interface BudgetRepositoryInterface
 {
     public function findById(int $id): ?Budget;
-    public function listByOrganization(int $organizationId): array;
+    /**
+     * Return paginated budgets for an organization.
+     *
+     * @param int $organizationId
+     * @param int $perPage
+     * @param int|null $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<\App\Modules\Budget\Domain\Entities\Budget>
+     */
+    public function listByOrganization(int $organizationId, int $perPage = 20, ?int $page = null);
+
     public function save(Budget $budget): Budget;
     public function delete(Budget $budget): void;
 

@@ -18,13 +18,20 @@ class BudgetRepository implements BudgetRepositoryInterface
         return $this->toEntity($model);
     }
 
-    public function listByOrganization(int $organizationId): array
+    /**
+     * {@inheritdoc}
+     */
+    public function listByOrganization(int $organizationId, int $perPage = 20, ?int $page = null)
     {
-        $models = BudgetModel::where('organization_id', $organizationId)
-            ->orderByDesc('created_at')
-            ->get();
+        $query = BudgetModel::where('organization_id', $organizationId)
+            ->orderByDesc('created_at');
 
-        return $models->map(fn($m) => $this->toEntity($m))->all();
+        // manually specify page if caller provided one (tests or custom
+        // requests). paginate() defaults to current request page otherwise.
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page);
+
+        // convert each model into domain entity while preserving paginator
+        return $paginator->through(fn($m) => $this->toEntity($m));
     }
 
     public function save(BudgetEntity $budget): BudgetEntity

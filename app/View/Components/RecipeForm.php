@@ -16,11 +16,11 @@ class RecipeForm extends Component
     public $backUrl;
 
     public function __construct(
-        $model = null,
-        $categories = [],
         string $action,
         string $buttonLabel,
         string $backUrl,
+        $model = null,
+        $categories = [],
         string $method = 'POST'
     ) {
         $this->model = $model;

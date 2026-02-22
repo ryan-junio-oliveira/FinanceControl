@@ -32,7 +32,12 @@ class BudgetController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
-            $budgets = collect($this->listBudgets->execute($orgId));
+
+            $perPage = (int) $request->query('per_page', 20);
+            $page = $request->query('page');
+
+            $budgets = $this->listBudgets->execute($orgId, $perPage, $page);
+
             return view('budgets.index', compact('budgets'));
         } catch (\Throwable $e) {
             Log::error($e);

@@ -352,26 +352,46 @@
         @endif
 
         <!-- CHARTS: status pago/recebido -->
-        @if(isset($totalExpensesPaid) || isset($totalRecipesReceived) || isset($cardsPaid))
+        @php
+            // show each donut only if there's at least one real value
+            $totalExpenses = $totalExpenses ?? 0;
+            $totalRecipes = $totalRecipes ?? 0;
+            $totalCards = $cardsTotal ?? 0;
+
+            $hasExpensesData = $totalExpenses > 0;
+            $hasRecipesData = $totalRecipes > 0;
+            $hasCardsData = $totalCards > 0;
+
+            // overall container shown when any dataset has values
+            $hasAnyPaid = $hasExpensesData || $hasRecipesData || $hasCardsData;
+        @endphp
+
+        @if($hasAnyPaid)
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Despesas pagas vs não pagas</h3>
-                    <div class="relative flex justify-center" style="height: 240px;">
-                        <canvas id="chartExpensesPaid"></canvas>
+                @if($hasExpensesData)
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Despesas pagas vs não pagas</h3>
+                        <div class="relative flex justify-center" style="height: 240px;">
+                            <canvas id="chartExpensesPaid"></canvas>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Receitas recebidas vs não recebidas</h3>
-                    <div class="relative flex justify-center" style="height: 240px;">
-                        <canvas id="chartRecipesReceived"></canvas>
+                @endif
+                @if($hasRecipesData)
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Receitas recebidas vs não recebidas</h3>
+                        <div class="relative flex justify-center" style="height: 240px;">
+                            <canvas id="chartRecipesReceived"></canvas>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Faturas pagas vs não pagas</h3>
-                    <div class="relative flex justify-center" style="height: 240px;">
-                        <canvas id="chartCardsPaid"></canvas>
+                @endif
+                @if($hasCardsData)
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Faturas pagas vs não pagas</h3>
+                        <div class="relative flex justify-center" style="height: 240px;">
+                            <canvas id="chartCardsPaid"></canvas>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         @endif
 
@@ -1011,7 +1031,9 @@
             if (ctxExpPaid) {
                 const paid = {{ $totalExpensesPaid ?? 0 }};
                 const unpaid = {{ ($totalExpenses ?? 0) - ($totalExpensesPaid ?? 0) }};
-                new Chart(ctxExpPaid, {
+                // skip chart when no values at all
+                if (paid + unpaid > 0) {
+                    new Chart(ctxExpPaid, {
                     type: 'doughnut',
                     data: {
                         labels: ['Pagas', 'Não pagas'],
@@ -1038,8 +1060,10 @@
             const ctxRecPaid = document.getElementById('chartRecipesReceived');
             if (ctxRecPaid) {
                 const rec = {{ $totalRecipesReceived ?? 0 }};
-                const recPend = {{ ($totalRecipes ?? 0) - ($totalRecipesReceived ?? 0) }};
-                new Chart(ctxRecPaid, {
+                const notRec = {{ ($totalRecipes ?? 0) - ($totalRecipesReceived ?? 0) }};
+                if (rec + notRec > 0) {
+                    const recPend = {{ ($totalRecipes ?? 0) - ($totalRecipesReceived ?? 0) }};
+                    new Chart(ctxRecPaid, {
                     type: 'doughnut',
                     data: {
                         labels: ['Recebidas', 'Não recebidas'],
@@ -1062,12 +1086,14 @@
                         }
                     }
                 });
+                } // end if rec+notRec
             }
             const ctxCardsPaid = document.getElementById('chartCardsPaid');
             if (ctxCardsPaid) {
                 const cp = {{ $cardsPaid ?? 0 }};
                 const cup = {{ ($cardsTotal ?? 0) - ($cardsPaid ?? 0) }};
-                new Chart(ctxCardsPaid, {
+                if (cp + cup > 0) {
+                    new Chart(ctxCardsPaid, {
                     type: 'doughnut',
                     data: {
                         labels: ['Pagas', 'Não pagas'],

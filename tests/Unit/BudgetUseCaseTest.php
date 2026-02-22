@@ -17,11 +17,18 @@ class BudgetUseCaseTest extends TestCase
             {
                 return null;
             }
-            public function listByOrganization(int $organizationId): array
+            public function listByOrganization(int $organizationId, int $perPage = 20, ?int $page = null)
             {
-                return [
+                $items = [
                     new Budget(1, 'Test', 100.0, new DateTime('2026-01-01'), new DateTime('2026-12-31'), null, true, $organizationId),
                 ];
+
+                return new \Illuminate\Pagination\LengthAwarePaginator(
+                    $items,
+                    count($items),
+                    $perPage,
+                    $page ?: 1
+                );
             }
             public function save(Budget $budget): Budget
             {
@@ -37,10 +44,11 @@ class BudgetUseCaseTest extends TestCase
         };
 
         $useCase = new ListBudgets($fakeRepo);
-        $result = $useCase->execute(42);
+        $result = $useCase->execute(42, 20, 1);
 
+        $this->assertInstanceOf(\Illuminate\Contracts\Pagination\LengthAwarePaginator::class, $result);
         $this->assertCount(1, $result);
-        $this->assertInstanceOf(Budget::class, $result[0]);
-        $this->assertEquals(42, $result[0]->organizationId());
+        $this->assertInstanceOf(Budget::class, $result->first());
+        $this->assertEquals(42, $result->first()->organizationId());
     }
 }

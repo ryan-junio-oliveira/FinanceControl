@@ -15,6 +15,8 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
+            // bank_id requires banks table – the migration timestamp has been
+            // adjusted so banks are created just before credit_cards.
             $table->foreignId('bank_id')
                 ->constrained()
                 ->cascadeOnDelete();
@@ -37,8 +39,13 @@ return new class extends Migration
 
             $table->timestamps();
 
-            // Índice para multi-tenant
-            $table->index(['organization_id', 'is_active', 'closing_day', 'due_day', 'bank_id']);
+            // Índice para multi-tenant (nome curto para não ultrapassar o limite de 64
+            // caracteres do MySQL). o nome automático anterior era muito longo e
+            // gerava erro 1059.
+            $table->index(
+                ['organization_id', 'is_active', 'closing_day', 'due_day', 'bank_id'],
+                'cc_org_active_closing_due_bank_idx'
+            );
         });
     }
 

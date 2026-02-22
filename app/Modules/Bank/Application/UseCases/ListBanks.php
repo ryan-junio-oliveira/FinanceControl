@@ -22,6 +22,6 @@ final class ListBanks implements ListBanksInterface
             return [];
         }
 
-        return $this->repository->allByOrganization($organizationId);
+        return $this->repository->all($organizationId);
     }
 }
