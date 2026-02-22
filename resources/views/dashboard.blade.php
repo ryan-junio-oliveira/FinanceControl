@@ -8,373 +8,19 @@
         <!-- HEADER -->
         <x-page-header title="Painel" subtitle="{{ now()->format('d/m/Y') }}" />
 
-        <!-- KPIs agrupados -->
-        <x-dashboard-section title="Visão Geral" icon="chart-line" color="emerald">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <x-kpi-card
-                    title="Receitas"
-                    :value="'R$ ' . number_format($totalRecipes ?? 0, 2, ',', '.')"
-                    icon="arrow-trend-up"
-                    color="emerald"
-                    subtitle="Mês atual"
-                />
-                <x-kpi-card
-                    title="Receitas fixas"
-                    :value="'R$ ' . number_format($fixedRecipes ?? 0, 2, ',', '.')"
-                    icon="lock"
-                    color="emerald"
-                    subtitle="Mês atual"
-                />
-                <x-kpi-card
-                    title="Receitas variáveis"
-                    :value="'R$ ' . number_format($variableRecipes ?? 0, 2, ',', '.')"
-                    icon="random"
-                    color="emerald"
-                    subtitle="Mês atual"
-                />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                <x-kpi-card
-                    title="Despesas"
-                    :value="'R$ ' . number_format($totalExpenses ?? 0, 2, ',', '.')"
-                    icon="arrow-trend-down"
-                    color="red"
-                    subtitle="Mês atual"
-                />
-                <x-kpi-card
-                    title="Despesas fixas"
-                    :value="'R$ ' . number_format($fixedExpenses ?? 0, 2, ',', '.')"
-                    icon="lock"
-                    color="red"
-                    subtitle="Mês atual"
-                />
-                <x-kpi-card
-                    title="Despesas variáveis"
-                    :value="'R$ ' . number_format($variableExpenses ?? 0, 2, ',', '.')"
-                    icon="random"
-                    color="red"
-                    subtitle="Mês atual"
-                />
-            </div>
-        </x-dashboard-section>
-
-        <x-dashboard-section title="Cartões / Investimentos" icon="credit-card" color="orange">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <x-kpi-card
-                    title="Faturas"
-                    :value="'R$ ' . number_format($cardsTotal ?? 0, 2, ',', '.')"
-                    icon="credit-card"
-                    color="orange"
-                    subtitle="Mês atual"
-                />
-
-                <x-kpi-card
-                    title="Despesas + faturas"
-                    :value="'R$ ' . number_format(($totalExpenses ?? 0) + ($cardsTotal ?? 0), 2, ',', '.')"
-                    icon="calculator"
-                    color="orange"
-                    subtitle="Mês atual"
-                />
-
-                <x-kpi-card
-                    title="Investimentos"
-                    :value="'R$ ' . number_format($totalInvestments ?? 0, 2, ',', '.')"
-                    icon="piggy-bank"
-                    color="cyan"
-                    subtitle="Mês atual"
-                />
-            </div>
-        </x-dashboard-section>
-
-        <x-dashboard-section title="Saldos Financeiros" icon="scale-balanced" color="gray">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <x-kpi-card
-                    title="Saldo (Receitas − Despesas)"
-                    :value="'R$ ' . number_format(($totalRecipes ?? 0) - ($totalExpenses ?? 0), 2, ',', '.')"
-                    icon="scale-balanced"
-                    color="gray"
-                    subtitle="Mês atual"
-                />
-
-                <x-kpi-card
-                    title="Saldo (Receitas − (Despesas + Faturas))"
-                    :value="'R$ ' . number_format(($totalRecipes ?? 0) - (($totalExpenses ?? 0) + ($cardsTotal ?? 0)), 2, ',', '.')"
-                    icon="balance-scale-right"
-                    color="gray"
-                    subtitle="Mês atual"
-                />
-            </div>
-        </x-dashboard-section>
-
-        <!-- CHART: resumo financeiro em barras/linhas -->
-        @php
-            $hasMonthly = false;
-            if (isset($monthlySeries) && is_array($monthlySeries)) {
-                foreach ($monthlySeries as $s) {
-                    if (array_sum($s['data'] ?? []) > 0) {
-                        $hasMonthly = true;
-                        break;
-                    }
-                }
-            }
-            if (!$hasMonthly && isset($cardsSeries)) {
-                $hasMonthly = array_sum($cardsSeries) > 0;
-            }
-        @endphp
-        @if ($hasMonthly)
-            <x-dashboard-section title="Resumo financeiro" icon="chart-bar" color="blue">
-                <div class="mb-6">
-                    <h4 class="text-base font-semibold text-gray-600 mb-2">Visão mensal (barras)</h4>
-                    <div class="relative" style="height: 300px;">
-                        <canvas id="chartFinanceBars"></canvas>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-base font-semibold text-gray-600 mb-2">Tendência (linhas)</h4>
-                    <div class="relative" style="height: 260px;">
-                        <canvas id="chartFinanceLines"></canvas>
-                    </div>
-                </div>
-            </x-dashboard-section>
-        @endif
-
-        <!-- CHARTS: Categorias (doughnut) -->
-        @if (count($expensesCategoryLabels ?? []) > 0 || count($recipesCategoryLabels ?? []) > 0)
-            <x-dashboard-section title="Categorias" icon="chart-pie" color="teal">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    {{-- Despesas por Categoria --}}
-                    @if (count($expensesCategoryLabels ?? []) > 0)
-                        <div>
-                            <h4 class="text-base font-semibold text-gray-600 mb-2">Despesas</h4>
-                            <div class="relative flex justify-center" style="height: 260px;">
-                                <canvas id="chartExpensesCategory"></canvas>
-                            </div>
-                        </div>
-                    @endif
-
-                    {{-- Receitas por Categoria --}}
-                    @if (count($recipesCategoryLabels ?? []) > 0)
-                        <div>
-                            <h4 class="text-base font-semibold text-gray-600 mb-2">Receitas</h4>
-                            <div class="relative flex justify-center" style="height: 260px;">
-                                <canvas id="chartRecipesCategory"></canvas>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </x-dashboard-section>
-        @endif
-
-        <!-- BUDGET IMPACT -->
-        @if (($availableBudgets ?? collect())->count() > 0)
-            <div class="bg-white rounded-xl shadow-md p-6 mt-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-700">{{ __('Orçamento') }}</h3>
-                    @php
-                        $budgetOptions = ($availableBudgets ?? collect())->map(function($b) {
-                            $b->name = $b->name
-                                . ' (' . \Carbon\Carbon::parse($b->start_date)->format('d/m')
-                                . '–' . \Carbon\Carbon::parse($b->end_date)->format('d/m')
-                                . ')';
-                            return $b;
-                        });
-                    @endphp
-                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center">
-                        <x-form-select
-                            name="budget_id"
-                            :options="$budgetOptions"
-                            :value="request('budget_id')"
-                            nullable-option="{{ __('(nenhum)') }}"
-                            class="rounded-xl border border-gray-200 px-3 py-2 text-sm"
-                            onchange="this.form.submit()"
-                        />
-                    </form>
-                </div>
-
-                @if ($selectedBudget)
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <x-card label="{{ __('Planejado') }}" :value="$budgetImpact['planned']" icon="fa-chart-pie"
-                            color="bg-emerald-500" />
-                        <x-card label="{{ __('Gasto no período') }}" :value="$budgetImpact['spent']" icon="fa-wallet"
-                            color="bg-red-500" />
-                    </div>
-                    <div class="mt-4 text-sm text-gray-500">
-                        {{ __('Utilização:') }} <strong>{{ $budgetImpact['percent'] }}%</strong>
-                    </div>
-
-                    {{-- comparison bar chart --}}
-                    <div class="mt-6 bg-white rounded-xl shadow-md p-6">
-                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Saldo atual vs previsto</h3>
-                        <div class="relative" style="height:240px;">
-                            <canvas id="chartBudgetComparison"></canvas>
-                        </div>
-                    </div>
-                @else
-                    <div class="text-sm text-gray-400">
-                        {{ __('Selecione um orçamento para ver impacto nas despesas') }}
-                    </div>
-                @endif
-            </div>
-        @endif
-
-        <!-- CHART: Gastos diários do mês atual -->
-        @if (array_sum($dailyData ?? []) > 0)
-            <x-dashboard-section title="Gastos Diários — {{ now()->format('F Y') }}" icon="calendar-days" color="cyan">
-                <p class="text-xs text-gray-400 mb-4">Barras = valor do dia · Linha = acumulado</p>
-                <div class="relative" style="height: 240px;">
-                    <canvas id="chartDailyExpenses"></canvas>
-                </div>
-            </x-dashboard-section>
-        @endif
-
-        <!-- CHART: Tendência das top 3 categorias de despesa -->
-        @if (count($trendSeries ?? []) > 0)
-            <x-dashboard-section title="Tendência — Top 3 Categorias" icon="chart-line-up" color="purple">
-                <p class="text-xs text-gray-400 mb-4">Evolução das maiores categorias nos últimos 6 meses</p>
-                <div class="relative" style="height: 240px;">
-                    <canvas id="chartCategoryTrend"></canvas>
-                </div>
-            </x-dashboard-section>
-        @endif
-
-        <!-- CHART: Cartões de Crédito — fatura e utilização -->
-        @if (($creditCards ?? collect())->count() > 0)
-            <x-dashboard-section title="Cartões">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 class="text-base font-semibold text-gray-600 mb-2">Faturas vs Limite</h4>
-                        <div class="relative" style="height: 220px;">
-                            <canvas id="chartCards"></canvas>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-base font-semibold text-gray-600 mb-2">Utilização do Limite</h4>
-                        <p class="text-xs text-gray-400 mb-4">% do limite comprometido por cartão</p>
-                        <div class="relative" style="height: 220px;">
-                            <canvas id="chartCardUtilization"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </x-dashboard-section>
-        @endif
-
-        <!-- CHART: Distribuição de faturas por cartão -->
-        @if (($creditCards ?? collect())->count() > 0)
-            <x-dashboard-section title="Distribuição de Faturas" icon="chart-pie" color="orange">
-                <div class="relative" style="height: 240px;">
-                    <canvas id="chartCardPie"></canvas>
-                </div>
-            </x-dashboard-section>
-        @endif
-
-        <!-- CHARTS: status pago/recebido -->
-        @php
-            // show each donut only if there's at least one real value
-            $totalExpenses = $totalExpenses ?? 0;
-            $totalRecipes = $totalRecipes ?? 0;
-            $totalCards = $cardsTotal ?? 0;
-
-            $hasExpensesData = $totalExpenses > 0;
-            $hasRecipesData = $totalRecipes > 0;
-            $hasCardsData = $totalCards > 0;
-
-            // overall container shown when any dataset has values
-            $hasAnyPaid = $hasExpensesData || $hasRecipesData || $hasCardsData;
-        @endphp
-
-        @if ($hasAnyPaid)
-            <x-dashboard-section title="Status de Pagamento" icon="circle-check" color="green">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    @if ($hasExpensesData)
-                        <div>
-                            <h4 class="text-base font-semibold text-gray-600 mb-2">Despesas</h4>
-                            <div class="relative flex justify-center" style="height: 240px;">
-                                <canvas id="chartExpensesPaid"></canvas>
-                            </div>
-                        </div>
-                    @endif
-                    @if ($hasRecipesData)
-                        <div>
-                            <h4 class="text-base font-semibold text-gray-600 mb-2">Receitas</h4>
-                            <div class="relative flex justify-center" style="height: 240px;">
-                                <canvas id="chartRecipesReceived"></canvas>
-                            </div>
-                        </div>
-                    @endif
-                    @if ($hasCardsData)
-                        <div>
-                            <h4 class="text-base font-semibold text-gray-600 mb-2">Faturas</h4>
-                            <div class="relative flex justify-center" style="height: 240px;">
-                                <canvas id="chartCardsPaid"></canvas>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </x-dashboard-section>
-        @endif
-
-        <!-- Transações Recentes -->
-        @if (isset($recentTransactions) && $recentTransactions->count())
-            <div class="bg-white rounded-xl shadow-md p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">Últimas Transações</h3>
-                <x-table :columns="[
-                    ['label' => 'Tipo'],
-                    ['label' => 'Descrição'],
-                    ['label' => 'Data'],
-                    ['label' => 'Valor', 'class' => 'text-right'],
-                ]" class="text-gray-600">
-                    @foreach ($recentTransactions as $tx)
-                        <tr
-                            class="group bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium transition-colors">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if ($tx['type'] === 'income')
-                                    <span
-                                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                        Receita
-                                    </span>
-                                @else
-                                    <span
-                                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
-                                        Despesa
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full {{ $tx['type'] === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600' }} text-sm font-semibold">
-                                        {{ strtoupper(mb_substr($tx['name'], 0, 1)) }}
-                                    </div>
-                                    <span class="text-sm font-medium text-heading">{{ $tx['name'] }}</span>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <div class="flex items-center gap-1.5">
-                                    <i class="fa-regular fa-calendar text-gray-400 text-xs"></i>
-                                    {{ \Carbon\Carbon::parse($tx['date'])->format('d/m/Y') }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <span
-                                    class="text-sm font-semibold tabular-nums {{ $tx['type'] === 'income' ? 'text-emerald-600' : 'text-red-600' }}">
-                                    {{ $tx['type'] === 'income' ? '+' : '−' }} R$
-                                    {{ number_format($tx['amount'], 2, ',', '.') }}
-                                </span>
-                            </td>
-                        </tr>
-                    @endforeach
-                </x-table>
-            </div>
-        @else
-            <div class="flex items-center justify-center h-28 text-gray-400 text-sm">
-                Nenhuma transação encontrada.
-            </div>
-        @endif
+        {{-- dashboard modules --}}
+        @include('dashboard.partials.overview')
+        @include('dashboard.partials.cards_investments')
+        @include('dashboard.partials.balances')
+        @include('dashboard.partials.monthly_summary')
+        @include('dashboard.partials.categories')
+        @include('dashboard.partials.budget_impact')
+        @include('dashboard.partials.daily_expenses')
+        @include('dashboard.partials.trend_top3')
+        @include('dashboard.partials.cards_charts')
+        @include('dashboard.partials.distribution')
+        @include('dashboard.partials.payment_status')
+        @include('dashboard.partials.recent_transactions')
     </div>
 
     </div>
@@ -416,6 +62,7 @@
                 const monthlySeries = @json($monthlySeries ?? []);
                 const incomes = monthlySeries.find(s => s.name === 'Receitas')?.data ?? [];
                 const expenses = monthlySeries.find(s => s.name === 'Despesas')?.data ?? [];
+                const investments = monthlySeries.find(s => s.name === 'Investimentos')?.data ?? [];
                 const cards = @json($cardsSeries ?? []);
 
                 new Chart(ctxBars, {
@@ -443,6 +90,14 @@
                                 data: cards,
                                 backgroundColor: hex2rgba(ORANGE, 0.75),
                                 borderColor: ORANGE,
+                                borderWidth: 1,
+                                borderRadius: 3
+                            },
+                            {
+                                label: 'Investimentos',
+                                data: investments,
+                                backgroundColor: hex2rgba('#06B6D4', 0.75),
+                                borderColor: '#06B6D4',
                                 borderWidth: 1,
                                 borderRadius: 3
                             }
@@ -507,6 +162,7 @@
                 const cards = @json($cardsSeries ?? []);
                 const incomes = monthlySeries.find(s => s.name === 'Receitas')?.data ?? [];
                 const expenses = monthlySeries.find(s => s.name === 'Despesas')?.data ?? [];
+                const investments = monthlySeries.find(s => s.name === 'Investimentos')?.data ?? [];
                 const saldo = incomes.map((v, i) => v - ((expenses[i] || 0) + (cards[i] || 0)));
 
                 new Chart(ctxLines, {
@@ -532,6 +188,13 @@
                                 data: cards,
                                 borderColor: ORANGE,
                                 backgroundColor: hex2rgba(ORANGE, 0.1),
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Investimentos',
+                                data: investments,
+                                borderColor: '#06B6D4',
+                                backgroundColor: hex2rgba('#06B6D4', 0.1),
                                 tension: 0.3
                             },
                             {

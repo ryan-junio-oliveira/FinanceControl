@@ -435,14 +435,21 @@ class DashboardController extends Controller
             ->whereBetween('transaction_date', [$start, $end])
             ->get(['transaction_date', 'amount']);
 
+        $investments = \App\Modules\Investment\Infrastructure\Persistence\Eloquent\InvestmentModel::
+            where('organization_id', $orgId)
+            ->whereBetween('transaction_date', [$start, $end])
+            ->get(['transaction_date', 'amount']);
+
         // Inicializa mapa de meses
         $incomeMap = [];
         $expenseMap = [];
+        $investMap = [];
 
         foreach ($months as $date) {
             $key = $date->format('Y-m');
             $incomeMap[$key] = 0;
             $expenseMap[$key] = 0;
+            $investMap[$key] = 0;
         }
 
         // Agrupa em memória (compatível com qualquer banco)
@@ -460,6 +467,13 @@ class DashboardController extends Controller
             }
         }
 
+        foreach ($investments as $i) {
+            $key = Carbon::parse($i->transaction_date)->format('Y-m');
+            if (isset($investMap[$key])) {
+                $investMap[$key] += (float) $i->amount;
+            }
+        }
+
         return [
             [
                 'name' => 'Receitas',
@@ -468,6 +482,10 @@ class DashboardController extends Controller
             [
                 'name' => 'Despesas',
                 'data' => array_values($expenseMap),
+            ],
+            [
+                'name' => 'Investimentos',
+                'data' => array_values($investMap),
             ],
         ];
     }
