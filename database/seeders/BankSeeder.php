@@ -10,7 +10,9 @@ class BankSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (BankEnum::cases() as $bank) {
+        $banks = BankEnum::cases();
+        usort($banks, fn($a, $b) => strcmp($a->value, $b->value));
+        foreach ($banks as $bank) {
             Bank::updateOrCreate(
                 ['name' => $bank->value],
                 ['name' => $bank->value, 'color' => $bank->color()]

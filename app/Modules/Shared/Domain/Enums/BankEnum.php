@@ -4,24 +4,25 @@ namespace App\Modules\Shared\Domain\Enums;
 
 enum BankEnum: string
 {
-    case PicPay        = 'PicPay';
-    case Caixa         = 'Caixa';
-    case BancoDoBrasil = 'Banco do Brasil';
-    case Santander     = 'Santander';
-    case Inter         = 'Inter';
-    case Nubank        = 'Nubank';
-    case Bradesco      = 'Bradesco';
-    case Sicoob        = 'Sicoob';
-    case Itau          = 'Itaú';
-    case C6Bank        = 'C6 Bank';
-    case BTGPactual    = 'BTG Pactual';
-    case XP            = 'XP';
-    case Neon          = 'Neon';
-    case PagBank       = 'PagBank';
-    case Mercadopago   = 'Mercado Pago';
+    // cases ordered alphabetically by value
     case Agibank       = 'Agibank';
-    case BRB           = 'BRB';
+    case BancoDoBrasil = 'Banco do Brasil';
     case Banrisul      = 'Banrisul';
+    case BRB           = 'BRB';
+    case BTGPactual    = 'BTG Pactual';
+    case Bradesco      = 'Bradesco';
+    case Caixa         = 'Caixa';
+    case C6Bank        = 'C6 Bank';
+    case Inter         = 'Inter';
+    case Itau          = 'Itaú';
+    case Mercadopago   = 'Mercado Pago';
+    case Neon          = 'Neon';
+    case Nubank        = 'Nubank';
+    case PagBank       = 'PagBank';
+    case PicPay        = 'PicPay';
+    case Santander     = 'Santander';
+    case Sicoob        = 'Sicoob';
+    case XP            = 'XP';
 
     /** Cor oficial da marca (cartão / identidade visual) */
     public function color(): string
@@ -84,7 +85,7 @@ enum BankEnum: string
      */
     public static function forSelect(): array
     {
-        return array_map(
+        $list = array_map(
             fn(self $case) => [
                 'value'     => $case->value,
                 'label'     => $case->value,
@@ -93,5 +94,8 @@ enum BankEnum: string
             ],
             self::cases()
         );
+        // sort alphabetically by label
+        usort($list, fn($a, $b) => strcmp($a['label'], $b['label']));
+        return $list;
     }
 }
