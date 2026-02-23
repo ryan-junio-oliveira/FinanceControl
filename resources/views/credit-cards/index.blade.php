@@ -21,10 +21,10 @@
                     <tr>
                         <th scope="col" class="px-6 py-3 font-medium">{{ __('Nome') }}</th>
                         <th scope="col" class="px-6 py-3 font-medium">{{ __('Banco') }}</th>
-                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Fatura') }}</th>
-                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Limite') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium text-right">{{ __('Fatura') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium text-right">{{ __('Limite') }}</th>
                         <th scope="col" class="px-6 py-3 font-medium">{{ __('Fech./Venc.') }}</th>
-                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Ativo') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium text-center">{{ __('Ativo / Pago') }}</th>
                         <th scope="col" class="px-6 py-3 font-medium"><span class="sr-only">{{ __('Ações') }}</span></th>
                     </tr>
                 </thead>

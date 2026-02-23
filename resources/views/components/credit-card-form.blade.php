@@ -15,7 +15,8 @@
     $closingVal = old('closing_day', $model?->closingDay() ?? '');
     $dueVal = old('due_day', $model?->dueDay() ?? '');
     $activeVal = old('is_active', $model?->isActive() ?? true);
-    $colorVal = old('color', $model?->color() ?? null);
+    $colorVal  = old('color', $model?->color() ?? null);
+    $paidVal   = old('paid', $model?->paid() ?? false);
 @endphp
 
 <form action="{{ $action }}" method="POST" class="divide-y divide-gray-100">
@@ -50,6 +51,7 @@
 
         <div class="flex items-center gap-6">
             <x-form-checkbox name="is_active" :checked="$activeVal" label="{{ __('Cartão ativo') }}" class="cursor-pointer" />
+            <x-form-checkbox name="paid" :checked="$paidVal" label="{{ __('Fatura paga') }}" class="cursor-pointer" />
 
             <div class="flex-1">
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Cor') }} <span class="text-xs text-gray-400">({{ __('opcional') }})</span></label>

@@ -40,6 +40,7 @@ class CreditCardViewRepository implements CreditCardViewRepositoryInterface
                 $m->due_day,
                 (bool) $m->is_active,
                 $m->color,
+                (bool) $m->paid,
             );
         });
 

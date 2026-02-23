@@ -20,8 +20,8 @@
                         <th scope="col" class="px-6 py-3 font-medium">{{ __('Nome') }}</th>
                         <th scope="col" class="px-6 py-3 font-medium">{{ __('Categoria') }}</th>
                         <th scope="col" class="px-6 py-3 font-medium">{{ __('Período') }}</th>
-                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Planejado') }}</th>
-                        <th scope="col" class="px-6 py-3 font-medium">{{ __('Gasto') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium text-right">{{ __('Planejado') }}</th>
+                        <th scope="col" class="px-6 py-3 font-medium text-right">{{ __('Gasto') }}</th>
                         <th scope="col" class="px-6 py-3 font-medium">{{ __('Progresso') }}</th>
                         <th scope="col" class="px-6 py-3 font-medium"><span class="sr-only">{{ __('Ações') }}</span></th>
                     </tr>

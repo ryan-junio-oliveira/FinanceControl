@@ -78,7 +78,8 @@ class CreditCardController extends Controller
                 $vals['closing_day'] ?? null,
                 $vals['due_day'] ?? null,
                 (bool) ($vals['is_active'] ?? true),
-                $vals['color'] ?? null
+                $vals['color'] ?? null,
+                (bool) ($vals['paid'] ?? false)
             );
 
             $this->cardRepo->save($card);
@@ -126,7 +127,8 @@ class CreditCardController extends Controller
                 $vals['closing_day'] ?? null,
                 $vals['due_day'] ?? null,
                 (bool) ($vals['is_active'] ?? false),
-                $vals['color'] ?? null
+                $vals['color'] ?? null,
+                (bool) ($vals['paid'] ?? false)
             );
 
             $this->cardRepo->save($card);

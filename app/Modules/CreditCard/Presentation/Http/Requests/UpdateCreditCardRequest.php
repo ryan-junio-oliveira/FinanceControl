@@ -26,6 +26,7 @@ class UpdateCreditCardRequest extends FormRequest
             'due_day' => 'nullable|integer|between:1,31',
             'color' => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'is_active' => 'sometimes|boolean',
+            'paid'      => 'sometimes|boolean',
         ];
     }
 }

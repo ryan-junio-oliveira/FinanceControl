@@ -23,17 +23,35 @@
         </div>
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-center">
-        @if ($card->isActive())
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
-                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                {{ __('Sim') }}
-            </span>
-        @else
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-secondary-medium text-gray-500">
-                <span class="h-1.5 w-1.5 rounded-full"></span>
-                {{ __('Não') }}
-            </span>
-        @endif
+        <div class="inline-flex items-center gap-1.5">
+            {{-- Ativo --}}
+            @if ($card->isActive())
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                    {{ __('Ativo') }}
+                </span>
+            @else
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-secondary-medium text-gray-400">
+                    <span class="h-1.5 w-1.5 rounded-full bg-gray-300"></span>
+                    {{ __('Inativo') }}
+                </span>
+            @endif
+
+            <span class="text-gray-300 text-xs">/</span>
+
+            {{-- Pago --}}
+            @if ($card->paid())
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                    <x-fa-icon name="check" class="h-2.5 w-2.5" />
+                    {{ __('Pago') }}
+                </span>
+            @else
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-500">
+                    <x-fa-icon name="clock" class="h-2.5 w-2.5" />
+                    {{ __('Pendente') }}
+                </span>
+            @endif
+        </div>
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-right">
         <div class="flex items-center justify-end gap-1">

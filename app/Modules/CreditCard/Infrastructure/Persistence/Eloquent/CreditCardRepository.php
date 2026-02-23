@@ -40,6 +40,7 @@ class CreditCardRepository implements CreditCardRepositoryInterface
             'due_day' => $card->dueDay(),
             'is_active' => $card->isActive(),
             'color' => $card->color(),
+            'paid' => $card->paid(),
         ];
 
         $model = CreditCardModel::updateOrCreate(['id' => $card->id()], $attributes);
@@ -65,6 +66,7 @@ class CreditCardRepository implements CreditCardRepositoryInterface
             $model->due_day,
             (bool) $model->is_active,
             $model->color,
+            (bool) $model->paid,
         );
     }
 }

@@ -15,6 +15,7 @@ final class CreditCard
     private ?int $dueDay;
     private bool $isActive;
     private ?string $color;
+    private bool $paid;
 
     public function __construct(
         int $id,
@@ -27,7 +28,8 @@ final class CreditCard
         ?int $closingDay,
         ?int $dueDay,
         bool $isActive,
-        ?string $color
+        ?string $color,
+        bool $paid = false
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -40,6 +42,7 @@ final class CreditCard
         $this->dueDay = $dueDay;
         $this->isActive = $isActive;
         $this->color = $color;
+        $this->paid = $paid;
     }
 
     public function id(): int
@@ -95,5 +98,10 @@ final class CreditCard
     public function color(): ?string
     {
         return $this->color;
+    }
+
+    public function paid(): bool
+    {
+        return $this->paid;
     }
 }
