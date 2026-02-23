@@ -23,26 +23,12 @@ class ModuleServiceProvider extends ServiceProvider
             \App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseRepository::class
         );
         $this->app->bind(
-            \App\Modules\Category\Domain\Contracts\CategoryRepositoryInterface::class,
-            \App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryRepository::class
-        );
-        $this->app->bind(
             \App\Modules\Recipe\Domain\Contracts\RecipeRepositoryInterface::class,
             \App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeRepository::class
         );
         $this->app->bind(
             \App\Modules\Organization\Domain\Contracts\OrganizationRepositoryInterface::class,
             \App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationRepository::class
-        );
-        $this->app->bind(
-            \App\Modules\Bank\Domain\Contracts\BankRepositoryInterface::class,
-            \App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankRepository::class
-        );
-
-        // application use-case bindings
-        $this->app->bind(
-            \App\Modules\Bank\Application\Contracts\ListBanksInterface::class,
-            \App\Modules\Bank\Application\UseCases\ListBanks::class
         );
         $this->app->bind(
             \App\Modules\CreditCard\Domain\Contracts\CreditCardRepositoryInterface::class,
@@ -63,6 +49,35 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Modules\Investment\Domain\Contracts\InvestmentRepositoryInterface::class,
             \App\Modules\Investment\Infrastructure\Persistence\Eloquent\InvestmentRepository::class
+        );
+
+        // admin module bindings
+        $this->app->bind(
+            \App\Modules\Admin\Domain\Contracts\BankRepositoryInterface::class,
+            \App\Modules\Admin\Infrastructure\Persistence\Eloquent\BankRepository::class
+        );
+
+        $this->app->bind(
+            \App\Modules\Admin\Domain\Contracts\CategoryRepositoryInterface::class,
+            \App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryRepository::class
+        );
+
+        // admin use case bindings
+        $this->app->bind(
+            \App\Modules\Admin\Application\Contracts\ListBanksInterface::class,
+            \App\Modules\Admin\Application\UseCases\ListBanks::class
+        );
+        $this->app->bind(
+            \App\Modules\Admin\Application\Contracts\ManageBankInterface::class,
+            \App\Modules\Admin\Application\UseCases\ManageBank::class
+        );
+        $this->app->bind(
+            \App\Modules\Admin\Application\Contracts\ListCategoriesInterface::class,
+            \App\Modules\Admin\Application\UseCases\ListCategories::class
+        );
+        $this->app->bind(
+            \App\Modules\Admin\Application\Contracts\ManageCategoryInterface::class,
+            \App\Modules\Admin\Application\UseCases\ManageCategory::class
         );
 
     }

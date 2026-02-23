@@ -12,10 +12,17 @@ class OrganizationCrudTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\UserSeeder::class);
+    }
+
     public function test_update_organization_name()
     {
         $org = Organization::create(['name' => 'Orig']);
         $user = User::factory()->create(['organization_id' => $org->id]);
+        $user->assignRole('gestor');
         $this->actingAs($user);
 
         $response = $this->put(route('organization.update'), ['name' => 'New Name']);
@@ -27,6 +34,7 @@ class OrganizationCrudTest extends TestCase
     {
         $org = Organization::create(['name' => 'Team']);
         $user = User::factory()->create(['organization_id' => $org->id]);
+        $user->assignRole('gestor');
         $this->actingAs($user);
 
         $response = $this->post(route('organization.invite'), ['username' => 'newuser', 'email' => 'new@example.com']);
@@ -44,6 +52,7 @@ class OrganizationCrudTest extends TestCase
     {
         $org = Organization::create(['name' => 'ToArchive']);
         $user = User::factory()->create(['organization_id' => $org->id]);
+        $user->assignRole('gestor');
         $this->actingAs($user);
 
         $response = $this->post(route('organization.archive'));

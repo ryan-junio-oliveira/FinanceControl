@@ -26,7 +26,7 @@ class CreditCardRepository implements CreditCardRepositoryInterface
         // database column is satisfied and denormalization remains in sync.
         $bankName = $card->bankName();
         if ($bankName === null) {
-            $bankName = \App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel::find($card->bankId())->name ?? null;
+            $bankName = \App\Modules\Admin\Infrastructure\Persistence\Eloquent\BankModel::find($card->bankId())->name ?? null;
         }
 
         $attributes = [

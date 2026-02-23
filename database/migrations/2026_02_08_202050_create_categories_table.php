@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('type', ['recipe', 'expense', 'investment']);
-            $table->foreignId('organization_id')->constrained()->onDelete('cascade');
+            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

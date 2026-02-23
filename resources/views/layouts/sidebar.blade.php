@@ -54,10 +54,10 @@
             </div>
 
             <div class="px-2 py-2">
-                <x-link href="{{ route('organization.edit') }}" variant="ghost" class="block px-3 py-2 rounded hover:bg-gray-50">Configurar
-                    organização</x-link>
-                <x-link href="{{ route('organization.edit') }}#members" variant="ghost"
-                    class="block px-3 py-2 rounded hover:bg-gray-50">Membros</x-link>
+                <a href="{{ route('organization.edit') }}" class="block px-3 py-2 rounded hover:bg-gray-50 text-gray-700">Configurar
+                    organização</a>
+                <a href="{{ route('organization.edit') }}#members" 
+                    class="block px-3 py-2 rounded hover:bg-gray-50 text-gray-700">Membros</a>
             </div>
 
             <div class="px-2 py-2 border-t border-gray-100">
@@ -65,15 +65,17 @@
                     <form action="{{ route('organization.unarchive') }}" method="POST"
                         onsubmit="return confirm('Restaurar organização?');">
                         @csrf
-                        <x-button type="submit" variant="ghost" class="w-full text-left px-3 py-2 rounded text-sm hover:bg-gray-50">Restaurar
-                            organização</x-button>
+                        <button type="submit" class="w-full text-left px-3 py-2 rounded text-sm hover:bg-gray-50 text-gray-700">
+                            Restaurar organização
+                        </button>
                     </form>
                 @else
                     <form action="{{ route('organization.archive') }}" method="POST"
                         onsubmit="return confirm('Arquivar organização? Ela será excluída automaticamente após 6 meses.');">
                         @csrf
-                        <x-button type="submit" variant="ghost" class="w-full text-left px-3 py-2 rounded text-sm hover:bg-gray-50">Arquivar
-                            organização</x-button>
+                        <button type="submit" class="w-full text-left px-3 py-2 rounded text-sm hover:bg-gray-50 text-gray-700">
+                            Arquivar organização
+                        </button>
                     </form>
                 @endif
 
@@ -82,8 +84,9 @@
                     class="mt-1">
                     @csrf
                     @method('DELETE')
-                    <x-button type="submit" variant="ghost" class="w-full text-left px-3 py-2 rounded text-sm text-red-600 hover:bg-gray-50">Remover
-                        organização</x-button>
+                    <button type="submit" class="w-full text-left px-3 py-2 rounded text-sm text-red-600 hover:bg-gray-50">
+                        Remover organização
+                    </button>
                 </form>
             </div>
         </div>

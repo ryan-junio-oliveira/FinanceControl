@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use Illuminate\Database\Seeder;
 

@@ -21,13 +21,13 @@ class MultipleUseCasesTest extends TestCase
 
     public function test_list_categories_returns_array()
     {
-        $fakeRepo = new class implements \App\Modules\Category\Domain\Contracts\CategoryRepositoryInterface {
-            public function findById(int $id): ?\App\Modules\Category\Domain\Entities\Category { return null; }
-            public function listByOrganization(int $org): array { return []; }
-            public function save(\App\Modules\Category\Domain\Entities\Category $c): \App\Modules\Category\Domain\Entities\Category { return $c; }
-            public function delete(\App\Modules\Category\Domain\Entities\Category $c): void {}
+        $fakeRepo = new class implements \App\Modules\Admin\Domain\Contracts\CategoryRepositoryInterface {
+            public function all(?int $organizationId = null): array { return []; }
+            public function findById(int $id): ?\App\Modules\Admin\Domain\Entities\Category { return null; }
+            public function save(\App\Modules\Admin\Domain\Entities\Category $c): \App\Modules\Admin\Domain\Entities\Category { return $c; }
+            public function delete(\App\Modules\Admin\Domain\Entities\Category $c): void {}
         };
-        $useCase = new \App\Modules\Category\Application\UseCases\ListCategories($fakeRepo);
+        $useCase = new \App\Modules\Admin\Application\UseCases\ListCategories($fakeRepo);
         $this->assertIsArray($useCase->execute(1));
     }
 

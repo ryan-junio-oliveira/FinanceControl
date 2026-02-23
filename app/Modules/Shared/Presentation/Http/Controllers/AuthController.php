@@ -45,12 +45,17 @@ class AuthController extends Controller
             'name' => $request->organization_name,
         ]);
 
-        User::create([
+        $user = User::create([
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'organization_id' => $organization->id,
         ]);
+
+        // new organization owner becomes the "gestor" of that org
+        if (method_exists($user, 'assignRole')) {
+            $user->assignRole('gestor');
+        }
 
         return redirect('/login')->with('success', 'Registration successful. Please login.');
     }

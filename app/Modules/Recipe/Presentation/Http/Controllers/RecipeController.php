@@ -4,7 +4,7 @@ namespace App\Modules\Recipe\Presentation\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Recipe\Application\UseCases\ListRecipes;
-use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 use App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeModel as RecipeModel;
 use App\Modules\Recipe\Presentation\Http\Requests\StoreRecipeRequest;
 use App\Modules\Recipe\Presentation\Http\Requests\UpdateRecipeRequest;

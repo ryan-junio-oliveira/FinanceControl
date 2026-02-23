@@ -29,6 +29,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'force_password_change'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/notifications', function () {
+        return view('notifications.index');
+    })->name('notifications');
+    
     Route::get('/styleguide/palette', function () {
         return view('style.palette');
     })->name('style.palette');

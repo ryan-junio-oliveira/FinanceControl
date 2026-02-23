@@ -23,6 +23,11 @@ class OrganizationInviteService
             'must_change_password' => true,
         ]);
 
+        // every invited user is a regular member
+        if (method_exists($user, 'assignRole')) {
+            $user->assignRole('member');
+        }
+
         // Best-effort notification (silently ignore mail failures in service)
         try {
             $user->notify(new InviteNotification($password));

@@ -7,7 +7,7 @@ use App\Modules\CreditCard\Application\UseCases\ListCreditCards;
 use App\Modules\CreditCard\Domain\Contracts\CreditCardRepositoryInterface;
 use App\Modules\CreditCard\Presentation\Http\Requests\StoreCreditCardRequest;
 use App\Modules\CreditCard\Presentation\Http\Requests\UpdateCreditCardRequest;
-use App\Modules\Bank\Application\UseCases\ListBanks;
+use App\Modules\Admin\Application\UseCases\ListBanks as ListBanksUseCase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,12 +17,12 @@ class CreditCardController extends Controller
 {
     private ListCreditCards $listCreditCards;
     private CreditCardRepositoryInterface $cardRepo;
-    private ListBanks $listBanks;
+    private ListBanksUseCase $listBanks;
 
     public function __construct(
         ListCreditCards $listCreditCards,
         CreditCardRepositoryInterface $cardRepo,
-        ListBanks $listBanks
+        ListBanksUseCase $listBanks
     ) {
         $this->listCreditCards = $listCreditCards;
         $this->cardRepo = $cardRepo;

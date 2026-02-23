@@ -33,6 +33,10 @@ class DashboardController extends Controller
 
         $recentTransactions = $this->getRecentTransactions($orgId);
 
+        // notifications for current user
+        $notifications = Auth::user()->notifications()->latest()->take(10)->get();
+        $unreadCount = Auth::user()->unreadNotifications()->count();
+
         // Expenses by category (current month)
         $expensesByCategory = Expense::selectRaw('categories.name AS category, SUM(expenses.amount) AS total')
             ->join('categories', 'categories.id', '=', 'expenses.category_id')
@@ -328,6 +332,8 @@ class DashboardController extends Controller
             'selectedBudget' => $selectedBudget,
             'budgetImpact' => $budgetImpact,
             'budgetComparison' => $budgetComparison,
+            'notifications' => $notifications ?? collect(),
+            'unreadCount' => $unreadCount ?? 0,
         ]);
     }
 

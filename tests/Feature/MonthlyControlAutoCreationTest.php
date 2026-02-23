@@ -9,7 +9,7 @@ use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationMod
 use App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeModel as Recipe;
 use App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel as Expense;
 use App\Modules\MonthlyFinancialControl\Infrastructure\Persistence\Eloquent\MonthlyFinancialControlModel as MonthlyFinancialControl;
-use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 use Carbon\Carbon;
 
 class MonthlyControlAutoCreationTest extends TestCase

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Organization\Presentation\Http\Controllers\OrganizationController;
 
-Route::middleware(['web','auth','force_password_change'])->group(function () {
+Route::middleware(['web','auth','force_password_change','role:gestor|root'])->group(function () {
     // list view (already existed)
     Route::get('/organization/list', [OrganizationController::class, 'index'])->name('organization.list');
 

@@ -33,7 +33,7 @@ class InvestmentForm extends Component
         $orgId = Auth::user()?->organization_id;
         $this->categories = [];
         if ($orgId) {
-            $this->categories = \App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel::
+            $this->categories = \App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel::
                 where('organization_id', $orgId)
                 ->where('type', 'investment')
                 ->orderBy('name')

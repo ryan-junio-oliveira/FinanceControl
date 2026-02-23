@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Budget\Presentation\Http\Controllers\BudgetController;
 
-Route::middleware(['web','auth','force_password_change'])->group(function () {
+Route::middleware(['web','auth','organization','force_password_change'])->group(function () {
     Route::get('/budgets', [BudgetController::class, 'index'])->name('budgets.index');
     Route::get('/budgets/create', [BudgetController::class, 'create'])->name('budgets.create');
     Route::post('/budgets', [BudgetController::class, 'store'])->name('budgets.store');

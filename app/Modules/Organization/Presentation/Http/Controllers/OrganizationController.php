@@ -31,7 +31,13 @@ class OrganizationController extends Controller
     public function edit()
     {
         try {
-            $org = OrganizationModel::findOrFail(Auth::user()->organization_id);
+            $orgId = Auth::user()->organization_id;
+            if (empty($orgId)) {
+                $org = null;
+                return view('organization.edit', compact('org'));
+            }
+
+            $org = OrganizationModel::findOrFail($orgId);
             return view('organization.edit', compact('org'));
         } catch (\Throwable $e) {
             Log::error($e);

@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel as Expense;
 use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
-use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel>

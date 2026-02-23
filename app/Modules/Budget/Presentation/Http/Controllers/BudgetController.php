@@ -5,7 +5,7 @@ namespace App\Modules\Budget\Presentation\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Budget\Application\UseCases\ListBudgets;
 use App\Modules\Budget\Domain\Contracts\BudgetRepositoryInterface;
-use App\Modules\Category\Domain\Contracts\CategoryRepositoryInterface;
+use App\Modules\Admin\Domain\Contracts\CategoryRepositoryInterface;
 use App\Modules\Budget\Presentation\Http\Requests\StoreBudgetRequest;
 use App\Modules\Budget\Presentation\Http\Requests\UpdateBudgetRequest;
 use Illuminate\Http\Request;
@@ -33,6 +33,10 @@ class BudgetController extends Controller
         try {
             $orgId = Auth::user()->organization_id;
 
+            if (empty($orgId)) {
+                return redirect()->route('organization.edit')->with('error', 'Selecione ou crie uma organização antes de acessar orçamentos.');
+            }
+
             $perPage = (int) $request->query('per_page', 20);
             $page = $request->query('page');
 
@@ -49,6 +53,9 @@ class BudgetController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
+            if (empty($orgId)) {
+                return redirect()->route('organization.edit')->with('error', 'Selecione ou crie uma organização antes de criar um orçamento.');
+            }
             $categories = $this->categoryRepo->listByOrganization($orgId);
             return view('budgets.create', compact('categories'));
         } catch (\Throwable $e) {
@@ -61,6 +68,9 @@ class BudgetController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
+            if (empty($orgId)) {
+                return redirect()->route('organization.edit')->with('error', 'Selecione ou crie uma organização antes de criar um orçamento.');
+            }
             $validated = $request->validated();
             $validated['organization_id'] = $orgId;
             $validated['is_active'] = $validated['is_active'] ?? true;
@@ -90,6 +100,9 @@ class BudgetController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
+            if (empty($orgId)) {
+                return redirect()->route('organization.edit')->with('error', 'Selecione ou crie uma organização antes de editar orçamentos.');
+            }
             $budget = $this->budgetRepo->findById($id);
             abort_unless($budget && $budget->organizationId() === $orgId, 404);
 
@@ -106,6 +119,9 @@ class BudgetController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
+            if (empty($orgId)) {
+                return redirect()->route('organization.edit')->with('error', 'Selecione ou crie uma organização antes de atualizar orçamentos.');
+            }
             $budget = $this->budgetRepo->findById($id);
             abort_unless($budget && $budget->organizationId() === $orgId, 404);
 
@@ -136,6 +152,9 @@ class BudgetController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
+            if (empty($orgId)) {
+                return redirect()->route('organization.edit')->with('error', 'Selecione ou crie uma organização antes de ver detalhes do orçamento.');
+            }
             $budget = $this->budgetRepo->findById($id);
             abort_unless($budget && $budget->organizationId() === $orgId, 404);
 
@@ -165,6 +184,9 @@ class BudgetController extends Controller
     {
         try {
             $orgId = Auth::user()->organization_id;
+            if (empty($orgId)) {
+                return redirect()->route('organization.edit')->with('error', 'Selecione ou crie uma organização antes de remover um orçamento.');
+            }
             $budget = $this->budgetRepo->findById($id);
             abort_unless($budget && $budget->organizationId() === $orgId, 404);
             $this->budgetRepo->delete($budget);

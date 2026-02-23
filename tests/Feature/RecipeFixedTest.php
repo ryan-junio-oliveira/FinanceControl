@@ -7,7 +7,7 @@ use Tests\TestCase;
 use App\Modules\Organization\Infrastructure\Persistence\Eloquent\OrganizationModel as Organization;
 use App\Models\User;
 use App\Modules\Recipe\Infrastructure\Persistence\Eloquent\RecipeModel as Recipe;
-use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 
 class RecipeFixedTest extends TestCase
 {

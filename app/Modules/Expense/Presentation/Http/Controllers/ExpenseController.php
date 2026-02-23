@@ -4,7 +4,7 @@ namespace App\Modules\Expense\Presentation\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Expense\Application\UseCases\ListExpenses;
-use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 use App\Modules\CreditCard\Infrastructure\Persistence\Eloquent\CreditCardModel as CreditCard;
 use App\Modules\Expense\Infrastructure\Persistence\Eloquent\ExpenseModel;
 use App\Modules\Expense\Presentation\Http\Requests\StoreExpenseRequest;

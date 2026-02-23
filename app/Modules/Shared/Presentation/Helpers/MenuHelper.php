@@ -2,21 +2,45 @@
 
 namespace App\Modules\Shared\Presentation\Helpers;
 
+use Illuminate\Support\Facades\Auth;
+
 class MenuHelper
 {
     public static function getMenuGroups(): array
     {
+        $principalItems = [[
+            'name' => 'Dashboard',
+            'path' => '/dashboard',
+            'route' => 'dashboard',
+            'icon' => 'home',
+        ]];
+
+        // root user sees configuration link + admin modules
+        if (Auth::check() && Auth::user()->hasRole('root')) {
+            $principalItems[] = [
+                'name' => 'Configurações',
+                'path' => '/admin/settings',
+                'route' => 'admin.settings',
+                'icon' => 'cog',
+            ];
+            $principalItems[] = [
+                'name' => 'Bancos',
+                'path' => '/admin/banks',
+                'route' => 'admin.banks.*',
+                'icon' => 'bank',
+            ];
+            $principalItems[] = [
+                'name' => 'Categorias',
+                'path' => '/admin/categories',
+                'route' => 'admin.categories.*',
+                'icon' => 'tags',
+            ];
+        }
+
         return [
             [
                 'title' => 'Principal',
-                'items' => [
-                    [
-                        'name' => 'Dashboard',
-                        'path' => '/dashboard',
-                        'route' => 'dashboard',
-                        'icon' => 'home',
-                    ],
-                ],
+                'items' => $principalItems,
             ],
             [
                 'title' => 'Financeiro',
@@ -51,24 +75,6 @@ class MenuHelper
                         'route' => 'budgets.*',
                         'icon' => 'tags',
                     ],
-                    // [
-                    //     'name' => 'Categorias',
-                    //     'path' => '/categories',
-                    //     'route' => 'categories.*',
-                    //     'icon' => 'tags',
-                    // ],
-                    // [
-                    //     'name' => 'Controles Mensais',
-                    //     'path' => '/monthly-controls',
-                    //     'route' => 'monthly-controls.*',
-                    //     'icon' => 'calendar',
-                    // ],
-                    // [
-                    //     'name' => 'Bancos',
-                    //     'path' => '/banks',
-                    //     'route' => 'banks.*',
-                    //     'icon' => 'bank',
-                    // ],
                 ],
             ],
             [
@@ -97,6 +103,7 @@ class MenuHelper
             'user' => '<i class="fa-solid fa-user fa-fw"></i>',
             'tags' => '<i class="fa-solid fa-tags fa-fw"></i>',
             'chart-line' => '<i class="fa-solid fa-chart-line fa-fw"></i>',
+            'cog' => '<i class="fa-solid fa-cog fa-fw"></i>',
         ];
 
         return $icons[$name] ?? '';

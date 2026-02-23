@@ -3,7 +3,7 @@
 namespace App\Modules\Shared\Presentation\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel as Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

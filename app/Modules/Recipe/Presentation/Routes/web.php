@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Recipe\Presentation\Http\Controllers\RecipeController;
 
-Route::middleware(['web', 'auth', 'force_password_change'])->group(function () {
+Route::middleware(['web', 'auth', 'organization', 'force_password_change'])->group(function () {
     Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
     Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipes.create');
     Route::post('/recipes', [RecipeController::class, 'store'])->name('recipes.store');

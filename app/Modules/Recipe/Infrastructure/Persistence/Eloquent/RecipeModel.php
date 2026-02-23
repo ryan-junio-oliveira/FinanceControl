@@ -41,6 +41,6 @@ class RecipeModel extends Model
 
     public function category()
     {
-        return $this->belongsTo(\App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel::class, 'category_id');
+        return $this->belongsTo(\App\Modules\Admin\Infrastructure\Persistence\Eloquent\CategoryModel::class, 'category_id');
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Expense\Presentation\Http\Controllers\ExpenseController;
 
-Route::middleware(['web','auth','force_password_change'])->group(function () {
+Route::middleware(['web','auth','organization','force_password_change'])->group(function () {
     Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
     Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
     Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');

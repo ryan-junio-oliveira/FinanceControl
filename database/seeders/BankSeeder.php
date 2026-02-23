@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel as Bank;
+use App\Modules\Admin\Infrastructure\Persistence\Eloquent\BankModel as Bank;
 use App\Modules\Shared\Domain\Enums\BankEnum;
 use Illuminate\Database\Seeder;
 

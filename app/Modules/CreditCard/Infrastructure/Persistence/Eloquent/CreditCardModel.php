@@ -33,7 +33,7 @@ class CreditCardModel extends Model
 
     public function bank()
     {
-        return $this->belongsTo(\App\Modules\Bank\Infrastructure\Persistence\Eloquent\BankModel::class, 'bank_id');
+        return $this->belongsTo(\App\Modules\Admin\Infrastructure\Persistence\Eloquent\BankModel::class, 'bank_id');
     }
 
     public function organization()
