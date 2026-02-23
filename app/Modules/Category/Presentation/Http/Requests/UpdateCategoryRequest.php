@@ -16,7 +16,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'type' => 'required|in:recipe,expense',
+            'type' => 'required|in:recipe,expense,investment',
         ];
     }
 }

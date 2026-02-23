@@ -17,6 +17,7 @@ class InvestmentModel extends Model
         'fixed',
         'transaction_date',
         'organization_id',
+        'category_id',
     ];
 
     protected $casts = [
@@ -27,6 +28,14 @@ class InvestmentModel extends Model
     protected $hidden = [
         'monthly_financial_control_id',
     ];
+
+    /**
+     * Category this investment belongs to (optional).
+     */
+    public function category()
+    {
+        return $this->belongsTo(\App\Modules\Category\Infrastructure\Persistence\Eloquent\CategoryModel::class, 'category_id');
+    }
 
     public static function booted()
     {

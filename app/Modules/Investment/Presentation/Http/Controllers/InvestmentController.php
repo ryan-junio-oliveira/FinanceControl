@@ -26,7 +26,48 @@ class InvestmentController extends Controller
             }
 
             $investments = $query->orderByDesc('transaction_date')->paginate($perPage);
-            return view('investments.index', compact('investments'));
+
+            // --- chart helpers ------------------------------------------------
+            // breakdown by investment category for current month
+            $investmentsByCategory = InvestmentModel::selectRaw('categories.name AS category, SUM(investments.amount) AS total')
+                ->join('categories', 'categories.id', '=', 'investments.category_id')
+                ->where('investments.organization_id', $orgId)
+                ->whereYear('transaction_date', now()->year)
+                ->whereMonth('transaction_date', now()->month)
+                ->groupBy('categories.name')
+                ->orderByDesc('total')
+                ->get();
+
+            $investmentsCategoryLabels = $investmentsByCategory->pluck('category')->toArray();
+            $investmentsCategorySeries = $investmentsByCategory->pluck('total')->map(fn($v) => (float) $v)->toArray();
+
+            // monthly totals over the past 12 months
+            $start = now()->subMonths(11)->startOfMonth();
+            $months = collect(range(0, 11))->map(fn($i) => $start->copy()->addMonths($i));
+            $invests = InvestmentModel::where('organization_id', $orgId)
+                ->whereBetween('transaction_date', [$start, now()->endOfMonth()])
+                ->get(['transaction_date', 'amount']);
+
+            $investMap = [];
+            foreach ($months as $date) {
+                $investMap[$date->format('Y-m')] = 0;
+            }
+            foreach ($invests as $i) {
+                $key = \Carbon\Carbon::parse($i->transaction_date)->format('Y-m');
+                if (isset($investMap[$key])) {
+                    $investMap[$key] += (float) $i->amount;
+                }
+            }
+            $investmentsMonthlyLabels = $months->map(fn($d) => $d->format('M/Y'))->toArray();
+            $investmentsMonthlySeries = array_values($investMap);
+
+            return view('investments.index', compact(
+                'investments',
+                'investmentsCategoryLabels',
+                'investmentsCategorySeries',
+                'investmentsMonthlyLabels',
+                'investmentsMonthlySeries'
+            ));
         } catch (\Throwable $e) {
             Log::error($e);
             return redirect()->back()->with('error','Erro ao listar investimentos.');

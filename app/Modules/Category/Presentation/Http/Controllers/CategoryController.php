@@ -54,6 +54,7 @@ class CategoryController extends Controller
             $types = [
                 'recipe' => 'Receita',
                 'expense' => 'Despesa',
+                'investment' => 'Investimento',
             ];
 
             return view('categories.create', compact('types'));
@@ -98,6 +99,7 @@ class CategoryController extends Controller
             $types = [
                 'recipe' => 'Receita',
                 'expense' => 'Despesa',
+                'investment' => 'Investimento',
             ];
 
             return view('categories.edit', compact('category', 'types'));

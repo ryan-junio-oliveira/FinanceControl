@@ -17,15 +17,28 @@ class InvestmentCrudTest extends TestCase
         $user = User::factory()->create(['organization_id' => $orgId]);
         $this->actingAs($user);
 
+        // create an investment category first
+        $catId = DB::table('categories')->insertGetId([
+            'name' => 'Ações',
+            'type' => 'investment',
+            'organization_id' => $orgId,
+        ]);
+
         // create an investment
         $response = $this->post(route('investments.store'), [
             'name' => 'Compra de ações',
             'amount' => 1200.00,
             'transaction_date' => now()->format('Y-m-d'),
             'fixed' => 0,
+            'category_id' => $catId,
         ]);
         $response->assertRedirect(route('investments.index'));
         $this->assertDatabaseHas('investments', ['name' => 'Compra de ações', 'organization_id' => $orgId]);
+
+        // index page should now surface category/month data
+        $respIndex = $this->get(route('investments.index'));
+        $respIndex->assertViewHas('investmentsCategoryLabels');
+        $respIndex->assertViewHas('investmentsMonthlyLabels');
 
         $inv = DB::table('investments')->where('organization_id', $orgId)->first();
 
@@ -34,6 +47,7 @@ class InvestmentCrudTest extends TestCase
             'amount' => 1500.00,
             'transaction_date' => now()->format('Y-m-d'),
             'fixed' => 1,
+            'category_id' => $catId,
         ]);
         $response->assertRedirect(route('investments.index'));
         $this->assertDatabaseHas('investments', ['id' => $inv->id, 'name' => 'Compra de CDB']);

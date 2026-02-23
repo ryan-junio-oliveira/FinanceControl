@@ -14,6 +14,7 @@
         isset($model?->transaction_date) && $model->transaction_date ? $model->transaction_date->format('Y-m-d') : '',
     );
     $fixedVal = old('fixed', $model?->fixed ?? false);
+    $categoryIdVal = old('category_id', $model?->category_id ?? '');
 @endphp
 
 <form action="{{ $action }}" method="POST" class="divide-y divide-gray-100">
@@ -32,6 +33,19 @@
                 required placeholder="0,00" />
             <x-form-input name="transaction_date" label="{{ __('Data da transação') }}" type="date"
                 :value="$dateVal" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+                <x-form-select
+                    name="category_id"
+                    label="{{ __('Categoria') }}"
+                    :options="$categories"
+                    :value="$categoryIdVal"
+                    placeholder="{{ __('Selecione uma categoria') }}"
+                    required
+                />
+            </div>
         </div>
 
         <x-form-checkbox name="fixed" :checked="$fixedVal" label="{{ __('Fixo / recorrente?') }}"

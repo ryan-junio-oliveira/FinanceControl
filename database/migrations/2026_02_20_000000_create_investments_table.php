@@ -16,6 +16,10 @@ return new class extends Migration
                     ->constrained()
                     ->restrictOnDelete();
 
+                $table->foreignId('category_id')->nullable()
+                    ->constrained('categories')
+                    ->restrictOnDelete();
+
                 $table->string('name');
                 $table->decimal('amount', 12, 2);
                 $table->boolean('fixed')->default(false);

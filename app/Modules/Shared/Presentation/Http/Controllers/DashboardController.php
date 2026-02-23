@@ -56,6 +56,42 @@ class DashboardController extends Controller
             ->orderByDesc('total')
             ->get();
 
+        // Investments by category (past 12‑month window)
+        $rangeStart = $months->first()->copy()->startOfMonth();
+        $rangeEnd   = $months->last()->copy()->endOfMonth();
+
+        $investmentsByCategory = \App\Modules\Investment\Infrastructure\Persistence\Eloquent\InvestmentModel::selectRaw('categories.name AS category, SUM(investments.amount) AS total')
+            ->join('categories', 'categories.id', '=', 'investments.category_id')
+            ->where('investments.organization_id', $orgId)
+            ->whereBetween('investments.transaction_date', [$rangeStart, $rangeEnd])
+            ->groupBy('categories.name')
+            ->orderByDesc('total')
+            ->get();
+
+        // trend for investment categories over the window
+        $investmentsTrendSeries = [];
+        $invCats = $investmentsByCategory->pluck('category')->toArray();
+        if (count($invCats) > 0) {
+            $invRaw = \App\Modules\Investment\Infrastructure\Persistence\Eloquent\InvestmentModel::select('categories.name AS category', 'investments.amount', 'investments.transaction_date')
+                ->join('categories', 'categories.id', '=', 'investments.category_id')
+                ->where('investments.organization_id', $orgId)
+                ->whereIn('categories.name', $invCats)
+                ->whereBetween('investments.transaction_date', [$rangeStart, $rangeEnd])
+                ->get();
+
+            foreach ($invCats as $cat) {
+                $data = [];
+                foreach ($months as $date) {
+                    $total = $invRaw
+                        ->filter(fn($r) => $r->category === $cat
+                            && Carbon::parse($r->transaction_date)->format('Y-m') === $date->format('Y-m'))
+                        ->sum('amount');
+                    $data[] = round((float) $total, 2);
+                }
+                $investmentsTrendSeries[] = ['name' => $cat, 'data' => $data];
+            }
+        }
+
         // Cards summary calculated from expenses linked to cards
         $cardSumsCurrent = Expense::where('organization_id', $orgId)
             ->whereYear('transaction_date', $year)
@@ -94,6 +130,9 @@ class DashboardController extends Controller
         $recipesCategoryLabels = $recipesByCategory->pluck('category')->toArray();
         $recipesCategorySeries = $recipesByCategory->pluck('total')->map(fn($v) => (float) $v)->toArray();
 
+        $investmentsCategoryLabels = $investmentsByCategory->pluck('category')->toArray();
+        $investmentsCategorySeries = $investmentsByCategory->pluck('total')->map(fn($v) => (float) $v)->toArray();
+
         // Combined small-series for current month (prepared server-side to avoid complex inline Blade arrays)
         $combinedChartLabels = [ now()->format('M/Y') ];
         $combinedChartSeries = [
@@ -111,11 +150,22 @@ class DashboardController extends Controller
 
         $cardsSeries = $months->map(function($date) use ($orgId, $mfcMonths) {
             if (in_array($date->format('Y-m'), $mfcMonths)) {
-                return Expense::where('organization_id', $orgId)
+                // prefer actual card-related expenses for the month
+                $sum = Expense::where('organization_id', $orgId)
                     ->whereYear('transaction_date', $date->year)
                     ->whereMonth('transaction_date', $date->month)
                     ->whereNotNull('credit_card_id')
                     ->sum('amount');
+
+                if ($sum > 0) {
+                    return $sum;
+                }
+
+                // when no expenses exist, fall back to the configured statement
+                // amount of all cards so that a month with a control still
+                // produces a non-zero point on the chart.
+                return CreditCard::where('organization_id', $orgId)
+                    ->sum('statement_amount');
             }
             return 0;
         })->toArray();
@@ -247,6 +297,9 @@ class DashboardController extends Controller
             'expensesCategorySeries' => $expensesCategorySeries,
             'recipesCategoryLabels' => $recipesCategoryLabels,
             'recipesCategorySeries' => $recipesCategorySeries,
+            'investmentsCategoryLabels' => $investmentsCategoryLabels,
+            'investmentsCategorySeries' => $investmentsCategorySeries,
+            'investmentsTrendSeries' => $investmentsTrendSeries,
 
             // cards
             'creditCards' => $creditCards,
@@ -317,6 +370,9 @@ class DashboardController extends Controller
             'expensesCategorySeries' => [],
             'recipesCategoryLabels'  => [],
             'recipesCategorySeries'  => [],
+            'investmentsCategoryLabels' => [],
+            'investmentsCategorySeries' => [],
+            'investmentsTrendSeries' => [],
             'topExpenseCategories'   => collect(),
             'topRecipeCategories'    => collect(),
             'totalInvestments'        => 0,

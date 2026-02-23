@@ -15,6 +15,7 @@
         :root {
             --app-header-height: 56px;
         }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 

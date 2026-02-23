@@ -35,6 +35,15 @@ class CategorySeeder extends Seeder
             'Outras despesas',
         ];
 
+        $investmentCategories = [
+            'CDB',
+            'Tesouro Direto',
+            'Ações',
+            'ETFs',
+            'Fundos',
+            'Criptomoedas',
+        ];
+
         foreach (Organization::all() as $org) {
             foreach ($incomeCategories as $name) {
                 Category::firstOrCreate([
@@ -49,6 +58,14 @@ class CategorySeeder extends Seeder
                     'organization_id' => $org->id,
                     'name' => $name,
                     'type' => 'expense',
+                ]);
+            }
+
+            foreach ($investmentCategories as $name) {
+                Category::firstOrCreate([
+                    'organization_id' => $org->id,
+                    'name' => $name,
+                    'type' => 'investment',
                 ]);
             }
         }

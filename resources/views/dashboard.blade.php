@@ -8,19 +8,62 @@
         <!-- HEADER -->
         <x-page-header title="Painel" subtitle="{{ now()->format('d/m/Y') }}" />
 
-        {{-- dashboard modules --}}
-        @include('dashboard.partials.overview')
-        @include('dashboard.partials.cards_investments')
-        @include('dashboard.partials.balances')
-        @include('dashboard.partials.monthly_summary')
-        @include('dashboard.partials.categories')
-        @include('dashboard.partials.budget_impact')
-        @include('dashboard.partials.daily_expenses')
-        @include('dashboard.partials.trend_top3')
-        @include('dashboard.partials.cards_charts')
-        @include('dashboard.partials.distribution')
-        @include('dashboard.partials.payment_status')
-        @include('dashboard.partials.recent_transactions')
+        {{-- ── Tab Navigation ── --}}
+        @php
+            $tabs = [
+                ['id' => 'geral',         'label' => 'Geral',         'icon' => 'chart-line'],
+                ['id' => 'receitas',      'label' => 'Receitas',      'icon' => 'arrow-trend-up'],
+                ['id' => 'despesas',      'label' => 'Despesas',      'icon' => 'arrow-trend-down'],
+                ['id' => 'cartoes',       'label' => 'Cartões',       'icon' => 'credit-card'],
+                ['id' => 'investimentos', 'label' => 'Investimentos', 'icon' => 'piggy-bank'],
+                ['id' => 'transacoes',    'label' => 'Transações',    'icon' => 'list'],
+            ];
+        @endphp
+
+        <div x-data="{ activeTab: 'geral' }">
+
+            {{-- Tab bar --}}
+            <div class="flex flex-wrap gap-1 border-b border-gray-200 mb-6 overflow-x-auto">
+                @foreach ($tabs as $tab)
+                    <button
+                        @click="activeTab = '{{ $tab['id'] }}'; setTimeout(() => window.dispatchEvent(new Event('resize')), 50)"
+                        :class="activeTab === '{{ $tab['id'] }}'
+                            ? 'border-b-2 border-blue-600 text-blue-700 bg-blue-50'
+                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'"
+                        class="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-t-md transition-colors whitespace-nowrap focus:outline-none"
+                    >
+                        <x-fa-icon name="{{ $tab['icon'] }}" class="h-4 w-4" />
+                        {{ $tab['label'] }}
+                    </button>
+                @endforeach
+            </div>
+
+            {{-- Tab panels --}}
+            <div x-show="activeTab === 'geral'" class="space-y-6">
+                @include('dashboard.partials.tab_geral')
+            </div>
+
+            <div x-show="activeTab === 'receitas'" class="space-y-6" x-cloak>
+                @include('dashboard.partials.tab_receitas')
+            </div>
+
+            <div x-show="activeTab === 'despesas'" class="space-y-6" x-cloak>
+                @include('dashboard.partials.tab_despesas')
+            </div>
+
+            <div x-show="activeTab === 'cartoes'" class="space-y-6" x-cloak>
+                @include('dashboard.partials.tab_cartoes')
+            </div>
+
+            <div x-show="activeTab === 'investimentos'" class="space-y-6" x-cloak>
+                @include('dashboard.partials.tab_investimentos')
+            </div>
+
+            <div x-show="activeTab === 'transacoes'" class="space-y-6" x-cloak>
+                @include('dashboard.partials.tab_transacoes')
+            </div>
+
+        </div>
     </div>
 
     </div>
@@ -38,6 +81,9 @@
             const RED = '#EF4444';
             const BLUE = '#3B82F6';
             const ORANGE = '#F97316';
+
+            // investment-specific color list reused by multiple charts
+            const invColors = ['#10B981', '#3B82F6', '#F97316', '#8B5CF6', '#EC4899', '#EAB308'];
 
             const fmtBRL = v => 'R$ ' + (+v).toLocaleString('pt-BR', {
                 minimumFractionDigits: 2
@@ -299,6 +345,113 @@
                             }
                         },
                     },
+                });
+            }
+
+            // ------------------------------------------------------------------
+            // 3b. Investimentos por categoria — Doughnut
+            // ------------------------------------------------------------------
+            const ctxInvCatDash = document.getElementById('chartInvestmentsCategory');
+            if (ctxInvCatDash) {
+                const invLabels = @json($investmentsCategoryLabels ?? []);
+                const invData = @json($investmentsCategorySeries ?? []);
+
+                new Chart(ctxInvCatDash, {
+                    type: 'doughnut',
+                    data: {
+                        labels: invLabels,
+                        datasets: [{
+                            data: invData,
+                            backgroundColor: invColors.slice(0, invLabels.length),
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '62%',
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    usePointStyle: true,
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: ctx => ` ${ctx.label}: ${fmtBRL(ctx.parsed)}`
+                                }
+                            }
+                        },
+                    },
+                });
+            }
+
+            // ------------------------------------------------------------------
+            // investment category bar (current month)
+            // ------------------------------------------------------------------
+            const ctxInvBar = document.getElementById('chartInvestmentsCatBar');
+            if (ctxInvBar) {
+                const invLabels2 = @json($investmentsCategoryLabels ?? []);
+                const invData2 = @json($investmentsCategorySeries ?? []);
+                new Chart(ctxInvBar, {
+                    type: 'bar',
+                    data: {
+                        labels: invLabels2,
+                        datasets: [{
+                            label: 'Valor',
+                            data: invData2,
+                            backgroundColor: invColors.slice(0, invLabels2.length),
+                            borderColor: invColors.slice(0, invLabels2.length),
+                            borderWidth:1,
+                            borderRadius:3
+                        }]
+                    },
+                    options: {
+                        responsive:true,
+                        maintainAspectRatio:false,
+                        interaction:{mode:'index',intersect:false},
+                        plugins:{legend:{display:false},tooltip:{callbacks:{label:ttBRL}}},
+                        scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{beginAtZero:true,ticks:{callback:v=>'R$ '+v.toLocaleString('pt-BR'),font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
+                    }
+                });
+            }
+
+            // ------------------------------------------------------------------
+            // investment categories trend (line)
+            // ------------------------------------------------------------------
+            const ctxInvLine = document.getElementById('chartInvestmentsCatLine');
+            if (ctxInvLine) {
+                const trendLabels = @json($monthlyCategories ?? []);
+                const trendSeries = @json($investmentsTrendSeries ?? []);
+                new Chart(ctxInvLine, {
+                    type: 'line',
+                    data: {
+                        labels: trendLabels,
+                        datasets: trendSeries.map((s,i)=>({
+                            label: s.name,
+                            data: s.data,
+                            borderColor: invColors[i] ?? COLORS[i],
+                            backgroundColor: hex2rgba(invColors[i] ?? COLORS[i],0.08),
+                            borderWidth:2,
+                            pointRadius:4,
+                            fill:false,
+                            tension:0.35
+                        }))
+                    },
+                    options: {
+                        responsive:true,
+                        maintainAspectRatio:false,
+                        interaction:{mode:'index',intersect:false},
+                        plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:10}},tooltip:{callbacks:{label:ttBRL}}},
+                        scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{beginAtZero:true,ticks:{callback:v=>'R$ '+v.toLocaleString('pt-BR'),font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
+                    }
                 });
             }
 

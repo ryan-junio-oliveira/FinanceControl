@@ -38,6 +38,7 @@ class CategoryController extends Controller
         $types = [
             'recipe' => 'Receita',
             'expense' => 'Despesa',
+            'investment' => 'Investimento',
         ];
 
         return view('categories.create', compact('types'));
@@ -49,7 +50,7 @@ class CategoryController extends Controller
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:recipe,expense',
+            'type' => 'required|in:recipe,expense,investment',
         ]);
 
         $data['organization_id'] = $org->id;
@@ -75,6 +76,7 @@ class CategoryController extends Controller
         $types = [
             'recipe' => 'Receita',
             'expense' => 'Despesa',
+            'investment' => 'Investimento',
         ];
 
         return view('categories.edit', compact('category', 'types'));
@@ -87,7 +89,7 @@ class CategoryController extends Controller
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:recipe,expense',
+            'type' => 'required|in:recipe,expense,investment',
         ]);
 
         $category->update($data);

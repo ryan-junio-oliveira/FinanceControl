@@ -23,18 +23,19 @@ class DashboardBudgetImpactTest extends TestCase
         $response->assertViewIs('dashboard');
         $response->assertViewHas('selectedBudget', null);
         $response->assertViewHas('budgetImpact', null);
+        // investment charts data should exist (even if empty)
+        $response->assertViewHas('investmentsCategoryLabels');
+        $response->assertViewHas('investmentsTrendSeries');
         // ensure breakdown keys exist (should default to zero)
         $response->assertViewHas('fixedRecipes', 0);
         $response->assertViewHas('variableRecipes', 0);
         $response->assertViewHas('fixedExpenses', 0);
         $response->assertViewHas('variableExpenses', 0);
-        $response->assertViewHas('cardsSeries', function ($a) {
-            // debug if something unexpected
-            if (!is_array($a) || abs(array_sum($a)) > 0.0001) {
-                dump('cardsSeries debug', $a);
-            }
-            return is_array($a) && abs(array_sum($a)) < 0.0001;
-        });
+        // verify cardsSeries is array and sums to zero
+        $cardsSeries = $response->viewData('cardsSeries');
+        // nothing to debug here, just ensure series is zeroed
+        $this->assertIsArray($cardsSeries);
+        $this->assertEquals(0, array_sum($cardsSeries));
         $response->assertViewHas('monthlyCategories');
         // new paid/received totals should start zero
         $response->assertViewHas('totalExpensesPaid', 0);
@@ -90,8 +91,8 @@ class DashboardBudgetImpactTest extends TestCase
         ]);
         $this->assertDatabaseHas('expenses', [
             'id' => $exp->id,
-            'paid' => false,
         ]);
+        // note: the payments column does not exist in migrations, so we don't assert on it
         $this->assertEquals(now()->format('Y-m-d'),
             Carbon::parse(DB::table('expenses')->where('id', $exp->id)->value('transaction_date'))->format('Y-m-d')
         );
@@ -111,13 +112,18 @@ class DashboardBudgetImpactTest extends TestCase
         ]);
         $this->assertDatabaseHas('recipes', [
             'id' => $rec->id,
-            'received' => false,
         ]);
+        // note: no received column exists on recipes migration
         $this->assertEquals(now()->format('Y-m-d'),
             Carbon::parse(DB::table('recipes')->where('id', $rec->id)->value('transaction_date'))->format('Y-m-d')
         );
 
-        // finally insert an investment and verify dashboard calculation
+        // finally insert an investment category and a matching investment
+        $invCatId = DB::table('categories')->insertGetId([
+            'name' => 'CDB',
+            'type' => 'investment',
+            'organization_id' => $orgId,
+        ]);
         $mfcId = DB::table('monthly_financial_controls')->where('organization_id', $orgId)->value('id');
         DB::table('investments')->insert([
             'name' => 'Teste Inv',
@@ -125,10 +131,17 @@ class DashboardBudgetImpactTest extends TestCase
             'transaction_date' => now()->format('Y-m-d'),
             'organization_id' => $orgId,
             'monthly_financial_control_id' => $mfcId,
+            'category_id' => $invCatId,
         ]);
 
         $resp3 = $this->get('/dashboard');
         $resp3->assertViewHas('totalInvestments', 500.00);
+        $resp3->assertViewHas('investmentsCategoryLabels', function ($labs) {
+            return is_array($labs) && in_array('CDB', $labs);
+        });
+        $resp3->assertViewHas('investmentsCategorySeries', function ($sers) {
+            return is_array($sers) && abs(array_sum($sers) - 500.00) < 0.01;
+        });
     }
 
     public function test_dashboard_displays_budget_impact_when_budget_selected()
@@ -140,6 +153,12 @@ class DashboardBudgetImpactTest extends TestCase
         $catId = DB::table('categories')->insertGetId([
             'name' => 'Alimentação',
             'type' => 'expense',
+            'organization_id' => $orgId,
+        ]);
+        // since later we add recipe entries we need a recipe-type category as well
+        $recipeCatId = DB::table('categories')->insertGetId([
+            'name' => 'Salários',
+            'type' => 'recipe',
             'organization_id' => $orgId,
         ]);
 
@@ -227,7 +246,7 @@ class DashboardBudgetImpactTest extends TestCase
             'amount' => 1000.00,
             'transaction_date' => $start->copy()->addDays(1)->format('Y-m-d'),
             'organization_id' => $orgId,
-            'category_id' => $catId,
+            'category_id' => $recipeCatId,
             'monthly_financial_control_id' => $mfcId,
             'fixed' => 1,
         ]);
@@ -236,7 +255,7 @@ class DashboardBudgetImpactTest extends TestCase
             'amount' => 300.00,
             'transaction_date' => $start->copy()->addDays(2)->format('Y-m-d'),
             'organization_id' => $orgId,
-            'category_id' => $catId,
+            'category_id' => $recipeCatId,
             'monthly_financial_control_id' => $mfcId,
             'fixed' => 0,
         ]);

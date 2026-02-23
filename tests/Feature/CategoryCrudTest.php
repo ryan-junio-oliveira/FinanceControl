@@ -27,6 +27,12 @@ class CategoryCrudTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Cat A');
         $response->assertDontSee('Cat B');
+
+        // filter by investment type should not show expense/recipe
+        $response2 = $this->get(route('categories.index', ['type' => 'investment']));
+        $response2->assertStatus(200);
+        $response2->assertDontSee('Cat A');
+        $response2->assertDontSee('Cat B');
     }
 
     public function test_store_creates_category()
@@ -42,6 +48,25 @@ class CategoryCrudTest extends TestCase
 
         $response->assertRedirect(route('categories.index'));
         $this->assertDatabaseHas('categories', ['name' => 'Vendas', 'organization_id' => $org->id]);
+
+        // also able to create investment type
+        $response2 = $this->post(route('categories.store'), [
+            'name' => 'CDB',
+            'type' => 'investment',
+        ]);
+        // debug response if it fails
+        if (! $response2->isRedirect(route('categories.index'))) {
+            dump('response status', $response2->status());
+            dump('response content', $response2->getContent());
+            dump('session errors', $response2->getSession()->get('errors')?->all());
+        }
+        $response2->assertRedirect(route('categories.index'));
+        $this->assertDatabaseHas('categories', ['name' => 'CDB', 'type' => 'investment', 'organization_id' => $org->id]);
+
+        // filtered listing should show the new investment category
+        $response3 = $this->get(route('categories.index', ['type' => 'investment']));
+        $response3->assertStatus(200);
+        $response3->assertSee('CDB');
     }
 
     public function test_update_category()

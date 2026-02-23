@@ -74,3 +74,4 @@
     </x-slot>
 </x-list-layout>
 @endsection
+
